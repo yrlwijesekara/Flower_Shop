@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
+import Footer from '../components/Footer';
 import { FiHome } from 'react-icons/fi';
 import './Home.css';
 
@@ -45,6 +46,9 @@ const Home = () => {
           </div>
         </div>
       </main>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };

@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
 import ProductGrid from '../components/ProductGrid';
 import OtherProducts from '../components/OtherProducts';
+import Footer from '../components/Footer';
 import { FiHome, FiMic } from 'react-icons/fi';
 import { BiSearch } from 'react-icons/bi';
 import './Shop.css';
@@ -329,6 +330,9 @@ const Shop = () => {
           </div>
         )}
       </section>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };
