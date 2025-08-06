@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="footer-content">
           {/* Logo Section */}
           <div className="footer-logo">
-            <img src="/logo.svg" alt="Adora Flower Shop" className="logo-img" />
+            <img src="./navbar/nav.png" alt="Adora Flower Shop" className="logo-img" />
           </div>
 
           {/* Links Section */}
