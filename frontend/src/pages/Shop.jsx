@@ -285,32 +285,28 @@ const Shop = () => {
         {/* Custom Layout: 3 rows of products + One spanning Other Products */}
         <div className="custom-product-layout">
           <div className="products-section">
-            {/* First Row - 3 products */}
-            <div className="product-row">
-              <ProductGrid 
-                products={getProductsByTab(activeTab).slice(0, 3)}
-                onAddToCart={handleAddToCart}
-                className="row-products-only"
-              />
-            </div>
-            
-            {/* Second Row - 3 products */}
-            <div className="product-row">
-              <ProductGrid 
-                products={getProductsByTab(activeTab).slice(3, 6)}
-                onAddToCart={handleAddToCart}
-                className="row-products-only"
-              />
-            </div>
-            
-            {/* Third Row - 3 products */}
-            <div className="product-row">
-              <ProductGrid 
-                products={getProductsByTab(activeTab).slice(6, 9)}
-                onAddToCart={handleAddToCart}
-                className="row-products-only"
-              />
-            </div>
+            {/* Dynamic rows based on available products */}
+            {(() => {
+              const products = getProductsByTab(activeTab);
+              const rows = [];
+              
+              for (let i = 0; i < products.length; i += 3) {
+                const rowProducts = products.slice(i, i + 3);
+                if (rowProducts.length > 0) {
+                  rows.push(
+                    <div key={`row-${i}`} className="product-row" style={{gridTemplateColumns: `repeat(${rowProducts.length}, 1fr)`}}>
+                      <ProductGrid 
+                        products={rowProducts}
+                        onAddToCart={handleAddToCart}
+                        className="row-products-only"
+                      />
+                    </div>
+                  );
+                }
+              }
+              
+              return rows;
+            })()}
           </div>
           
           {/* Other Products Sidebar - Spans all 3 rows */}

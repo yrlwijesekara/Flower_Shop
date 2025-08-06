@@ -437,12 +437,22 @@
   gap: 30px;
 }
 
-/* Product Row - 3 cards in a row */
+/* Product Row - Dynamic cards in a row */
 .product-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 15px;
   width: 100%;
+  justify-items: center;
+}
+
+/* When row has fewer than 3 products */
+.product-row[style*="repeat(1"] {
+  justify-content: center;
+}
+
+.product-row[style*="repeat(2"] {
+  justify-content: center;
 }
 
 /* Row Products Only - Takes all space in the row */
@@ -584,8 +594,9 @@
   }
   
   .product-row {
-    grid-template-columns: repeat(2, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 15px;
+    justify-content: center;
   }
   
   .other-products-sidebar {
@@ -619,8 +630,9 @@
   }
   
   .product-row {
-    grid-template-columns: repeat(2, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 12px;
+    justify-content: center;
   }
   
   .other-products-sidebar {
