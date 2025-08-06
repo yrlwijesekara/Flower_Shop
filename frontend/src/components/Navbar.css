@@ -13,6 +13,7 @@
   z-index: 1000;
 }
 
+
 .navbar-container {
   display: flex;
   align-items: center;
@@ -150,6 +151,7 @@
   margin: 3px 0;
   transition: 0.3s;
 }
+
 
 /* Responsive Breakpoints */
 
@@ -383,6 +385,7 @@ html {
 }
 
 /* Ensure content doesn't hide behind fixed navbar */
+/* Note: MiniNavbar uses position sticky, so body only needs main navbar padding */
 body {
   padding-top: 100px;
 }
