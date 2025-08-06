@@ -4,7 +4,7 @@
   position: relative;
   width: 100%;
   height: auto;
-  max-width: 300px;
+  max-width: 250px;
   margin: 0 auto;
 }
 
@@ -134,18 +134,22 @@
 /* Rating Container */
 .other-products-rating-container {
   display: flex;
-  gap: 2px;
+  gap: 1px;
   align-items: center;
   margin-bottom: 5px;
+  max-width: 100px;
+  overflow: hidden;
+  flex-wrap: nowrap;
 }
 
 /* Star Styles */
 .other-products-star {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  flex-shrink: 0;
 }
 
 .other-products-full-star {
@@ -190,6 +194,9 @@
 
 /* 1400px+ - Desktop Large */
 @media (min-width: 1400px) {
+  .other-products-container {
+    max-width: 300px;
+  }
   .other-products-header-title {
     font-size: 20px;
   }
@@ -220,8 +227,13 @@
   }
   
   .other-products-star {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
+  }
+  
+  .other-products-rating-container {
+    max-width: 110px;
+    gap: 2px;
   }
   
   .other-products-price-text {
@@ -231,6 +243,9 @@
 
 /* 1200px to 1399px - Desktop */
 @media (max-width: 1399px) and (min-width: 1200px) {
+  .other-products-container {
+    max-width: 280px;
+  }
   .other-products-header-title {
     font-size: 19px;
   }
@@ -261,8 +276,13 @@
   }
   
   .other-products-star {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
+  }
+  
+  .other-products-rating-container {
+    max-width: 100px;
+    gap: 1px;
   }
   
   .other-products-price-text {
@@ -272,6 +292,9 @@
 
 /* 992px to 1199px - Tablet Large */
 @media (max-width: 1199px) and (min-width: 992px) {
+  .other-products-container {
+    max-width: 260px;
+  }
   .other-products-header-title {
     font-size: 18px;
   }
@@ -299,11 +322,13 @@
   .other-products-rating-container {
     left: 90px;
     top: 35px;
+    max-width: 90px;
+    gap: 1px;
   }
   
   .other-products-star {
-    width: 18px;
-    height: 18px;
+    width: 15px;
+    height: 15px;
   }
   
   .other-products-price-text {
@@ -356,11 +381,13 @@
   
   .other-products-rating-container {
     margin-bottom: 3px;
+    max-width: 85px;
+    gap: 1px;
   }
   
   .other-products-star {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
   }
   
   .other-products-price-container {

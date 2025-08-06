@@ -425,7 +425,7 @@
   padding: 20px;
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: 1fr 350px;
+  grid-template-columns: 1fr 320px;
   gap: 30px;
   align-items: start;
 }
@@ -464,8 +464,8 @@
 
 .other-products-sidebar .other-products-container {
   width: 100%;
-  max-width: 100%;
-  margin: 0;
+  max-width: 280px;
+  margin: 0 auto;
 }
 
 /* Responsive Design for Custom Layout */
@@ -474,7 +474,7 @@
 @media (min-width: 1400px) {
   .custom-product-layout {
     max-width: 1600px;
-    grid-template-columns: 1fr 400px;
+    grid-template-columns: 1fr 360px;
     gap: 40px;
     padding: 30px;
   }
@@ -497,7 +497,7 @@
 @media (max-width: 1399px) and (min-width: 1200px) {
   .custom-product-layout {
     max-width: 1400px;
-    grid-template-columns: 1fr 350px;
+    grid-template-columns: 1fr 320px;
     gap: 35px;
     padding: 25px;
   }
@@ -520,7 +520,7 @@
 @media (max-width: 1199px) and (min-width: 992px) {
   .custom-product-layout {
     max-width: 1200px;
-    grid-template-columns: 1fr 300px;
+    grid-template-columns: 1fr 280px;
     gap: 30px;
     padding: 20px;
   }
