@@ -295,7 +295,7 @@ const Shop = () => {
                 const rowProducts = products.slice(i, i + 3);
                 if (rowProducts.length > 0) {
                   rows.push(
-                    <div key={`row-${i}`} className="product-row" style={{gridTemplateColumns: `repeat(${rowProducts.length}, 1fr)`}}>
+                    <div key={`row-${i}`} className="product-row">
                       <ProductGrid 
                         products={rowProducts}
                         onAddToCart={handleAddToCart}
