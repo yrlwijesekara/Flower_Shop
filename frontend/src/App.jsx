@@ -10,6 +10,10 @@ function App() {
 
   const breadcrumbData = [
     { 
+      icon: <FiHome size={25} color="#000000" />, 
+      href: '#home' 
+    },
+    { 
       label: 'Products', 
       href: '#products' 
     }
