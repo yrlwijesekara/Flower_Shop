@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
+import ProductGrid from '../components/ProductGrid';
+import OtherProducts from '../components/OtherProducts';
 import { FiHome, FiMic } from 'react-icons/fi';
 import { BiSearch } from 'react-icons/bi';
 import './Shop.css';
@@ -9,6 +11,84 @@ const Shop = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('recent');
   const [searchQuery, setSearchQuery] = useState('');
+  const [cart, setCart] = useState([]);
+
+  // Sample product data based on active tab
+  const getProductsByTab = (tab) => {
+    const allProducts = [
+      {
+        id: 1,
+        name: "SNAKE PLANT",
+        category: "Cactus",
+        price: 149,
+        image: "/images/snake-plant.jpg",
+        isRecent: true,
+        isPopular: true,
+        isSpecial: false
+      },
+      {
+        id: 2,
+        name: "CANDELABRA ALOE",
+        category: "Aloe Vera",
+        price: 39,
+        image: "/images/candelabra-aloe.jpg",
+        isRecent: false,
+        isPopular: true,
+        isSpecial: true
+      },
+      {
+        id: 3,
+        name: "GOLDEN POTHOS",
+        category: "Pothos",
+        price: 69,
+        image: "/images/golden-pothos.jpg",
+        isRecent: true,
+        isPopular: false,
+        isSpecial: true
+      },
+      {
+        id: 4,
+        name: "HOMALOMENA",
+        category: "Tropical",
+        price: 119,
+        image: "/images/homalomena.jpg",
+        isRecent: false,
+        isPopular: true,
+        isSpecial: false
+      },
+      {
+        id: 5,
+        name: "FIDDLE LEAF FIG",
+        category: "Indoor Tree",
+        price: 89,
+        image: "/images/fiddle-leaf.jpg",
+        isRecent: true,
+        isPopular: false,
+        isSpecial: true
+      },
+      {
+        id: 6,
+        name: "PEACE LILY",
+        category: "Flowering",
+        price: 45,
+        image: "/images/peace-lily.jpg",
+        isRecent: false,
+        isPopular: true,
+        isSpecial: true
+      }
+    ];
+
+    switch (tab) {
+      case 'recent':
+        return allProducts.filter(product => product.isRecent);
+      case 'popular':
+        return allProducts.filter(product => product.isPopular);
+      case 'special':
+        return allProducts.filter(product => product.isSpecial);
+      default:
+        return allProducts;
+    }
+  };
 
   const breadcrumbData = [
     { 
@@ -44,6 +124,22 @@ const Shop = () => {
   const handleVoiceSearch = () => {
     console.log('Voice search activated');
     // Voice search functionality would go here
+  };
+
+  const handleAddToCart = (product) => {
+    setCart(prevCart => {
+      const existingItem = prevCart.find(item => item.id === product.id);
+      if (existingItem) {
+        return prevCart.map(item =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      } else {
+        return [...prevCart, { ...product, quantity: 1 }];
+      }
+    });
+    console.log(`Added ${product.name} to cart`);
   };
 
   return (
@@ -126,17 +222,27 @@ const Shop = () => {
       
       {/* Content based on active tab */}
       <section className="shop-content">
-        <div style={{ padding: '40px 20px', textAlign: 'center' }}>
-          <h2>
-            {activeTab === 'recent' && 'Recent Items'}
-            {activeTab === 'popular' && 'Popular Items'}
-            {activeTab === 'special' && 'Special Offers For You'}
-          </h2>
-          <p>Content for {activeTab} tab will be displayed here.</p>
-          {searchQuery && (
-            <p>Search results for: "{searchQuery}"</p>
-          )}
-        </div>
+        <ProductGrid 
+          products={getProductsByTab(activeTab)}
+          onAddToCart={handleAddToCart}
+        />
+        
+        {/* Other Products Sidebar */}
+        <OtherProducts />
+        
+        {/* Display cart info for demo */}
+        {cart.length > 0 && (
+          <div className="cart-summary" style={{ 
+            padding: '20px', 
+            backgroundColor: '#f8f9fa', 
+            margin: '20px',
+            borderRadius: '8px',
+            textAlign: 'center'
+          }}>
+            <h3>Cart ({cart.reduce((total, item) => total + item.quantity, 0)} items)</h3>
+            <p>Total: ${cart.reduce((total, item) => total + (item.price * item.quantity), 0)}</p>
+          </div>
+        )}
       </section>
     </div>
   );

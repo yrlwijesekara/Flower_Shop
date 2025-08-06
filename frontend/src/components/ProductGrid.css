@@ -1,0 +1,92 @@
+/* Product Grid Component Styles */
+
+.product-grid {
+  width: 100%;
+  padding: 40px 20px;
+  background: #FFFFFF;
+}
+
+.grid-container {
+  display: grid;
+  justify-content: center;
+  gap: 30px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Responsive Grid Layout */
+
+/* 1400px and above - Desktop Large */
+@media (min-width: 1400px) {
+  .grid-container {
+    grid-template-columns: repeat(4, 325px);
+    gap: 30px 25px;
+    padding: 0 20px;
+  }
+}
+
+/* 1200px - Desktop */
+@media (max-width: 1399px) and (min-width: 1200px) {
+  .grid-container {
+    grid-template-columns: repeat(4, 300px);
+    gap: 25px 20px;
+    padding: 0 15px;
+  }
+}
+
+/* 992px - Tablet Large */
+@media (max-width: 1199px) and (min-width: 992px) {
+  .grid-container {
+    grid-template-columns: repeat(3, 280px);
+    gap: 25px 20px;
+    padding: 0 15px;
+  }
+}
+
+/* 768px - Tablet */
+@media (max-width: 991px) and (min-width: 768px) {
+  .product-grid {
+    padding: 30px 15px;
+  }
+  
+  .grid-container {
+    grid-template-columns: repeat(3, 260px);
+    gap: 20px 15px;
+    padding: 0 10px;
+  }
+}
+
+/* 480px - Mobile */
+@media (max-width: 767px) and (min-width: 480px) {
+  .product-grid {
+    padding: 25px 10px;
+  }
+  
+  .grid-container {
+    grid-template-columns: repeat(2, 240px);
+    gap: 15px 10px;
+    padding: 0 5px;
+  }
+}
+
+/* Below 480px - Mobile Small */
+@media (max-width: 479px) {
+  .product-grid {
+    padding: 20px 5px;
+  }
+  
+  .grid-container {
+    grid-template-columns: repeat(2, 220px);
+    gap: 12px 8px;
+    padding: 0;
+  }
+}
+
+/* Very small screens - Single column */
+@media (max-width: 380px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 15px;
+  }
+}

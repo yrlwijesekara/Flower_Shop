@@ -386,6 +386,7 @@
   margin: 0 auto;
   box-sizing: border-box;
   padding: 0 20px;
+  position: relative;
 }
 
 /* Responsive shop content padding */
