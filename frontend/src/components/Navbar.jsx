@@ -5,6 +5,7 @@ import './Navbar.css';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
   const location = useLocation();
 
   const toggleMenu = () => {
@@ -19,15 +20,30 @@ const Navbar = () => {
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMenuOpen) {
+      // Capture current scroll position
+      setScrollY(window.scrollY);
+      // Apply body lock with fixed position
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${window.scrollY}px`;
+      document.body.style.width = '100%';
       document.body.classList.add('menu-open');
     } else {
+      // Remove body lock and restore scroll position
       document.body.classList.remove('menu-open');
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      window.scrollTo(0, scrollY);
     }
 
     return () => {
+      // Cleanup on unmount
       document.body.classList.remove('menu-open');
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
     };
-  }, [isMenuOpen]);
+  }, [isMenuOpen, scrollY]);
 
   return (
     <nav className="navbar">

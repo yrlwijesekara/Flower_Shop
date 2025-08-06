@@ -1,12 +1,9 @@
 /* Mini Navbar Styles */
 .mini-navbar {
-  
-   width: 100%;
-  
+  width: 100%;
   background: #2ac90e;
   padding: 15px 0;
-  position: sticky;
-  top: 100px; /* Below main navbar */
+  position: relative;
   z-index: 999;
 }
 
@@ -159,7 +156,6 @@
 @media (max-width: 1200px) {
   .mini-navbar {
     padding: 18px 0;
-    top: 80px; /* Adjusted for smaller main navbar */
   }
   
   .mini-navbar-container {
@@ -191,7 +187,6 @@
 @media (max-width: 992px) {
   .mini-navbar {
     padding: 16px 0;
-    top: 80px;
   }
   
   .mini-navbar-container {
@@ -237,7 +232,6 @@
 @media (max-width: 768px) {
   .mini-navbar {
     padding: 14px 0;
-    top: 70px; /* Adjusted for mobile main navbar */
   }
   
   .mini-navbar-container {
@@ -292,7 +286,6 @@
 @media (max-width: 480px) {
   .mini-navbar {
     padding: 12px 0;
-    top: 60px; /* Adjusted for smallest mobile navbar */
   }
   
   .mini-navbar-container {

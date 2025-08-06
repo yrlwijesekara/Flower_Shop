@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
-import { FiHome, FiSearch, FiMic } from 'react-icons/fi';
+import { FiHome, FiMic } from 'react-icons/fi';
+import { BiSearch } from 'react-icons/bi';
 import './Shop.css';
 
 const Shop = () => {
@@ -72,7 +73,7 @@ const Shop = () => {
               className="search-icon"
               aria-label="Search"
             >
-              <FiSearch size={24} color="#000000" />
+              <BiSearch size={28} color="#000000" />
             </button>
             <button 
               type="button" 
@@ -80,13 +81,13 @@ const Shop = () => {
               onClick={handleVoiceSearch}
               aria-label="Voice Search"
             >
-              <FiMic size={24} color="#000000" />
+              <FiMic size={26} color="#000000" />
             </button>
           </form>
         </div>
 
-        {/* Filter Tabs */}
-        <div className="filter-tabs">
+        {/* Filter Tabs - Desktop */}
+        <div className="filter-tabs desktop-filters">
           <button 
             className={`filter-tab recent ${activeTab === 'recent' ? 'active' : ''}`}
             onClick={() => handleTabClick('recent')}
@@ -107,6 +108,19 @@ const Shop = () => {
           >
             <span className="tab-text">Special Offers For you</span>
           </button>
+        </div>
+
+        {/* Mobile Filter Dropdown */}
+        <div className="mobile-filter-container">
+          <select 
+            className="mobile-filter-select"
+            value={activeTab}
+            onChange={(e) => handleTabClick(e.target.value)}
+          >
+            <option value="recent">Recent</option>
+            <option value="popular">Popular Items</option>
+            <option value="special">Special Offers For you</option>
+          </select>
         </div>
       </section>
       
