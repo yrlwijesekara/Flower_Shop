@@ -75,6 +75,66 @@ const Shop = () => {
         isRecent: false,
         isPopular: true,
         isSpecial: true
+      },
+      {
+        id: 7,
+        name: "MONSTERA DELICIOSA",
+        category: "Tropical",
+        price: 79,
+        image: "/images/monstera.jpg",
+        isRecent: true,
+        isPopular: true,
+        isSpecial: false
+      },
+      {
+        id: 8,
+        name: "RUBBER PLANT",
+        category: "Indoor Tree",
+        price: 59,
+        image: "/images/rubber-plant.jpg",
+        isRecent: false,
+        isPopular: false,
+        isSpecial: true
+      },
+      {
+        id: 9,
+        name: "ZZ PLANT",
+        category: "Low Light",
+        price: 35,
+        image: "/images/zz-plant.jpg",
+        isRecent: true,
+        isPopular: true,
+        isSpecial: true
+      },
+      {
+        id: 10,
+        name: "PHILODENDRON",
+        category: "Tropical",
+        price: 55,
+        image: "/images/philodendron.jpg",
+        isRecent: false,
+        isPopular: true,
+        isSpecial: false
+      },
+      {
+        id: 11,
+        name: "SPIDER PLANT",
+        category: "Air Purifying",
+        price: 25,
+        image: "/images/spider-plant.jpg",
+        isRecent: true,
+        isPopular: false,
+        isSpecial: true
+      },
+      {
+        id: 12,
+        name: "DRACAENA",
+        category: "Low Light",
+        price: 65,
+        image: "/images/dracaena.jpg",
+        isRecent: false,
+        isPopular: true,
+        isSpecial: true
       }
     ];
 
@@ -222,13 +282,31 @@ const Shop = () => {
       
       {/* Content based on active tab */}
       <section className="shop-content">
-        <ProductGrid 
-          products={getProductsByTab(activeTab)}
-          onAddToCart={handleAddToCart}
-        />
-        
-        {/* Other Products Sidebar */}
-        <OtherProducts />
+        {/* Custom Layout: First 4 products in grid, then 3 products + Other Products */}
+        <div className="custom-product-layout">
+          {/* First Row - 4 products */}
+          <ProductGrid 
+            products={getProductsByTab(activeTab).slice(0, 4)}
+            onAddToCart={handleAddToCart}
+            className="first-row"
+          />
+          
+          {/* Second Row - All remaining products + Other Products */}
+          <div className="second-row-container">
+            <div className="second-row-products">
+              <ProductGrid 
+                products={getProductsByTab(activeTab).slice(4)}
+                onAddToCart={handleAddToCart}
+                className="second-row"
+              />
+            </div>
+            
+            {/* Other Products in last card space */}
+            <div className="other-products-card-space">
+              <OtherProducts />
+            </div>
+          </div>
+        </div>
         
         {/* Display cart info for demo */}
         {cart.length > 0 && (

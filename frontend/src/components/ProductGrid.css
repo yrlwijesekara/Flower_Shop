@@ -104,3 +104,17 @@
     max-width: calc(100vw - 10px);
   }
 }
+
+/* Override default grid settings for custom layout classes */
+.product-grid.first-row,
+.product-grid.second-row {
+  padding: 0;
+  background: transparent;
+}
+
+.product-grid.first-row .grid-container,
+.product-grid.second-row .grid-container {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
