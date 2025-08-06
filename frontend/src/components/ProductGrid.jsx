@@ -47,13 +47,7 @@ const ProductGrid = ({ products = [], onAddToCart, className = "" }) => {
       price: 45,
       image: "/images/peace-lily.jpg"
     },
-    {
-      id: 6,
-      name: "PEACE LILY",
-      category: "Flowering",
-      price: 45,
-      image: "/images/peace-lily.jpg"
-    }
+    
   ];
 
   const displayProducts = products.length > 0 ? products : defaultProducts;

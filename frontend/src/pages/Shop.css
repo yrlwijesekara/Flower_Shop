@@ -424,46 +424,45 @@
   margin: 0 auto;
   padding: 20px;
   box-sizing: border-box;
-}
-
-/* First Row Grid - 4 products */
-.product-grid.first-row .grid-container {
   display: grid;
-  grid-template-columns: repeat(4, minmax(250px, 1fr));
-  gap: 20px;
-  margin-bottom: 40px;
-  justify-items: center;
-}
-
-/* Second Row Container - Dynamic Grid */
-.second-row-container {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 20px;
+  grid-template-columns: 1fr 350px;
+  gap: 30px;
   align-items: start;
 }
 
-/* Second Row Products - Takes available space */
-.second-row-products {
+/* Products Section - Contains all 3 rows */
+.products-section {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Product Row - 3 cards in a row */
+.product-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  width: 100%;
+}
+
+/* Row Products Only - Takes all space in the row */
+.product-grid.row-products-only {
   display: contents;
 }
 
-.second-row-products .product-grid.second-row .grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
+.product-grid.row-products-only .grid-container {
+  display: contents;
 }
 
-/* Other Products Card Space - Fixed width */
-.other-products-card-space {
-  width: 300px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 400px;
+/* Other Products Sidebar - Spans all rows */
+.other-products-sidebar {
+  width: 100%;
+  height: fit-content;
+  position: sticky;
+  top: 20px;
 }
 
-.other-products-card-space .other-products-container {
+.other-products-sidebar .other-products-container {
   width: 100%;
   max-width: 100%;
   margin: 0;
@@ -471,78 +470,62 @@
 
 /* Responsive Design for Custom Layout */
 @media (max-width: 1199px) {
-  .product-grid.first-row .grid-container {
-    grid-template-columns: repeat(4, minmax(220px, 1fr));
-  }
-  
-  .second-row-products .product-grid.second-row .grid-container {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  }
-  
-  .other-products-card-space {
-    width: 280px;
+  .custom-product-layout {
+    grid-template-columns: 1fr 300px;
+    gap: 25px;
   }
 }
 
 @media (max-width: 991px) {
-  .product-grid.first-row .grid-container {
-    grid-template-columns: repeat(3, minmax(200px, 1fr));
-  }
-  
-  .second-row-container {
+  .custom-product-layout {
     grid-template-columns: 1fr;
     gap: 30px;
   }
   
-  .second-row-products .product-grid.second-row .grid-container {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  .other-products-sidebar {
+    position: static;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
   }
   
-  .other-products-card-space {
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-    justify-content: center;
+  .product-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
   }
 }
 
 @media (max-width: 767px) {
-  .product-grid.first-row .grid-container {
-    grid-template-columns: repeat(2, minmax(180px, 1fr));
-    gap: 15px;
-  }
-  
-  .second-row-products .product-grid.second-row .grid-container {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 15px;
-  }
-  
   .custom-product-layout {
     padding: 15px;
+    gap: 25px;
   }
   
-  .product-grid.first-row .grid-container {
-    margin-bottom: 30px;
+  .products-section {
+    gap: 25px;
   }
   
-  .other-products-card-space {
-    width: 100%;
-    max-width: 400px;
+  .product-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .other-products-sidebar {
+    max-width: 100%;
   }
 }
 
 @media (max-width: 479px) {
-  .product-grid.first-row .grid-container {
-    grid-template-columns: repeat(2, minmax(150px, 1fr));
-    gap: 12px;
-  }
-  
-  .second-row-products .product-grid.second-row .grid-container {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 12px;
-  }
-  
   .custom-product-layout {
     padding: 10px;
+    gap: 20px;
+  }
+  
+  .products-section {
+    gap: 20px;
+  }
+  
+  .product-row {
+    gap: 10px;
   }
 }

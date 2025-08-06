@@ -282,29 +282,40 @@ const Shop = () => {
       
       {/* Content based on active tab */}
       <section className="shop-content">
-        {/* Custom Layout: First 4 products in grid, then 3 products + Other Products */}
+        {/* Custom Layout: 3 rows of products + One spanning Other Products */}
         <div className="custom-product-layout">
-          {/* First Row - 4 products */}
-          <ProductGrid 
-            products={getProductsByTab(activeTab).slice(0, 4)}
-            onAddToCart={handleAddToCart}
-            className="first-row"
-          />
-          
-          {/* Second Row - All remaining products + Other Products */}
-          <div className="second-row-container">
-            <div className="second-row-products">
+          <div className="products-section">
+            {/* First Row - 3 products */}
+            <div className="product-row">
               <ProductGrid 
-                products={getProductsByTab(activeTab).slice(4)}
+                products={getProductsByTab(activeTab).slice(0, 3)}
                 onAddToCart={handleAddToCart}
-                className="second-row"
+                className="row-products-only"
               />
             </div>
             
-            {/* Other Products in last card space */}
-            <div className="other-products-card-space">
-              <OtherProducts />
+            {/* Second Row - 3 products */}
+            <div className="product-row">
+              <ProductGrid 
+                products={getProductsByTab(activeTab).slice(3, 6)}
+                onAddToCart={handleAddToCart}
+                className="row-products-only"
+              />
             </div>
+            
+            {/* Third Row - 3 products */}
+            <div className="product-row">
+              <ProductGrid 
+                products={getProductsByTab(activeTab).slice(6, 9)}
+                onAddToCart={handleAddToCart}
+                className="row-products-only"
+              />
+            </div>
+          </div>
+          
+          {/* Other Products Sidebar - Spans all 3 rows */}
+          <div className="other-products-sidebar">
+            <OtherProducts />
           </div>
         </div>
         
