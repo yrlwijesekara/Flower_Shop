@@ -1,12 +1,42 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FiSearch, FiShoppingCart, FiUser } from 'react-icons/fi';
 import './Navbar.css';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [cartItemCount, setCartItemCount] = useState(0);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  // Load cart count from localStorage
+  useEffect(() => {
+    const updateCartCount = () => {
+      const savedCart = localStorage.getItem('flowerShopCart');
+      if (savedCart) {
+        const cart = JSON.parse(savedCart);
+        const totalCount = cart.reduce((total, item) => total + item.quantity, 0);
+        setCartItemCount(totalCount);
+      } else {
+        setCartItemCount(0);
+      }
+    };
+
+    // Update cart count on component mount
+    updateCartCount();
+
+    // Listen for storage changes to update cart count
+    window.addEventListener('storage', updateCartCount);
+    
+    // Listen for custom cart update event
+    window.addEventListener('cartUpdated', updateCartCount);
+
+    return () => {
+      window.removeEventListener('storage', updateCartCount);
+      window.removeEventListener('cartUpdated', updateCartCount);
+    };
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -15,6 +45,12 @@ const Navbar = () => {
   // Close menu when clicking on nav links
   const closeMenu = () => {
     setIsMenuOpen(false);
+  };
+
+  // Handle cart navigation
+  const handleCartClick = () => {
+    closeMenu(); // Close mobile menu if open
+    navigate('/cart');
   };
 
   // Prevent body scroll when mobile menu is open
@@ -88,8 +124,11 @@ const Navbar = () => {
               <button className="action-btn search-btn" aria-label="Search">
                 <FiSearch size={32} color="#164C0D" />
               </button>
-              <button className="action-btn cart-btn" aria-label="Shopping Cart">
+              <button className="action-btn cart-btn" aria-label="Shopping Cart" onClick={handleCartClick}>
                 <FiShoppingCart size={32} color="#164C0D" />
+                {cartItemCount > 0 && (
+                  <span className="cart-badge">{cartItemCount > 99 ? '99+' : cartItemCount}</span>
+                )}
               </button>
               <button className="action-btn user-btn" aria-label="User Account">
                 <FiUser size={32} color="#164C0D" />
@@ -102,8 +141,11 @@ const Navbar = () => {
             <button className="action-btn search-btn" aria-label="Search">
               <FiSearch size={32} color="#164C0D" />
             </button>
-            <button className="action-btn cart-btn" aria-label="Shopping Cart">
+            <button className="action-btn cart-btn" aria-label="Shopping Cart" onClick={handleCartClick}>
               <FiShoppingCart size={32} color="#164C0D" />
+              {cartItemCount > 0 && (
+                <span className="cart-badge">{cartItemCount > 99 ? '99+' : cartItemCount}</span>
+              )}
             </button>
             <button className="action-btn user-btn" aria-label="User Account">
               <FiUser size={32} color="#164C0D" />
