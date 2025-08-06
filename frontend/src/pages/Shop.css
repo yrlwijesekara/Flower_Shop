@@ -393,6 +393,62 @@
   overflow: visible;
 }
 
+/* Search Results Info */
+.search-results-info {
+  background: #f8f9fa;
+  padding: 15px 20px;
+  margin: 20px 0;
+  border-radius: 8px;
+  border-left: 4px solid #23B540;
+}
+
+.search-results-info p {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.clear-search-btn {
+  background: #23B540;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  margin-left: 15px;
+}
+
+.clear-search-btn:hover {
+  background: #1e9e3a;
+}
+
+/* No Results Message */
+.no-results {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+}
+
+.no-results h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.no-results p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  margin: 0;
+}
+
 /* Responsive shop content padding */
 @media (max-width: 768px) {
   .shop-content {

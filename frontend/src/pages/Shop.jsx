@@ -14,7 +14,7 @@ const Shop = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [cart, setCart] = useState([]);
 
-  // Sample product data based on active tab
+  // Sample product data based on active tab and search query
   const getProductsByTab = (tab) => {
     const allProducts = [
       {
@@ -139,16 +139,32 @@ const Shop = () => {
       }
     ];
 
+    let filteredProducts = allProducts;
+
+    // Filter by tab
     switch (tab) {
       case 'recent':
-        return allProducts.filter(product => product.isRecent);
+        filteredProducts = allProducts.filter(product => product.isRecent);
+        break;
       case 'popular':
-        return allProducts.filter(product => product.isPopular);
+        filteredProducts = allProducts.filter(product => product.isPopular);
+        break;
       case 'special':
-        return allProducts.filter(product => product.isSpecial);
+        filteredProducts = allProducts.filter(product => product.isSpecial);
+        break;
       default:
-        return allProducts;
+        filteredProducts = allProducts;
     }
+
+    // Filter by search query
+    if (searchQuery.trim()) {
+      filteredProducts = filteredProducts.filter(product =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.category.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    return filteredProducts;
   };
 
   const breadcrumbData = [
@@ -179,12 +195,16 @@ const Shop = () => {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    console.log('Search query:', searchQuery);
+    // Search is handled automatically by getProductsByTab function
   };
 
   const handleVoiceSearch = () => {
     console.log('Voice search activated');
     // Voice search functionality would go here
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery('');
   };
 
   const handleAddToCart = (product) => {
@@ -283,12 +303,37 @@ const Shop = () => {
       
       {/* Content based on active tab */}
       <section className="shop-content">
+        {/* Search Results Info */}
+        {searchQuery.trim() && (
+          <div className="search-results-info">
+            <p>
+              {getProductsByTab(activeTab).length > 0 
+                ? `Found ${getProductsByTab(activeTab).length} product(s) for "${searchQuery}"`
+                : `No products found for "${searchQuery}"`
+              }
+              <button onClick={handleClearSearch} className="clear-search-btn">
+                Clear Search
+              </button>
+            </p>
+          </div>
+        )}
+        
         {/* Custom Layout: 3 rows of products + One spanning Other Products */}
         <div className="custom-product-layout">
           <div className="products-section">
             {/* Dynamic rows based on available products */}
             {(() => {
               const products = getProductsByTab(activeTab);
+              
+              if (products.length === 0 && searchQuery.trim()) {
+                return (
+                  <div className="no-results">
+                    <h3>No products found</h3>
+                    <p>Try searching with different keywords or browse our categories.</p>
+                  </div>
+                );
+              }
+              
               const rows = [];
               
               for (let i = 0; i < products.length; i += 3) {
