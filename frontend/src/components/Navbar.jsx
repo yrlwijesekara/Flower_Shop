@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { FiSearch, FiShoppingCart, FiUser } from 'react-icons/fi';
 import './Navbar.css';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -49,19 +51,19 @@ const Navbar = () => {
           <div className={`navbar-menu ${isMenuOpen ? 'active' : ''}`}>
             <ul className="navbar-nav">
               <li className="nav-item">
-                <a href="#home" className="nav-link active" onClick={closeMenu}>HOME</a>
+                <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`} onClick={closeMenu}>HOME</Link>
               </li>
               <li className="nav-item">
-                <a href="#shop" className="nav-link" onClick={closeMenu}>SHOP</a>
+                <Link to="/shop" className={`nav-link ${location.pathname === '/shop' ? 'active' : ''}`} onClick={closeMenu}>SHOP</Link>
               </li>
               <li className="nav-item">
-                <a href="#category" className="nav-link" onClick={closeMenu}>CATEGORY</a>
+                <Link to="/category" className={`nav-link ${location.pathname === '/category' ? 'active' : ''}`} onClick={closeMenu}>CATEGORY</Link>
               </li>
               <li className="nav-item">
-                <a href="#about" className="nav-link" onClick={closeMenu}>ABOUT</a>
+                <Link to="/about" className={`nav-link ${location.pathname === '/about' ? 'active' : ''}`} onClick={closeMenu}>ABOUT</Link>
               </li>
               <li className="nav-item">
-                <a href="#contact" className="nav-link contact-link" onClick={closeMenu}>CONTACT</a>
+                <Link to="/contact" className={`nav-link contact-link ${location.pathname === '/contact' ? 'active' : ''}`} onClick={closeMenu}>CONTACT</Link>
               </li>
             </ul>
 

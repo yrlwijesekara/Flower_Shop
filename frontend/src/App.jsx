@@ -1,42 +1,23 @@
-import { useState } from 'react'
-import Navbar from './components/Navbar'
-import MiniNavbar from './components/MiniNavbar'
-import { FiHome } from 'react-icons/fi'
-import './App.css'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import Shop from './pages/Shop';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [isFilterOpen, setIsFilterOpen] = useState(false)
-
-  const breadcrumbData = [
-    { 
-      icon: <FiHome size={25} color="#000000" />, 
-      href: '#home' 
-    },
-    { 
-      label: 'Products', 
-      href: '#products' 
-    }
-  ]
-
-  const handleFilterToggle = (isOpen) => {
-    setIsFilterOpen(isOpen)
-    console.log('Filters are now:', isOpen ? 'open' : 'closed')
-  }
-
   return (
-    <>
-      <Navbar />
-      <MiniNavbar 
-        breadcrumbs={breadcrumbData}
-        showFilters={true}
-        onFilterToggle={handleFilterToggle}
-        isFilterOpen={isFilterOpen}
-      />
-      
-   
-    </>
-  )
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/category" element={<div>Category Page Coming Soon</div>} />
+          <Route path="/about" element={<div>About Page Coming Soon</div>} />
+          <Route path="/contact" element={<div>Contact Page Coming Soon</div>} />
+        </Routes>
+      </div>
+    </Router>
+  );
 }
 
-export default App
+export default App;
