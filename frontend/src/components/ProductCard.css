@@ -1,0 +1,536 @@
+/* Product Card Component Styles */
+
+.product-card {
+  display: inline-block;
+  margin: 20px 15px;
+}
+
+/* Card Background - Rectangle 2 */
+.card-background {
+  position: relative;
+  width: 325px;
+  height: 450px;
+  background: #D9D9D9;
+  border-radius: 17px;
+  padding: 0;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.card-background:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Image Frame */
+.image-frame {
+  position: absolute;
+  width: 253.7px;
+  height: 357.85px;
+  left: 33.33px;
+  top: 51.89px;
+  margin-bottom: 20px;
+}
+
+/* Image Container with background color */
+.image-container {
+  position: relative;
+  width: 248.68px;
+  height: 220px;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+/* Product Image */
+.product-image {
+  position: absolute;
+  width: 334px;
+  height: 334px;
+  left: -29px;
+  top: -10px;
+  object-fit: cover;
+  border-radius: 5px;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+/* Product Information Section */
+.product-info {
+  position: absolute;
+  left: 33.33px;
+  bottom: 110px;
+  width: 248.68px;
+  margin-top: 30px;
+}
+
+/* Product Header (Name and Price) */
+.product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+/* Product Name - SNAKE PLANT */
+.product-name {
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 30px;
+  color: #000000;
+  margin: 0;
+  flex: 1;
+}
+
+/* Product Price - $149 */
+.product-price {
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 20px;
+  line-height: 30px;
+  color: #000000;
+  margin-left: 10px;
+}
+
+/* Product Category - Cactus */
+.product-category {
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 20px;
+  color: #000000;
+  margin: 0;
+  margin-top: 4px;
+}
+
+/* Add to Cart Button */
+.add-to-cart-btn {
+  position: absolute;
+  width: 230.19px;
+  height: 35.3px;
+  left: 47.84px;
+  bottom: 33.44px;
+  background: #164C0D;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-to-cart-btn:hover {
+  background: #0f3a08;
+  transform: translateY(-2px);
+}
+
+.add-to-cart-btn:active {
+  transform: translateY(0);
+}
+
+/* Button Text - ADD TO CART */
+.btn-text {
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 20px;
+  line-height: 30px;
+  color: #FFFFFF;
+  flex: 1;
+  text-align: left;
+}
+
+/* Cart Icon */
+.cart-icon {
+  width: 30.83px;
+  height: 24.07px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive Design */
+
+/* 1400px and above - Desktop Large */
+@media (min-width: 1400px) {
+  .product-card {
+    margin: 0;
+    width: 100%;
+  }
+  
+  .card-background {
+    width: 100%;
+    max-width: 350px;
+    height: 480px;
+  }
+  
+  .image-frame {
+    width: 85%;
+    height: 75%;
+    left: 7.5%;
+    top: 12%;
+  }
+  
+  .image-container {
+    width: 100%;
+    height: 60%;
+  }
+  
+  .product-image {
+    width: 120%;
+    height: 120%;
+    left: -10%;
+    top: -10%;
+  }
+  
+  .product-info {
+    left: 7.5%;
+    width: 85%;
+    bottom: 18%;
+  }
+  
+  .add-to-cart-btn {
+    width: 80%;
+    height: 40px;
+    left: 10%;
+    bottom: 8%;
+  }
+  
+  .product-name,
+  .product-price {
+    font-size: 22px;
+    line-height: 32px;
+  }
+  
+  .product-category {
+    font-size: 14px;
+  }
+  
+  .btn-text {
+    font-size: 18px;
+  }
+}
+
+/* 1200px to 1399px - Desktop */
+@media (max-width: 1399px) and (min-width: 1200px) {
+  .product-card {
+    margin: 0;
+    width: 100%;
+  }
+  
+  .card-background {
+    width: 100%;
+    max-width: 320px;
+    height: 450px;
+  }
+  
+  .image-frame {
+    width: 85%;
+    height: 75%;
+    left: 7.5%;
+    top: 12%;
+  }
+  
+  .image-container {
+    width: 100%;
+    height: 60%;
+  }
+  
+  .product-image {
+    width: 120%;
+    height: 120%;
+    left: -10%;
+    top: -10%;
+  }
+  
+  .product-info {
+    left: 7.5%;
+    width: 85%;
+    bottom: 18%;
+  }
+  
+  .add-to-cart-btn {
+    width: 80%;
+    height: 38px;
+    left: 10%;
+    bottom: 8%;
+  }
+  
+  .product-name,
+  .product-price {
+    font-size: 20px;
+    line-height: 28px;
+  }
+  
+  .product-category {
+    font-size: 13px;
+  }
+  
+  .btn-text {
+    font-size: 16px;
+  }
+}
+
+/* 992px to 1199px - Tablet Large */
+@media (max-width: 1199px) and (min-width: 992px) {
+  .product-card {
+    margin: 0;
+    width: 100%;
+  }
+  
+  .card-background {
+    width: 100%;
+    max-width: 300px;
+    height: 420px;
+  }
+  
+  .image-frame {
+    width: 85%;
+    height: 75%;
+    left: 7.5%;
+    top: 12%;
+  }
+  
+  .image-container {
+    width: 100%;
+    height: 60%;
+  }
+  
+  .product-image {
+    width: 120%;
+    height: 120%;
+    left: -10%;
+    top: -10%;
+  }
+  
+  .product-info {
+    left: 7.5%;
+    width: 85%;
+    bottom: 18%;
+  }
+  
+  .add-to-cart-btn {
+    width: 80%;
+    height: 36px;
+    left: 10%;
+    bottom: 8%;
+  }
+  
+  .product-name,
+  .product-price {
+    font-size: 18px;
+    line-height: 26px;
+  }
+  
+  .product-category {
+    font-size: 12px;
+  }
+  
+  .btn-text {
+    font-size: 15px;
+  }
+}
+
+/* 768px to 991px - Tablet */
+@media (max-width: 991px) and (min-width: 768px) {
+  .product-card {
+    margin: 0;
+    width: 100%;
+  }
+  
+  .card-background {
+    width: 100%;
+    max-width: 280px;
+    height: 380px;
+  }
+  
+  .image-frame {
+    width: 85%;
+    height: 75%;
+    left: 7.5%;
+    top: 12%;
+  }
+  
+  .image-container {
+    width: 100%;
+    height: 60%;
+  }
+  
+  .product-image {
+    width: 120%;
+    height: 120%;
+    left: -10%;
+    top: -10%;
+  }
+  
+  .product-info {
+    left: 7.5%;
+    width: 85%;
+    bottom: 18%;
+  }
+  
+  .add-to-cart-btn {
+    width: 80%;
+    height: 34px;
+    left: 10%;
+    bottom: 8%;
+  }
+  
+  .product-name,
+  .product-price {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  
+  .product-category {
+    font-size: 11px;
+  }
+  
+  .btn-text {
+    font-size: 14px;
+  }
+}
+
+/* 480px to 767px - Mobile Large */
+@media (max-width: 767px) and (min-width: 480px) {
+  .product-card {
+    margin: 0;
+    width: 100%;
+  }
+  
+  .card-background {
+    width: 100%;
+    max-width: 250px;
+    height: 340px;
+  }
+  
+  .image-frame {
+    width: 85%;
+    height: 75%;
+    left: 7.5%;
+    top: 12%;
+  }
+  
+  .image-container {
+    width: 100%;
+    height: 60%;
+  }
+  
+  .product-image {
+    width: 120%;
+    height: 120%;
+    left: -10%;
+    top: -10%;
+  }
+  
+  .product-info {
+    left: 7.5%;
+    width: 85%;
+    bottom: 18%;
+  }
+  
+  .add-to-cart-btn {
+    width: 80%;
+    height: 32px;
+    left: 10%;
+    bottom: 8%;
+    padding: 0 15px;
+  }
+  
+  .product-name,
+  .product-price {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  
+  .product-category {
+    font-size: 10px;
+  }
+  
+  .btn-text {
+    font-size: 12px;
+  }
+  
+  .cart-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Below 480px - Mobile Small */
+@media (max-width: 479px) {
+  .product-card {
+    margin: 0;
+    width: 100%;
+  }
+  
+  .card-background {
+    width: 100%;
+    max-width: 220px;
+    height: 320px;
+  }
+  
+  .image-frame {
+    width: 85%;
+    height: 75%;
+    left: 7.5%;
+    top: 12%;
+  }
+  
+  .image-container {
+    width: 100%;
+    height: 60%;
+  }
+  
+  .product-image {
+    width: 120%;
+    height: 120%;
+    left: -10%;
+    top: -10%;
+  }
+  
+  .product-info {
+    left: 7.5%;
+    width: 85%;
+    bottom: 18%;
+  }
+  
+  .add-to-cart-btn {
+    width: 80%;
+    height: 30px;
+    left: 10%;
+    bottom: 8%;
+    padding: 0 12px;
+  }
+  
+  .product-name,
+  .product-price {
+    font-size: 13px;
+    line-height: 18px;
+  }
+  
+  .product-category {
+    font-size: 9px;
+  }
+  
+  .btn-text {
+    font-size: 11px;
+  }
+  
+  .cart-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
