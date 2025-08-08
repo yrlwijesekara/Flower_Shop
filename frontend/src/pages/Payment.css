@@ -175,6 +175,7 @@
   position: absolute;
   left: 627px;
   top: 233px;
+  width: 520px;
 }
 
 .cvv-group .field-title {
@@ -207,6 +208,10 @@
   font-size: 20px;
   color: #000000;
   outline: none;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cvv-input::placeholder {
@@ -451,8 +456,9 @@
   .card-number-input,
   .form-select,
   .cvv-input {
-    height: 70px;
-    font-size: 17px;
+    height: 70px !important;
+    font-size: 17px !important;
+    padding: 0 15px !important;
   }
   
   .pay-button {
@@ -497,9 +503,9 @@
   .card-number-input,
   .form-select,
   .cvv-input {
-    height: 65px;
-    font-size: 16px;
-    padding: 0 15px;
+    height: 65px !important;
+    font-size: 16px !important;
+    padding: 0 15px !important;
   }
   
   .card-number-input::placeholder,
@@ -554,9 +560,9 @@
   .card-number-input,
   .form-select,
   .cvv-input {
-    height: 55px;
-    font-size: 14px;
-    padding: 0 12px;
+    height: 55px !important;
+    font-size: 14px !important;
+    padding: 0 10px !important;
     text-align: center;
   }
   
