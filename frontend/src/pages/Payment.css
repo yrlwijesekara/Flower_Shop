@@ -179,7 +179,7 @@
 
 .cvv-group .field-title {
   position: absolute;
-  width: 68px;
+  width: 120px;
   height: 48px;
   left: 0;
   top: 0;
@@ -395,6 +395,10 @@
     font-size: 28px;
   }
   
+  .cvv-group .field-title {
+    font-size: 28px;
+  }
+  
   .card-number-input,
   .form-select,
   .cvv-input {
@@ -427,6 +431,10 @@
   .field-title {
     font-size: 26px;
     margin-bottom: 15px;
+  }
+  
+  .cvv-group .field-title {
+    font-size: 26px;
   }
   
   .form-row {
@@ -472,6 +480,10 @@
   .field-title {
     font-size: 24px;
     margin-bottom: 12px;
+  }
+  
+  .cvv-group .field-title {
+    font-size: 24px;
   }
   
   .form-row {
@@ -522,6 +534,11 @@
   .field-title {
     font-size: 20px;
     margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .cvv-group .field-title {
+    font-size: 20px;
     text-align: center;
   }
   
