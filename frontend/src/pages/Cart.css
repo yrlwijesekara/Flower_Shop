@@ -15,54 +15,76 @@
   flex: 1;
 }
 
-/* Cart steps indicator */
+/* Cart steps indicator - Using Checkout Page Styling */
 .cart-steps {
   display: flex;
-  align-items: center;
   justify-content: center;
-  margin-bottom: 40px;
+  align-items: center;
+  margin-bottom: 60px;
   gap: 20px;
 }
 
 .step {
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: #B8B4B4;
-}
-
-.step.active {
-  color: #23B540;
+  gap: 15px;
 }
 
 .step-number {
-  width: 30px;
-  height: 30px;
+  width: 46px;
+  height: 45px;
   border-radius: 50%;
-  background-color: #EFECEC;
-  border: 2px solid #B8B4B4;
+  background: #ffffff;
+  border: 2px solid #164C0D;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  color: #164C0D;
+}
+
+.step.completed .step-number {
+  background: #23B540;
+  color: #ffffff;
 }
 
 .step.active .step-number {
-  background-color: #23B540;
-  border-color: #23B540;
-  color: white;
+  background: #164C0D;
+  color: #ffffff;
 }
 
 .step-label {
   font-family: 'Poppins', sans-serif;
-  font-size: 16px;
   font-weight: 500;
+  font-size: 36px;
+  line-height: 54px;
+  color: #23B540;
+  white-space: nowrap;
+}
+
+.step.active .step-label {
+  color: #23B540;
+}
+
+.step:not(.active):not(.completed) .step-label {
+  color: #A6A3A3;
 }
 
 .step-arrow {
-  color: #B8B4B4;
-  font-size: 18px;
+  width: 42.55px;
+  height: 2px;
+  background: #164C0D;
+  margin: 0 10px;
+}
+
+.step:not(.completed) .step-arrow {
+  background: #A6A3A3;
+}
+
+.step:last-child .step-arrow {
+  display: none;
 }
 
 /* Main cart content layout */
@@ -508,6 +530,11 @@
     font-size: 20px;
     height: 50px;
   }
+  
+  .step-label {
+    font-size: 28px;
+    line-height: 42px;
+  }
 }
 
 /* 992px breakpoint */
@@ -541,13 +568,12 @@
   }
   
   .step-label {
-    font-size: 14px;
+    font-size: 28px;
+    line-height: 42px;
   }
   
-  .step-number {
-    width: 25px;
-    height: 25px;
-    font-size: 14px;
+  .step-arrow {
+    width: 30px;
   }
 }
 
@@ -560,17 +586,29 @@
   
   .cart-steps {
     flex-direction: column;
-    gap: 10px;
+    align-items: center;
+    gap: 20px;
   }
   
   .step {
     flex-direction: column;
     text-align: center;
-    gap: 5px;
+    gap: 10px;
   }
   
   .step-arrow {
+    width: 2px;
+    height: 30px;
     transform: rotate(90deg);
+  }
+  
+  .step:last-child .step-arrow {
+    display: none;
+  }
+  
+  .step-label {
+    font-size: 24px;
+    line-height: 36px;
   }
   
   .cart-table-header {
@@ -679,13 +717,14 @@
   }
   
   .step-label {
-    font-size: 12px;
+    font-size: 20px;
+    line-height: 30px;
   }
   
   .step-number {
-    width: 20px;
-    height: 20px;
-    font-size: 12px;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
   }
   
   .cart-item-row {

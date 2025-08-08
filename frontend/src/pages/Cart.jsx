@@ -149,17 +149,19 @@ const Cart = () => {
       <div className="cart-container">
         <div className="cart-steps">
           <div className="step active">
-            <span className="step-number">1</span>
+            <div className="step-number">1</div>
             <span className="step-label">Shopping Cart</span>
+            <div className="step-arrow"></div>
           </div>
-          <div className="step-arrow">→</div>
+          
           <div className="step">
-            <span className="step-number">2</span>
+            <div className="step-number">2</div>
             <span className="step-label">Checkout Details</span>
+            <div className="step-arrow"></div>
           </div>
-          <div className="step-arrow">→</div>
+          
           <div className="step">
-            <span className="step-number">3</span>
+            <div className="step-number">3</div>
             <span className="step-label">Order Complete</span>
           </div>
         </div>
