@@ -10,18 +10,57 @@ const Cart = () => {
   const navigate = useNavigate();
   const [cart, setCart] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  
 
   // Load cart from localStorage on component mount
   useEffect(() => {
     const savedCart = localStorage.getItem('flowerShopCart');
-    if (savedCart) {
-      setCart(JSON.parse(savedCart));
+    
+    if (savedCart && savedCart !== '[]') {
+      try {
+        const parsedCart = JSON.parse(savedCart);
+        if (parsedCart && parsedCart.length > 0) {
+          setCart(parsedCart);
+          return;
+        }
+      } catch (error) {
+      }
     }
+    
+    // Always add sample items for demonstration if no valid cart exists
+    const sampleCart = [
+      {
+        id: 1,
+        name: "Homolomena",
+        price: 200,
+        image: "/images/homalomena.jpg",
+        quantity: 1
+      },
+      {
+        id: 2,
+        name: "Alovera", 
+        price: 250,
+        image: "/images/candelabra-aloe.jpg",
+        quantity: 1
+      },
+      {
+        id: 3,
+        name: "Rose",
+        price: 350,
+        image: "/images/placeholder.jpg",
+        quantity: 1
+      }
+    ];
+    setCart(sampleCart);
+    localStorage.setItem('flowerShopCart', JSON.stringify(sampleCart));
   }, []);
 
   // Save cart to localStorage whenever cart changes
   useEffect(() => {
-    localStorage.setItem('flowerShopCart', JSON.stringify(cart));
+    // Only save if cart is not in initial empty state
+    if (cart.length > 0) {
+      localStorage.setItem('flowerShopCart', JSON.stringify(cart));
+    }
   }, [cart]);
 
   const breadcrumbData = [
@@ -63,16 +102,12 @@ const Cart = () => {
     return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
-  const calculateTax = () => {
-    return calculateSubtotal() * 0.1; // 10% tax
-  };
-
   const calculateShipping = () => {
-    return calculateSubtotal() > 100 ? 0 : 15; // Free shipping over $100
+    return 250; // Fixed shipping fee as shown in design
   };
 
   const calculateTotal = () => {
-    return calculateSubtotal() + calculateTax() + calculateShipping();
+    return calculateSubtotal() + calculateShipping();
   };
 
   const handleCheckout = () => {
@@ -97,18 +132,16 @@ const Cart = () => {
           showFilters={false}
         />
         
-        <section className="cart-content">
-          <div className="empty-cart">
-            <div className="empty-cart-icon">
-              <FiShoppingBag size={80} color="#ccc" />
-            </div>
+        <div className="empty-cart-container">
+          <div className="empty-cart-content">
+            <FiShoppingBag size={80} color="#164C0D" />
             <h2>Your cart is empty</h2>
-            <p>Looks like you haven't added any products to your cart yet.</p>
-            <button onClick={continueShopping} className="continue-shopping-btn">
+            <p>Looks like you haven't added any items to your cart yet.</p>
+            <button className="continue-shopping-btn" onClick={continueShopping}>
               Continue Shopping
             </button>
           </div>
-        </section>
+        </div>
         
         <Footer />
       </div>
@@ -123,127 +156,139 @@ const Cart = () => {
         showFilters={false}
       />
       
-      <section className="cart-content">
-        <div className="cart-container">
-          <div className="cart-header">
-            <h1>Shopping Cart</h1>
-            <span className="item-count">{cart.length} {cart.length === 1 ? 'item' : 'items'}</span>
+      <div className="cart-container">
+        <div className="cart-steps">
+          <div className="step active">
+            <span className="step-number">1</span>
+            <span className="step-label">Shopping Cart</span>
           </div>
-          
-          <div className="cart-layout">
-            {/* Cart Items */}
-            <div className="cart-items">
-              {cart.map(item => (
-                <div key={item.id} className="cart-item">
-                  <div className="item-image">
-                    <img src={item.image} alt={item.name} />
-                  </div>
-                  
-                  <div className="item-details">
-                    <h3 className="item-name">{item.name}</h3>
-                    <p className="item-category">{item.category}</p>
-                    <p className="item-price">${item.price}</p>
-                  </div>
-                  
-                  <div className="item-controls">
-                    <div className="quantity-controls">
+          <div className="step-arrow">→</div>
+          <div className="step">
+            <span className="step-number">2</span>
+            <span className="step-label">Checkout Details</span>
+          </div>
+          <div className="step-arrow">→</div>
+          <div className="step">
+            <span className="step-number">3</span>
+            <span className="step-label">Order Complete</span>
+          </div>
+        </div>
+
+        <div className="cart-content">
+          <div className="cart-table-container">
+            <div className="cart-table">
+              <div className="cart-table-header">
+                <div className="header-cell checkbox-cell"></div>
+                <div className="header-cell cart-product-cell">Product</div>
+                <div className="header-cell price-cell">Price</div>
+                <div className="header-cell qty-cell">Qty.</div>
+                <div className="header-cell subtotal-cell">Subtotal</div>
+                <div className="header-cell remove-cell">Remove</div>
+              </div>
+
+              <div className="cart-table-body">
+                {cart.map((item) => {
+                  return (
+                  <div key={item.id} className="cart-item-row">
+                    <div className="item-cell checkbox-cell">
+                      <input type="checkbox" className="item-checkbox" />
+                    </div>
+                    <div className="item-cell cart-product-cell">
+                      <div className="cart-product-info">
+                        <img src={item.image} alt={item.name} className="cart-product-image" />
+                        <span className="cart-product-name">{item.name}</span>
+                      </div>
+                    </div>
+                    <div className="item-cell price-cell">
+                      <span className="cart-price">${item.price}</span>
+                    </div>
+                    <div className="item-cell qty-cell">
+                      <div className="quantity-controls">
+                        <button 
+                          className="qty-btn"
+                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        >
+                          <FiMinus />
+                        </button>
+                        <span className="cart-quantity">{item.quantity}</span>
+                        <button 
+                          className="qty-btn"
+                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        >
+                          <FiPlus />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="item-cell subtotal-cell">
+                      <span className="cart-subtotal">${(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                    <div className="item-cell remove-cell">
                       <button 
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                        className="quantity-btn"
-                        aria-label="Decrease quantity"
+                        className="remove-btn"
+                        onClick={() => removeFromCart(item.id)}
                       >
-                        <FiMinus size={16} />
-                      </button>
-                      <span className="quantity">{item.quantity}</span>
-                      <button 
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="quantity-btn"
-                        aria-label="Increase quantity"
-                      >
-                        <FiPlus size={16} />
+                        <FiTrash2 />
                       </button>
                     </div>
-                    
-                    <div className="item-total">
-                      <span>${(item.price * item.quantity).toFixed(2)}</span>
-                    </div>
-                    
-                    <button 
-                      onClick={() => removeFromCart(item.id)}
-                      className="remove-btn"
-                      aria-label="Remove item"
-                    >
-                      <FiTrash2 size={18} />
-                    </button>
                   </div>
-                </div>
-              ))}
-              
-              <div className="cart-actions">
-                <button onClick={continueShopping} className="continue-shopping-btn">
-                  Continue Shopping
-                </button>
-                <button onClick={clearCart} className="clear-cart-btn">
-                  Clear Cart
-                </button>
+                  );
+                })}
               </div>
             </div>
-            
-            {/* Cart Summary */}
-            <div className="cart-summary">
-              <div className="summary-card">
-                <h3>Order Summary</h3>
-                
-                <div className="summary-row">
-                  <span>Subtotal:</span>
-                  <span>${calculateSubtotal().toFixed(2)}</span>
-                </div>
-                
-                <div className="summary-row">
-                  <span>Tax:</span>
-                  <span>${calculateTax().toFixed(2)}</span>
-                </div>
-                
-                <div className="summary-row">
-                  <span>Shipping:</span>
-                  <span>
-                    {calculateShipping() === 0 ? (
-                      <span className="free-shipping">Free</span>
-                    ) : (
-                      `$${calculateShipping().toFixed(2)}`
-                    )}
-                  </span>
-                </div>
-                
-                {calculateShipping() === 0 && (
-                  <div className="free-shipping-notice">
-                    🎉 You qualify for free shipping!
-                  </div>
-                )}
-                
-                <div className="summary-divider"></div>
-                
-                <div className="summary-row total-row">
-                  <span>Total:</span>
-                  <span className="total-amount">${calculateTotal().toFixed(2)}</span>
-                </div>
-                
+          </div>
+
+          <div className="cart-summary">
+            <div className="cart-total-section">
+              <div className="cart-total-header">
+                <h3>Cart Total</h3>
+              </div>
+              
+              <div className="summary-row">
+                <span className="summary-label">Shipping Fee</span>
+                <span className="summary-value">${calculateShipping().toFixed(2)}</span>
+              </div>
+              
+              <div className="summary-row total-row">
+                <span className="summary-label">Total</span>
+                <span className="summary-value">${calculateTotal().toFixed(2)}</span>
+              </div>
+
+              <div className="payment-options">
+                <label className="payment-option">
+                  <input type="radio" name="payment" value="cod" defaultChecked />
+                  <span>Cash On Delivery</span>
+                </label>
+                <label className="payment-option">
+                  <input type="radio" name="payment" value="online" />
+                  <span>Online Payment</span>
+                </label>
+              </div>
+
+              <div className="cart-actions">
                 <button 
-                  onClick={handleCheckout}
                   className="checkout-btn"
+                  onClick={handleCheckout}
                   disabled={isLoading}
                 >
-                  {isLoading ? 'Processing...' : 'Proceed to Checkout'}
+                  {isLoading ? 'Processing...' : 'Check Out'}
                 </button>
-                
-                <div className="secure-checkout">
-                  🔒 Secure Checkout
-                </div>
+                <button 
+                  className="continue-shopping-btn"
+                  onClick={continueShopping}
+                >
+                  Continue Shopping
+                </button>
+                <button 
+                  className="empty-cart-btn"
+                  onClick={clearCart}
+                >
+                  Empty Cart
+                </button>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
       
       <Footer />
     </div>
