@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
 import ProductGrid from '../components/ProductGrid';
@@ -13,6 +13,28 @@ const Shop = () => {
   const [activeTab, setActiveTab] = useState('recent');
   const [searchQuery, setSearchQuery] = useState('');
   const [cart, setCart] = useState([]);
+
+  // Load cart from localStorage on component mount
+  useEffect(() => {
+    const savedCart = localStorage.getItem('flowerShopCart');
+    if (savedCart && savedCart !== '[]') {
+      try {
+        const parsedCart = JSON.parse(savedCart);
+        if (parsedCart && parsedCart.length > 0) {
+          setCart(parsedCart);
+        }
+      } catch (error) {
+        console.error('Error parsing cart from localStorage:', error);
+      }
+    }
+  }, []);
+
+  // Save cart to localStorage whenever cart changes
+  useEffect(() => {
+    if (cart.length > 0) {
+      localStorage.setItem('flowerShopCart', JSON.stringify(cart));
+    }
+  }, [cart]);
 
   // Sample product data based on active tab and search query
   const getProductsByTab = (tab) => {
@@ -82,7 +104,7 @@ const Shop = () => {
         name: "MONSTERA DELICIOSA",
         category: "Tropical",
         price: 79,
-        image: "/images/monstera.jpg",
+        image: "/images/fiddle-leaf.jpg",
         isRecent: true,
         isPopular: true,
         isSpecial: false
@@ -92,7 +114,7 @@ const Shop = () => {
         name: "RUBBER PLANT",
         category: "Indoor Tree",
         price: 59,
-        image: "/images/rubber-plant.jpg",
+        image: "/images/fiddle-leaf.jpg",
         isRecent: false,
         isPopular: false,
         isSpecial: true
@@ -102,7 +124,7 @@ const Shop = () => {
         name: "ZZ PLANT",
         category: "Low Light",
         price: 35,
-        image: "/images/zz-plant.jpg",
+        image: "/images/fiddle-leaf.jpg",
         isRecent: true,
         isPopular: true,
         isSpecial: true
@@ -112,7 +134,7 @@ const Shop = () => {
         name: "PHILODENDRON",
         category: "Tropical",
         price: 55,
-        image: "/images/philodendron.jpg",
+        image: "/images/fiddle-leaf.jpg",
         isRecent: false,
         isPopular: true,
         isSpecial: false
@@ -122,7 +144,7 @@ const Shop = () => {
         name: "SPIDER PLANT",
         category: "Air Purifying",
         price: 25,
-        image: "/images/spider-plant.jpg",
+        image: "/images/fiddle-leaf.jpg",
         isRecent: true,
         isPopular: false,
         isSpecial: true
@@ -132,7 +154,7 @@ const Shop = () => {
         name: "DRACAENA",
         category: "Low Light",
         price: 65,
-        image: "/images/dracaena.jpg",
+        image: "/images/fiddle-leaf.jpg",
         isRecent: false,
         isPopular: true,
         isSpecial: true
@@ -220,7 +242,9 @@ const Shop = () => {
         return [...prevCart, { ...product, quantity: 1 }];
       }
     });
-    console.log(`Added ${product.name} to cart`);
+    
+    // Simple notification
+    alert(`${product.name} added to cart!`);
   };
 
   return (
