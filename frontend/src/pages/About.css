@@ -1,0 +1,270 @@
+.img img {
+  width: 100%;
+  height: 600px;
+
+}
+
+.aboutContainter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color:#A6A3A3;
+  padding: 20px;
+
+  
+}
+
+.aboutContainter h1{
+  color:green;
+font-size: 4rem;
+}
+.aboutContainter h3{
+  margin-top: 10px;
+}
+
+
+.aboutContainter p {
+  font-size: 2rem;
+  text-align: center;
+  margin-top: 40px;
+  
+}
+
+.yearsofexperience {
+display: flex;
+flex-direction: column;
+color: green;
+width: 40%;
+margin:20px;
+align-items: center;
+
+
+}
+.yearsofexperience h1 {
+    margin-left: 60px;
+  font-size: 6rem;
+  margin-bottom: 20px;
+}
+
+.yearsofexperience h4{
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color:black;
+  display: flex;
+  flex-direction: column;
+  margin-right: 70px;
+  
+  
+  
+}
+.yearsofexperience h5 {
+  font-size: 1rem;
+  margin-bottom: 20px;
+   text-align: end;
+   margin-left:120px;
+  color:black;
+
+
+}
+
+.experiencecontainer{
+  display: flex;
+  
+
+}  
+
+.experienceimg {
+  width: 50%;
+  display: flex;
+  margin-left: 30px;
+
+}
+
+.imgone img{
+    border: 30px solid #ffffff; 
+    width: 273px;
+    height: 244px;
+    margin-top: 50px;
+    margin-left:20px ;
+}
+
+.imgtwo img{
+  width: 326px;
+  height: 326px;
+}
+  
+
+.imgthree img{
+    
+margin-right: 30px;
+  width: 326px;
+  height: 326px;
+}
+
+.imgfour img{
+ border: 30px solid #ffffff;    
+ margin-left: -30px;
+ width: 273px;
+  height: 226px;
+
+}
+
+.Historycontainer{
+    display: flex;
+    margin-top: 100px;
+}
+
+.HistoryText{
+    text-align: center;
+}
+.HistoryText h1{
+    font-size: 4rem;
+    color: green;
+}
+
+.HistoryText p{
+    font-size: 2rem;
+    color: #A6A3A3;
+    max-width: 1000px;
+    margin-left: 20px;
+}
+
+
+.Result {
+
+width: 90%;
+height: 568px;
+display: flex;
+flex-direction: column;
+margin-left: 50px;
+
+margin-top: 110px;
+background-color: rgb(4, 36, 0);
+
+   
+}
+
+.bg-overlay img {
+    width: 90%;
+    height: 568px;
+    object-fit: cover;
+    opacity: 0.2;
+    position: absolute;
+
+
+}
+
+
+
+
+
+.resultbox{
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 70px;
+    margin-top: 120px;
+}
+
+.onebox{
+    border: #ffffff solid 4px;
+    width: 110px;
+    height: 130px;
+    display: flex;
+    justify-content: center;
+    margin-left: 70px;
+    align-items: center;
+    font-size: 3rem;
+    font-weight: bold;
+    
+    
+}
+
+.twobox{
+    border: #ffffff solid 4px;
+    width: 110px;
+    height: 130px;
+    display: flex;
+    justify-content: center;
+    margin-left: 50px;  
+    align-items: center;
+    font-size: 3rem;
+    font-weight: bold;
+    
+}
+
+
+
+.threebox{
+    border: #ffffff solid 4px;
+    width: 110px;
+    height: 130px;
+    display: flex;
+    justify-content: center;
+    margin-left: 30px;
+    align-items: center;
+    font-size: 3rem;
+    font-weight: bold;
+    
+}
+
+.fourbox{
+    border: #ffffff solid 4px;
+    width: 110px;
+    height: 130px;
+    display: flex;
+    justify-content: center;
+    margin-left: 30px;
+    align-items: center;
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.Result h1{
+    color: rgb(110, 227, 110);
+    align-items: center;
+    text-align: center; 
+    margin-top: 5%;
+}
+
+.Clientbox{
+    width: 90% ;
+    height: 422px ;
+    display : flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+    margin-left: 50px;
+    border: solid 2px #000000;
+   
+   
+
+}
+
+.Clientbox h1{
+    font-size: 2.5rem;
+    color: green;
+    
+}
+.Clientbox img{
+    width: 119px;
+    height: 112px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.Clientbox p{
+    font-size: 1.5rem;
+    color: #A6A3A3;
+    text-align: center;
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-top: 20px;
+
+}
+

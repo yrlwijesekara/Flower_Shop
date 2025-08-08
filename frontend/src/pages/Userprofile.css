@@ -1,0 +1,33 @@
+.myprofile{
+    text-align: center;
+    background-color: rgb(105, 102, 93);
+    width: 90%;
+    align-items: center;
+    margin-left:50px ;
+
+
+}
+
+.profile-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.propic img{
+    width: 315px;
+    height: 315px;
+    border-radius: 50%;
+}
+
+.ProName{
+    display: flex;
+    align-items: center;
+   
+}
+
+.ProName h1{
+    color: #ffffff;
+    font-size: 2rem;
+    margin-left: =70px;
+}
