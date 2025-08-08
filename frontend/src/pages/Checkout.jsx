@@ -22,7 +22,6 @@ const Checkout = () => {
     emailAddress: ''
   });
 
-  const [paymentMethod, setPaymentMethod] = useState('cod');
 
   // Load cart from localStorage on component mount
   useEffect(() => {
@@ -74,20 +73,14 @@ const Checkout = () => {
   };
 
   const handleOrderSubmit = () => {
-    if (paymentMethod === 'online') {
-      // Save form data to localStorage for payment page
-      localStorage.setItem('checkoutFormData', JSON.stringify(formData));
-      navigate('/payment');
-    } else {
-      // Cash on delivery - process order directly
-      setIsLoading(true);
-      setTimeout(() => {
-        setIsLoading(false);
-        alert('Order placed successfully!');
-        localStorage.removeItem('flowerShopCart');
-        navigate('/order-complete');
-      }, 2000);
-    }
+    // Process order directly (cash on delivery)
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      alert('Order placed successfully!');
+      localStorage.removeItem('flowerShopCart');
+      navigate('/order-success');
+    }, 2000);
   };
 
   // Show loading or empty state while cart is being loaded
@@ -230,39 +223,13 @@ const Checkout = () => {
                 />
               </div>
 
-              <div className="payment-method-section">
-                <h3>Payment Method</h3>
-                <p style={{fontSize: '14px', color: '#666', marginBottom: '10px'}}>Current: {paymentMethod}</p>
-                <div className="payment-options">
-                  <label className="payment-option">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="cod"
-                      checked={paymentMethod === 'cod'}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
-                    />
-                    <span>Cash on Delivery</span>
-                  </label>
-                  <label className="payment-option">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="online"
-                      checked={paymentMethod === 'online'}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
-                    />
-                    <span>Online Payment</span>
-                  </label>
-                </div>
-              </div>
 
               <button 
                 type="submit" 
                 className="order-button"
                 disabled={isLoading}
               >
-                {isLoading ? 'Processing...' : (paymentMethod === 'online' ? 'PROCEED TO PAYMENT' : 'ORDER')}
+                {isLoading ? 'Processing...' : ' ORDER'}
               </button>
             </form>
           </div>

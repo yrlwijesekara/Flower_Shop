@@ -102,60 +102,6 @@
   cursor: not-allowed;
 }
 
-/* Payment Method Section */
-.payment-method-section {
-  margin-bottom: 30px;
-}
-
-.payment-method-section h3 {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 400;
-  font-size: 32px;
-  line-height: 48px;
-  color: #000000;
-  margin-bottom: 15px;
-}
-
-.payment-options {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.payment-option {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  cursor: pointer;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 30px;
-  color: #000000;
-  padding: 10px;
-  border-radius: 5px;
-  transition: background-color 0.2s ease;
-}
-
-.payment-option:hover {
-  background-color: #f5f5f5;
-}
-
-.payment-option input[type="radio"] {
-  width: 20px;
-  height: 20px;
-  accent-color: #23B540;
-  cursor: pointer;
-  margin: 0;
-  flex-shrink: 0;
-  appearance: auto;
-  -webkit-appearance: auto;
-}
-
-.payment-option span {
-  cursor: pointer;
-  user-select: none;
-}
 
 /* Order Summary */
 .order-summary {
@@ -289,15 +235,6 @@
     line-height: 42px;
   }
   
-  .payment-method-section h3 {
-    font-size: 28px;
-    line-height: 42px;
-  }
-  
-  .payment-option {
-    font-size: 18px;
-    line-height: 27px;
-  }
 }
 
 /* 992px and below */
@@ -334,15 +271,6 @@
     line-height: 39px;
   }
   
-  .payment-method-section h3 {
-    font-size: 26px;
-    line-height: 39px;
-  }
-  
-  .payment-option {
-    font-size: 16px;
-    line-height: 24px;
-  }
 }
 
 /* 768px and below */
@@ -383,15 +311,6 @@
     line-height: 33px;
   }
   
-  .payment-method-section h3 {
-    font-size: 22px;
-    line-height: 33px;
-  }
-  
-  .payment-option {
-    font-size: 14px;
-    line-height: 21px;
-  }
   
   .order-summary {
     padding: 20px;
@@ -432,15 +351,6 @@
     line-height: 30px;
   }
   
-  .payment-method-section h3 {
-    font-size: 20px;
-    line-height: 30px;
-  }
-  
-  .payment-option {
-    font-size: 12px;
-    line-height: 18px;
-  }
   
   .order-summary {
     padding: 15px;
@@ -503,13 +413,4 @@
     line-height: 27px;
   }
   
-  .payment-method-section h3 {
-    font-size: 18px;
-    line-height: 27px;
-  }
-  
-  .payment-option {
-    font-size: 11px;
-    line-height: 16px;
-  }
 }
