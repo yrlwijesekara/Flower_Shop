@@ -92,12 +92,21 @@ const Cart = () => {
   };
 
   const handleCheckout = () => {
+    if (cart.length === 0) {
+      alert('Your cart is empty. Please add items before checkout.');
+      return;
+    }
+    
     setIsLoading(true);
-    // Simulate checkout process
+    
+    // Ensure cart is saved to localStorage before navigation
+    localStorage.setItem('flowerShopCart', JSON.stringify(cart));
+    
+    // Brief loading simulation then navigate to checkout
     setTimeout(() => {
       setIsLoading(false);
-      alert('Checkout functionality would be implemented here!');
-    }, 1500);
+      navigate('/checkout');
+    }, 500);
   };
 
   const continueShopping = () => {
