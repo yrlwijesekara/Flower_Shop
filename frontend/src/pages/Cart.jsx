@@ -17,8 +17,25 @@ const Cart = () => {
 
   // Load cart from localStorage on component mount
   useEffect(() => {
+    // First check if there's a full cart saved (when user returns from checkout/payment)
+    const savedFullCart = localStorage.getItem('flowerShopFullCart');
     const savedCart = localStorage.getItem('flowerShopCart');
     
+    if (savedFullCart && savedFullCart !== '[]') {
+      try {
+        const parsedFullCart = JSON.parse(savedFullCart);
+        if (parsedFullCart && parsedFullCart.length > 0) {
+          setCart(parsedFullCart);
+          // DON'T clear the full cart storage yet - keep it until order is completed
+          // This way if user navigates back and forth, we preserve the original cart
+          return;
+        }
+      } catch (error) {
+        console.error('Error parsing full cart from localStorage:', error);
+      }
+    }
+    
+    // If no full cart, load regular cart
     if (savedCart && savedCart !== '[]') {
       try {
         const parsedCart = JSON.parse(savedCart);
@@ -145,7 +162,10 @@ const Cart = () => {
     // Filter only selected items for checkout
     const selectedCartItems = cart.filter(item => selectedItems.has(item.id));
     
-    // Save selected items to localStorage for checkout
+    // Save the full original cart (to preserve unchecked items when user returns)
+    localStorage.setItem('flowerShopFullCart', JSON.stringify(cart));
+    
+    // Save selected items for checkout process
     localStorage.setItem('flowerShopCart', JSON.stringify(selectedCartItems));
     
     // Save selected payment method to localStorage

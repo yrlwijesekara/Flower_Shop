@@ -140,8 +140,25 @@ const Payment = () => {
     // Simulate payment processing
     setTimeout(() => {
       setIsLoading(false);
-      // Clear cart after order data is saved
-      localStorage.removeItem('flowerShopCart');
+      
+      // Remove purchased items from full cart if it exists
+      const savedFullCart = localStorage.getItem('flowerShopFullCart');
+      if (savedFullCart) {
+        try {
+          const fullCart = JSON.parse(savedFullCart);
+          const purchasedItemIds = cart.map(item => item.id);
+          const remainingItems = fullCart.filter(item => !purchasedItemIds.includes(item.id));
+          
+          if (remainingItems.length > 0) {
+            localStorage.setItem('flowerShopCart', JSON.stringify(remainingItems));
+          }
+          // Always clear the full cart after successful purchase
+          localStorage.removeItem('flowerShopFullCart');
+        } catch (error) {
+          console.error('Error updating full cart:', error);
+        }
+      }
+      
       navigate('/order-success');
     }, 2000);
   };
