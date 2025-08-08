@@ -10,6 +10,7 @@ const Cart = () => {
   const navigate = useNavigate();
   const [cart, setCart] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState('cod');
   
 
   // Load cart from localStorage on component mount
@@ -91,9 +92,19 @@ const Cart = () => {
     return calculateSubtotal() + calculateShipping();
   };
 
+  const handlePaymentChange = (e) => {
+    setSelectedPayment(e.target.value);
+  };
+
   const handleCheckout = () => {
     if (cart.length === 0) {
       alert('Your cart is empty. Please add items before checkout.');
+      return;
+    }
+    
+    // Only allow checkout for Cash on Delivery
+    if (selectedPayment !== 'cod') {
+      alert('Checkout is only available for Cash on Delivery orders. Please select Cash on Delivery to proceed.');
       return;
     }
     
@@ -247,22 +258,51 @@ const Cart = () => {
 
               <div className="payment-options">
                 <label className="payment-option">
-                  <input type="radio" name="payment" value="cod" defaultChecked />
+                  <input 
+                    type="radio" 
+                    name="payment" 
+                    value="cod" 
+                    checked={selectedPayment === 'cod'}
+                    onChange={handlePaymentChange}
+                  />
                   <span>Cash On Delivery</span>
                 </label>
                 <label className="payment-option">
-                  <input type="radio" name="payment" value="online" />
-                  <span>Online Payment</span>
+                  <input 
+                    type="radio" 
+                    name="payment" 
+                    value="online"
+                    checked={selectedPayment === 'online'}
+                    onChange={handlePaymentChange}
+                  />
+                  <span>Online Payment (Coming Soon)</span>
                 </label>
               </div>
+
+              {selectedPayment !== 'cod' && (
+                <div className="payment-notice">
+                  <p style={{ 
+                    color: '#ff6b6b', 
+                    fontSize: '14px', 
+                    textAlign: 'center', 
+                    margin: '10px 0',
+                    padding: '10px',
+                    backgroundColor: '#fff5f5',
+                    borderRadius: '5px',
+                    border: '1px solid #ffebee'
+                  }}>
+                    ⚠️ Checkout is only available for Cash on Delivery orders
+                  </p>
+                </div>
+              )}
 
               <div className="cart-actions">
                 <button 
                   className="checkout-btn"
                   onClick={handleCheckout}
-                  disabled={isLoading}
+                  disabled={isLoading || selectedPayment !== 'cod'}
                 >
-                  {isLoading ? 'Processing...' : 'Check Out'}
+                  {isLoading ? 'Processing...' : selectedPayment !== 'cod' ? 'Select Cash on Delivery' : 'Check Out'}
                 </button>
                 <button 
                   className="continue-shopping-btn"

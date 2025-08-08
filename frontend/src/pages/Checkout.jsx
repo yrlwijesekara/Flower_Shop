@@ -25,28 +25,18 @@ const Checkout = () => {
   useEffect(() => {
     const savedCart = localStorage.getItem('flowerShopCart');
     if (savedCart) {
-      setCart(JSON.parse(savedCart));
+      const parsedCart = JSON.parse(savedCart);
+      if (parsedCart && parsedCart.length > 0) {
+        setCart(parsedCart);
+      } else {
+        // Redirect to cart if empty
+        navigate('/cart');
+      }
     } else {
-      // Add some sample items for demonstration if cart is empty
-      const sampleCart = [
-        {
-          id: 1,
-          name: "Homolomena",
-          price: 200,
-          image: "/images/homalomena.jpg",
-          quantity: 1
-        },
-        {
-          id: 2,
-          name: "Alovera",
-          price: 250,
-          image: "/images/candelabra-aloe.jpg",
-          quantity: 1
-        }
-      ];
-      setCart(sampleCart);
+      // Redirect to cart if no saved cart
+      navigate('/cart');
     }
-  }, []);
+  }, [navigate]);
 
   const breadcrumbData = [
     { 
@@ -92,10 +82,24 @@ const Checkout = () => {
     }, 2000);
   };
 
-  // If cart is empty, redirect to cart page
+  // Show loading or empty state while cart is being loaded
   if (cart.length === 0) {
-    navigate('/cart');
-    return null;
+    return (
+      <div className="checkout-page">
+        <Navbar />
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          minHeight: '300px',
+          fontSize: '18px',
+          color: '#164C0D'
+        }}>
+          Loading...
+        </div>
+        <Footer />
+      </div>
+    );
   }
 
   return (
