@@ -1,11 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import './OrderSuccess.css';
 import Navbar from '../components/Navbar';
+import MiniNavbar from '../components/MiniNavbar';
 import Footer from '../components/Footer';
 import ProgressSteps from '../components/ProgressSteps';
+import { FiHome } from 'react-icons/fi';
 
 const OrderSuccess = () => {
   const [orderData, setOrderData] = useState(null);
+
+  const breadcrumbData = [
+    { 
+      icon: <FiHome size={25} color="#000000" />, 
+      label: 'Home',
+      href: '/' 
+    },
+    { 
+      label: 'Checkout', 
+      href: '/checkout' 
+    },
+    { 
+      label: 'Order Success', 
+      href: '/order-success' 
+    }
+  ];
 
   // Load order data from localStorage on component mount
   useEffect(() => {
@@ -95,16 +113,11 @@ const OrderSuccess = () => {
     <div className="order-success-page">
       <Navbar />
       
-      {/* Breadcrumb */}
-      <div className="breadcrumb-section">
-        <div className="breadcrumb-container">
-          <span className="breadcrumb-item">🏠</span>
-          <span className="breadcrumb-arrow">➤</span>
-          <span className="breadcrumb-item">Checkout</span>
-        </div>
-      </div>
-
-      {/* Progress Steps */}
+      <MiniNavbar 
+        breadcrumbs={breadcrumbData}
+        showFilters={false}
+      />
+      
       <div className="progress-section">
         <ProgressSteps currentStep={3} />
       </div>
