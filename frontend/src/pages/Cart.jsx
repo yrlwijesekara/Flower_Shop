@@ -12,6 +12,7 @@ const Cart = () => {
   const [cart, setCart] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState('cod');
+  const [selectedItems, setSelectedItems] = useState(new Set());
   
 
   // Load cart from localStorage on component mount
@@ -82,11 +83,13 @@ const Cart = () => {
   };
 
   const calculateSubtotal = () => {
-    return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    return cart
+      .filter(item => selectedItems.has(item.id))
+      .reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
   const calculateShipping = () => {
-    return 250; // Fixed shipping fee as shown in design
+    return selectedItems.size > 0 ? 250 : 0; // Only charge shipping if items are selected
   };
 
   const calculateTotal = () => {
@@ -97,9 +100,37 @@ const Cart = () => {
     setSelectedPayment(e.target.value);
   };
 
+  const handleItemSelection = (productId) => {
+    setSelectedItems(prevSelected => {
+      const newSelected = new Set(prevSelected);
+      if (newSelected.has(productId)) {
+        newSelected.delete(productId);
+      } else {
+        newSelected.add(productId);
+      }
+      return newSelected;
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (selectedItems.size === cart.length) {
+      // If all items are selected, deselect all
+      setSelectedItems(new Set());
+    } else {
+      // Select all items
+      setSelectedItems(new Set(cart.map(item => item.id)));
+    }
+  };
+
   const handleCheckout = () => {
     if (cart.length === 0) {
       alert('Your cart is empty. Please add items before checkout.');
+      return;
+    }
+    
+    // Validate item selection
+    if (selectedItems.size === 0) {
+      alert('Please select at least one item to proceed with checkout.');
       return;
     }
     
@@ -111,8 +142,11 @@ const Cart = () => {
     
     setIsLoading(true);
     
-    // Ensure cart is saved to localStorage before navigation
-    localStorage.setItem('flowerShopCart', JSON.stringify(cart));
+    // Filter only selected items for checkout
+    const selectedCartItems = cart.filter(item => selectedItems.has(item.id));
+    
+    // Save selected items to localStorage for checkout
+    localStorage.setItem('flowerShopCart', JSON.stringify(selectedCartItems));
     
     // Save selected payment method to localStorage
     localStorage.setItem('selectedPaymentMethod', selectedPayment);
@@ -168,7 +202,14 @@ const Cart = () => {
           <div className="cart-table-container">
             <div className="cart-table">
               <div className="cart-table-header">
-                <div className="header-cell checkbox-cell"></div>
+                <div className="header-cell checkbox-cell">
+                  <input 
+                    type="checkbox" 
+                    className="select-all-checkbox"
+                    checked={selectedItems.size === cart.length && cart.length > 0}
+                    onChange={handleSelectAll}
+                  />
+                </div>
                 <div className="header-cell cart-product-cell">Product</div>
                 <div className="header-cell price-cell">Price</div>
                 <div className="header-cell qty-cell">Qty.</div>
@@ -181,7 +222,12 @@ const Cart = () => {
                   return (
                   <div key={item.id} className="cart-item-row">
                     <div className="item-cell checkbox-cell">
-                      <input type="checkbox" className="item-checkbox" />
+                      <input 
+                        type="checkbox" 
+                        className="item-checkbox"
+                        checked={selectedItems.has(item.id)}
+                        onChange={() => handleItemSelection(item.id)}
+                      />
                     </div>
                     <div className="item-cell cart-product-cell">
                       <div className="cart-product-info">
@@ -266,7 +312,24 @@ const Cart = () => {
                 </label>
               </div>
 
-              {!selectedPayment && (
+              {selectedItems.size === 0 && (
+                <div className="selection-notice">
+                  <p style={{ 
+                    color: '#ff9800', 
+                    fontSize: '14px', 
+                    textAlign: 'center', 
+                    margin: '10px 0',
+                    padding: '10px',
+                    backgroundColor: '#fff3e0',
+                    borderRadius: '5px',
+                    border: '1px solid #ffcc02'
+                  }}>
+                    ⚠️ Please select items to checkout by ticking the checkboxes
+                  </p>
+                </div>
+              )}
+
+              {!selectedPayment && selectedItems.size > 0 && (
                 <div className="payment-notice">
                   <p style={{ 
                     color: '#2196f3', 
@@ -287,9 +350,12 @@ const Cart = () => {
                 <button 
                   className="checkout-btn"
                   onClick={handleCheckout}
-                  disabled={isLoading || !selectedPayment}
+                  disabled={isLoading || !selectedPayment || selectedItems.size === 0}
                 >
-                  {isLoading ? 'Processing...' : !selectedPayment ? 'Select Payment Method' : 'Check Out'}
+                  {isLoading ? 'Processing...' : 
+                   selectedItems.size === 0 ? 'Select Items to Checkout' :
+                   !selectedPayment ? 'Select Payment Method' : 
+                   `Check Out (${selectedItems.size} item${selectedItems.size > 1 ? 's' : ''})`}
                 </button>
                 <button 
                   className="continue-shopping-btn"
