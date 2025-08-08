@@ -288,9 +288,9 @@ const Cart = () => {
                 <button 
                   className="checkout-btn"
                   onClick={handleCheckout}
-                  disabled={isLoading || selectedPayment !== 'cod'}
+                  disabled={isLoading || !selectedPayment}
                 >
-                  {isLoading ? 'Processing...' : selectedPayment !== 'cod' ? 'Select Cash on Delivery' : 'Check Out'}
+                  {isLoading ? 'Processing...' : !selectedPayment ? 'Select Payment Method' : selectedPayment === 'online' ? 'Proceed to Payment' : 'Check Out'}
                 </button>
                 <button 
                   className="continue-shopping-btn"
