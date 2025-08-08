@@ -1,38 +1,116 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './OrderSuccess.css';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import ProgressSteps from '../components/ProgressSteps';
 
 const OrderSuccess = () => {
-  // Sample order data - in a real app, this would come from props or state
-  const orderData = {
-    orderNumber: "26953",
-    orderDate: "15 Aug 2025",
-    shippingAddress: {
-      line1: "48, SRI WAJIRAGANA MAWATHA,",
-      line2: "DEMATAGOA ROAD,",
-      line3: "MARADANA."
-    },
-    items: [
-      {
-        id: 1,
-        name: "Golden Pothos",
-        category: "Pothos",
-        price: 129,
-        quantity: 2,
-        total: 258,
-        image: "/images/golden-pothos.jpg"
+  const [orderData, setOrderData] = useState(null);
+
+  // Load order data from localStorage on component mount
+  useEffect(() => {
+    const loadOrderData = () => {
+      // Try to get order data from localStorage
+      const storedOrderData = localStorage.getItem('orderData');
+      const storedCart = localStorage.getItem('flowerShopCart');
+      const storedFormData = localStorage.getItem('checkoutFormData');
+
+      if (storedOrderData) {
+        // Use stored order data if available
+        setOrderData(JSON.parse(storedOrderData));
+      } else {
+        // Generate order data from cart and form data
+        const cart = storedCart ? JSON.parse(storedCart) : [];
+        const formData = storedFormData ? JSON.parse(storedFormData) : {};
+        
+        const generateOrderNumber = () => {
+          return Math.floor(Math.random() * 90000) + 10000; // Random 5-digit number
+        };
+
+        const getCurrentDate = () => {
+          const now = new Date();
+          return now.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+          });
+        };
+
+        const calculateSubtotal = () => {
+          return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+        };
+
+        const subtotal = calculateSubtotal();
+        const shipping = 250;
+        const tax = Math.round(subtotal * 0.1); // 10% tax
+        const total = subtotal + shipping + tax;
+
+        const newOrderData = {
+          orderNumber: generateOrderNumber().toString(),
+          orderDate: getCurrentDate(),
+          shippingAddress: {
+            line1: formData.streetAddress ? `${formData.streetAddress},` : "48, SRI WAJIRAGANA MAWATHA,",
+            line2: formData.apartment ? `${formData.apartment},` : "DEMATAGOA ROAD,",
+            line3: formData.townCity ? `${formData.townCity}.` : "MARADANA."
+          },
+          items: cart.length > 0 ? cart.map(item => ({
+            id: item.id,
+            name: item.name,
+            category: item.category || "Plant",
+            price: item.price,
+            quantity: item.quantity,
+            total: item.price * item.quantity,
+            image: item.image
+          })) : [
+            // Fallback sample data
+            {
+              id: 1,
+              name: "Golden Pothos",
+              category: "Pothos",
+              price: 129,
+              quantity: 2,
+              total: 258,
+              image: "/images/golden-pothos.jpg"
+            }
+          ],
+          pricing: {
+            itemsTotal: subtotal || 258,
+            discount: 0,
+            shipping: shipping,
+            tax: tax || 25,
+            total: total || 533
+          }
+        };
+
+        setOrderData(newOrderData);
+        
+        // Save the generated order data to localStorage for future reference
+        localStorage.setItem('orderData', JSON.stringify(newOrderData));
       }
-    ],
-    pricing: {
-      itemsTotal: 258,
-      discount: 0,
-      shipping: 25,
-      tax: 5,
-      total: 288
-    }
-  };
+    };
+
+    loadOrderData();
+  }, []);
+
+  // Show loading state while order data is being processed
+  if (!orderData) {
+    return (
+      <div className="order-success-page">
+        <Navbar />
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          minHeight: '400px',
+          fontSize: '18px',
+          color: '#164C0D'
+        }}>
+          Loading your order details...
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   const handleShare = () => {
     // Handle share functionality

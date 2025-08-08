@@ -89,6 +89,8 @@ const Payment = () => {
       setIsLoading(false);
       // Clear cart and navigate to success page
       localStorage.removeItem('flowerShopCart');
+      // Clear any existing order data to force new generation
+      localStorage.removeItem('orderData');
       navigate('/order-success');
     }, 2000);
   };

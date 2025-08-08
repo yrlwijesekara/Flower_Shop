@@ -75,10 +75,17 @@ const Checkout = () => {
   const handleOrderSubmit = () => {
     // Process order directly (cash on delivery)
     setIsLoading(true);
+    
+    // Save checkout form data to localStorage
+    localStorage.setItem('checkoutFormData', JSON.stringify(formData));
+    
     setTimeout(() => {
       setIsLoading(false);
       alert('Order placed successfully!');
+      // Clear cart after successful order
       localStorage.removeItem('flowerShopCart');
+      // Clear any existing order data to force new generation
+      localStorage.removeItem('orderData');
       navigate('/order-success');
     }, 2000);
   };
