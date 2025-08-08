@@ -238,7 +238,7 @@
 
 /* Cart summary section */
 .cart-summary {
-  background: #FFFFFF;
+  background: transparent;
   border-radius: 10px;
   height: fit-content;
   overflow: hidden;
@@ -246,7 +246,8 @@
 
 .cart-total-section {
   background: #EFECEC;
-  padding: 0;
+  padding: 20px 0 0 0;
+  text-align: center;
 }
 
 .cart-total-header {
@@ -254,7 +255,9 @@
   padding: 20px;
   text-align: center;
   border-radius: 12px;
-  margin: 20px;
+  margin: 0 auto;
+  width: fit-content;
+  min-width: 200px;
 }
 
 .cart-total-header h3 {
@@ -336,16 +339,19 @@
 
 .checkout-btn {
   width: 100%;
-  height: 83px;
+  height: 60px;
   background: #164C0D;
-  border: 1px solid #164C0D;
+  border: 2px solid #164C0D;
   border-radius: 10px;
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
-  font-size: 32px;
+  font-size: 18px;
   color: #FFFFFF;
   cursor: pointer;
   transition: background-color 0.3s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .checkout-btn:hover:not(:disabled) {
@@ -359,16 +365,19 @@
 
 .continue-shopping-btn {
   width: 100%;
-  height: 83px;
+  height: 60px;
   background: transparent;
-  border: 7px solid #164C0D;
+  border: 2px solid #164C0D;
   border-radius: 10px;
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
-  font-size: 32px;
+  font-size: 18px;
   color: #164C0D;
   cursor: pointer;
   transition: all 0.3s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .continue-shopping-btn:hover {
@@ -442,8 +451,8 @@
   }
   
   .checkout-btn, .continue-shopping-btn {
-    font-size: 28px;
-    height: 75px;
+    font-size: 18px;
+    height: 60px;
   }
 }
 
@@ -491,8 +500,8 @@
   }
   
   .checkout-btn, .continue-shopping-btn {
-    font-size: 24px;
-    height: 70px;
+    font-size: 16px;
+    height: 55px;
   }
   
   .empty-cart-btn {
@@ -639,8 +648,8 @@
   }
   
   .checkout-btn, .continue-shopping-btn {
-    font-size: 18px;
-    height: 60px;
+    font-size: 16px;
+    height: 50px;
   }
   
   .empty-cart-btn {
@@ -693,8 +702,10 @@
   }
   
   .cart-total-header {
-    margin: 10px;
+    margin: 0 auto;
     padding: 15px;
+    width: fit-content;
+    min-width: 180px;
   }
   
   .cart-total-header h3 {
@@ -714,8 +725,8 @@
   }
   
   .checkout-btn, .continue-shopping-btn {
-    font-size: 16px;
-    height: 50px;
+    font-size: 14px;
+    height: 45px;
   }
   
   .empty-cart-btn {
