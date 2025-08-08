@@ -114,14 +114,13 @@ const Cart = () => {
     // Ensure cart is saved to localStorage before navigation
     localStorage.setItem('flowerShopCart', JSON.stringify(cart));
     
-    // Navigate based on payment method
+    // Save selected payment method to localStorage
+    localStorage.setItem('selectedPaymentMethod', selectedPayment);
+    
+    // Navigate to checkout page for both payment types (checkout page will handle the routing)
     setTimeout(() => {
       setIsLoading(false);
-      if (selectedPayment === 'cod') {
-        navigate('/checkout');
-      } else if (selectedPayment === 'online') {
-        navigate('/payment');
-      }
+      navigate('/checkout');
     }, 500);
   };
 
@@ -290,7 +289,7 @@ const Cart = () => {
                   onClick={handleCheckout}
                   disabled={isLoading || !selectedPayment}
                 >
-                  {isLoading ? 'Processing...' : !selectedPayment ? 'Select Payment Method' : selectedPayment === 'online' ? 'Proceed to Payment' : 'Check Out'}
+                  {isLoading ? 'Processing...' : !selectedPayment ? 'Select Payment Method' : 'Check Out'}
                 </button>
                 <button 
                   className="continue-shopping-btn"

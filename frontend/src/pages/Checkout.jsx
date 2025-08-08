@@ -73,12 +73,28 @@ const Checkout = () => {
   };
 
   const handleOrderSubmit = () => {
-    // Process order directly (cash on delivery)
     setIsLoading(true);
     
-    // Save checkout form data and create order before clearing cart
+    // Save checkout form data 
     localStorage.setItem('checkoutFormData', JSON.stringify(formData));
     
+    // Get selected payment method from localStorage (set by cart page)
+    const selectedPayment = localStorage.getItem('selectedPaymentMethod') || 'cod';
+    
+    setTimeout(() => {
+      setIsLoading(false);
+      
+      if (selectedPayment === 'online') {
+        // Redirect to payment page for online payment
+        navigate('/payment');
+      } else {
+        // Process COD order directly and go to success page
+        processOrder('cod');
+      }
+    }, 1000);
+  };
+
+  const processOrder = (paymentMethod) => {
     // Generate and save order data with current cart items
     const generateOrderNumber = () => {
       return Math.floor(Math.random() * 90000) + 10000;
@@ -121,19 +137,16 @@ const Checkout = () => {
         shipping: shipping,
         tax: tax,
         total: total
-      }
+      },
+      paymentMethod: paymentMethod
     };
 
     // Save order data before clearing cart
     localStorage.setItem('orderData', JSON.stringify(orderData));
     
-    setTimeout(() => {
-      setIsLoading(false);
-      alert('Order placed successfully!');
-      // Clear cart after order data is saved
-      localStorage.removeItem('flowerShopCart');
-      navigate('/order-success');
-    }, 2000);
+    // Clear cart after order data is saved
+    localStorage.removeItem('flowerShopCart');
+    navigate('/order-success');
   };
 
   // Show loading or empty state while cart is being loaded
@@ -298,7 +311,7 @@ const Checkout = () => {
                   <div className="item-details">
                     <h4>{item.name}</h4>
                     <p>Quantity: {item.quantity}</p>
-                    <p className="price">Rs. {item.price}</p>
+                    <p className="price">$ {item.price}</p>
                   </div>
                 </div>
               ))}
@@ -307,15 +320,15 @@ const Checkout = () => {
             <div className="order-totals">
               <div className="total-row">
                 <span>Subtotal:</span>
-                <span>Rs. {calculateSubtotal()}</span>
+                <span>$ {calculateSubtotal()}</span>
               </div>
               <div className="total-row">
                 <span>Shipping:</span>
-                <span>Rs. {calculateShipping()}</span>
+                <span>$ {calculateShipping()}</span>
               </div>
               <div className="total-row final-total">
                 <span>Total:</span>
-                <span>Rs. {calculateTotal()}</span>
+                <span>$ {calculateTotal()}</span>
               </div>
             </div>
           </div>
