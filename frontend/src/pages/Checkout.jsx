@@ -76,16 +76,62 @@ const Checkout = () => {
     // Process order directly (cash on delivery)
     setIsLoading(true);
     
-    // Save checkout form data to localStorage
+    // Save checkout form data and create order before clearing cart
     localStorage.setItem('checkoutFormData', JSON.stringify(formData));
+    
+    // Generate and save order data with current cart items
+    const generateOrderNumber = () => {
+      return Math.floor(Math.random() * 90000) + 10000;
+    };
+
+    const getCurrentDate = () => {
+      const now = new Date();
+      return now.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      });
+    };
+
+    const subtotal = calculateSubtotal();
+    const shipping = calculateShipping();
+    const tax = Math.round(subtotal * 0.1);
+    const total = subtotal + shipping + tax;
+
+    const orderData = {
+      orderNumber: generateOrderNumber().toString(),
+      orderDate: getCurrentDate(),
+      shippingAddress: {
+        line1: formData.streetAddress ? `${formData.streetAddress},` : "Address not provided,",
+        line2: formData.apartment ? `${formData.apartment},` : "",
+        line3: formData.townCity ? `${formData.townCity}.` : "City not provided."
+      },
+      items: cart.map(item => ({
+        id: item.id,
+        name: item.name,
+        category: item.category || "Plant",
+        price: item.price,
+        quantity: item.quantity,
+        total: item.price * item.quantity,
+        image: item.image
+      })),
+      pricing: {
+        itemsTotal: subtotal,
+        discount: 0,
+        shipping: shipping,
+        tax: tax,
+        total: total
+      }
+    };
+
+    // Save order data before clearing cart
+    localStorage.setItem('orderData', JSON.stringify(orderData));
     
     setTimeout(() => {
       setIsLoading(false);
       alert('Order placed successfully!');
-      // Clear cart after successful order
+      // Clear cart after order data is saved
       localStorage.removeItem('flowerShopCart');
-      // Clear any existing order data to force new generation
-      localStorage.removeItem('orderData');
       navigate('/order-success');
     }, 2000);
   };
