@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
 import ProductGrid from '../components/ProductGrid';
@@ -13,6 +13,28 @@ const Shop = () => {
   const [activeTab, setActiveTab] = useState('recent');
   const [searchQuery, setSearchQuery] = useState('');
   const [cart, setCart] = useState([]);
+
+  // Load cart from localStorage on component mount
+  useEffect(() => {
+    const savedCart = localStorage.getItem('flowerShopCart');
+    if (savedCart && savedCart !== '[]') {
+      try {
+        const parsedCart = JSON.parse(savedCart);
+        if (parsedCart && parsedCart.length > 0) {
+          setCart(parsedCart);
+        }
+      } catch (error) {
+        console.error('Error parsing cart from localStorage:', error);
+      }
+    }
+  }, []);
+
+  // Save cart to localStorage whenever cart changes
+  useEffect(() => {
+    if (cart.length > 0) {
+      localStorage.setItem('flowerShopCart', JSON.stringify(cart));
+    }
+  }, [cart]);
 
   // Sample product data based on active tab and search query
   const getProductsByTab = (tab) => {
@@ -220,7 +242,9 @@ const Shop = () => {
         return [...prevCart, { ...product, quantity: 1 }];
       }
     });
-    console.log(`Added ${product.name} to cart`);
+    
+    // Simple notification
+    alert(`${product.name} added to cart!`);
   };
 
   return (
