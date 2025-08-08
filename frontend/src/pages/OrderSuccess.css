@@ -1,0 +1,183 @@
+/* Order Success Page Styles */
+.order-success-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f9fa;
+}
+
+.order-success-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+.order-success-content {
+  background: white;
+  border-radius: 15px;
+  padding: 60px 40px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+}
+
+.success-icon {
+  margin-bottom: 30px;
+  animation: bounceIn 0.8s ease-out;
+}
+
+.success-title {
+  font-size: 36px;
+  font-weight: 600;
+  color: #164C0D;
+  margin-bottom: 15px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.success-message {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.order-details {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 30px;
+  margin-bottom: 40px;
+}
+
+.order-info h3 {
+  color: #164C0D;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.order-info p {
+  margin: 10px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.success-actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primary-btn,
+.secondary-btn {
+  padding: 15px 30px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid #164C0D;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 180px;
+  justify-content: center;
+}
+
+.primary-btn {
+  background: #164C0D;
+  color: white;
+}
+
+.primary-btn:hover {
+  background: #0f3a08;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(22, 76, 13, 0.3);
+}
+
+.secondary-btn {
+  background: white;
+  color: #164C0D;
+}
+
+.secondary-btn:hover {
+  background: #164C0D;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(22, 76, 13, 0.3);
+}
+
+/* Animations */
+@keyframes bounceIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .order-success-container {
+    padding: 40px 15px;
+  }
+  
+  .order-success-content {
+    padding: 40px 20px;
+  }
+  
+  .success-title {
+    font-size: 28px;
+  }
+  
+  .success-message {
+    font-size: 16px;
+  }
+  
+  .order-details {
+    padding: 20px;
+  }
+  
+  .success-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .primary-btn,
+  .secondary-btn {
+    width: 100%;
+    max-width: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .order-success-content {
+    padding: 30px 15px;
+  }
+  
+  .success-title {
+    font-size: 24px;
+  }
+  
+  .success-message {
+    font-size: 14px;
+  }
+  
+  .order-info h3 {
+    font-size: 18px;
+  }
+  
+  .order-info p {
+    font-size: 14px;
+  }
+}

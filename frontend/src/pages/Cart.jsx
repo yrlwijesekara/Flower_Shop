@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
 import Footer from '../components/Footer';
+import ProgressSteps from '../components/ProgressSteps';
 import { FiHome, FiMinus, FiPlus, FiTrash2, FiShoppingBag } from 'react-icons/fi';
 import './Cart.css';
 
@@ -102,9 +103,9 @@ const Cart = () => {
       return;
     }
     
-    // Only allow checkout for Cash on Delivery
-    if (selectedPayment !== 'cod') {
-      alert('Checkout is only available for Cash on Delivery orders. Please select Cash on Delivery to proceed.');
+    // Validate payment method selection
+    if (!selectedPayment) {
+      alert('Please select a payment method to proceed.');
       return;
     }
     
@@ -113,10 +114,14 @@ const Cart = () => {
     // Ensure cart is saved to localStorage before navigation
     localStorage.setItem('flowerShopCart', JSON.stringify(cart));
     
-    // Brief loading simulation then navigate to checkout
+    // Navigate based on payment method
     setTimeout(() => {
       setIsLoading(false);
-      navigate('/checkout');
+      if (selectedPayment === 'cod') {
+        navigate('/checkout');
+      } else if (selectedPayment === 'online') {
+        navigate('/payment');
+      }
     }, 500);
   };
 
@@ -158,24 +163,7 @@ const Cart = () => {
       />
       
       <div className="cart-container">
-        <div className="cart-steps">
-          <div className="step active">
-            <div className="step-number">1</div>
-            <span className="step-label">Shopping Cart</span>
-            <div className="step-arrow"></div>
-          </div>
-          
-          <div className="step">
-            <div className="step-number">2</div>
-            <span className="step-label">Checkout Details</span>
-            <div className="step-arrow"></div>
-          </div>
-          
-          <div className="step">
-            <div className="step-number">3</div>
-            <span className="step-label">Order Complete</span>
-          </div>
-        </div>
+        <ProgressSteps currentStep={1} />
 
         <div className="cart-content">
           <div className="cart-table-container">
@@ -275,23 +263,23 @@ const Cart = () => {
                     checked={selectedPayment === 'online'}
                     onChange={handlePaymentChange}
                   />
-                  <span>Online Payment (Coming Soon)</span>
+                  <span>Online Payment</span>
                 </label>
               </div>
 
-              {selectedPayment !== 'cod' && (
+              {!selectedPayment && (
                 <div className="payment-notice">
                   <p style={{ 
-                    color: '#ff6b6b', 
+                    color: '#2196f3', 
                     fontSize: '14px', 
                     textAlign: 'center', 
                     margin: '10px 0',
                     padding: '10px',
-                    backgroundColor: '#fff5f5',
+                    backgroundColor: '#e3f2fd',
                     borderRadius: '5px',
-                    border: '1px solid #ffebee'
+                    border: '1px solid #bbdefb'
                   }}>
-                    ⚠️ Checkout is only available for Cash on Delivery orders
+                    ℹ️ Please select a payment method to continue
                   </p>
                 </div>
               )}

@@ -1,0 +1,598 @@
+/* Payment Page Styles */
+.payment-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f9fa;
+}
+
+.payment-container {
+  flex: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  width: 100%;
+}
+
+
+/* Payment Content */
+.payment-content {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.payment-form-container {
+  position: relative;
+  width: 1216px;
+  height: 614px;
+  background: #EFECEC;
+  border-radius: 10px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.payment-title {
+  position: absolute;
+  width: 216px;
+  height: 48px;
+  left: 75px;
+  top: 57px;
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 48px;
+  text-align: center;
+  color: #000000;
+  margin: 0;
+}
+
+.payment-form {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Card Number Input */
+.card-number-group {
+  position: absolute;
+  width: 1077px;
+  height: 85px;
+  left: 69px;
+  top: 108px;
+}
+
+.card-number-input {
+  width: 100%;
+  height: 100%;
+  background: #FFFFFF;
+  border-radius: 5px;
+  border: none;
+  padding: 0 20px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  color: #000000;
+  outline: none;
+}
+
+.card-number-input::placeholder {
+  color: #E9E4E4;
+  font-size: 20px;
+  text-align: center;
+}
+
+/* Form Row */
+.form-row {
+  display: flex;
+  gap: 20px;
+  position: relative;
+}
+
+/* Expiration Group */
+.expiration-group {
+  position: absolute;
+  left: 66px;
+  top: 233px;
+}
+
+.field-title {
+  position: absolute;
+  width: 239px;
+  height: 48px;
+  left: 0;
+  top: 0;
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 48px;
+  text-align: center;
+  color: #000000;
+  margin: 0;
+}
+
+.expiration-fields {
+  position: absolute;
+  top: 48px;
+  left: 0;
+  display: flex;
+  gap: 26px;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper:first-child {
+  position: absolute;
+  width: 238px;
+  height: 85px;
+  left: 3px;
+  top: 0;
+}
+
+.select-wrapper:last-child {
+  position: absolute;
+  width: 238px;
+  height: 85px;
+  left: 267px;
+  top: 0;
+}
+
+.form-select {
+  width: 100%;
+  height: 100%;
+  background: #FFFFFF;
+  border-radius: 5px;
+  border: none;
+  padding: 0 40px 0 20px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  color: #E9E4E4;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.form-select option {
+  color: #000000;
+}
+
+.select-arrow {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: #666;
+  pointer-events: none;
+}
+
+/* CVV Group */
+.cvv-group {
+  position: absolute;
+  left: 627px;
+  top: 233px;
+}
+
+.cvv-group .field-title {
+  position: absolute;
+  width: 68px;
+  height: 48px;
+  left: 0;
+  top: 0;
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 48px;
+  text-align: center;
+  color: #000000;
+  margin: 0;
+}
+
+.cvv-input {
+  position: absolute;
+  width: 518px;
+  height: 85px;
+  left: -1px;
+  top: 48px;
+  background: #FFFFFF;
+  border-radius: 5px;
+  border: none;
+  padding: 0 20px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  color: #000000;
+  outline: none;
+}
+
+.cvv-input::placeholder {
+  color: #E9E4E4;
+  font-size: 20px;
+  text-align: center;
+}
+
+/* Pay Button */
+.pay-button {
+  position: absolute;
+  width: 1077px;
+  height: 85px;
+  left: 67px;
+  top: 472px;
+  background: #164C0D;
+  border: 1px solid #164C0D;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 48px;
+  text-align: center;
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pay-button:hover {
+  background: #0f3a08;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(22, 76, 13, 0.3);
+}
+
+.pay-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(22, 76, 13, 0.3);
+}
+
+.pay-button:disabled {
+  background: #cccccc;
+  border-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Responsive Design */
+
+/* 1400px */
+@media (max-width: 1400px) {
+  .payment-container {
+    padding: 40px 40px;
+  }
+  
+  .payment-form-container {
+    width: 100%;
+    max-width: 1216px;
+    height: auto;
+    min-height: 614px;
+    padding: 60px 40px 40px;
+  }
+  
+  .payment-title {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 40px;
+  }
+  
+  .card-number-group {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    margin-bottom: 40px;
+  }
+  
+  .card-number-input {
+    height: 85px;
+  }
+  
+  .form-row {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 40px;
+  }
+  
+  .expiration-group {
+    position: relative;
+    left: 0;
+    top: 0;
+    flex: 1;
+    min-width: 300px;
+  }
+  
+  .field-title {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 20px;
+  }
+  
+  .expiration-fields {
+    position: relative;
+    top: 0;
+    left: 0;
+    display: flex;
+    gap: 20px;
+  }
+  
+  .select-wrapper:first-child,
+  .select-wrapper:last-child {
+    position: relative;
+    left: 0;
+    top: 0;
+    flex: 1;
+    width: auto;
+    height: auto;
+  }
+  
+  .form-select {
+    height: 85px;
+  }
+  
+  .cvv-group {
+    position: relative;
+    left: 0;
+    top: 0;
+    flex: 1;
+    min-width: 300px;
+  }
+  
+  .cvv-group .field-title {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 20px;
+  }
+  
+  .cvv-input {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 85px;
+  }
+  
+  .pay-button {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 85px;
+    margin-top: 20px;
+  }
+}
+
+/* 1200px */
+@media (max-width: 1200px) {
+  .payment-container {
+    padding: 30px 30px;
+  }
+  
+  
+  .payment-form-container {
+    padding: 50px 30px 30px;
+  }
+  
+  .payment-title {
+    font-size: 28px;
+    margin-bottom: 30px;
+  }
+  
+  .field-title {
+    font-size: 28px;
+  }
+  
+  .card-number-input,
+  .form-select,
+  .cvv-input {
+    height: 75px;
+    font-size: 18px;
+  }
+  
+  .pay-button {
+    height: 75px;
+    font-size: 28px;
+  }
+}
+
+/* 992px */
+@media (max-width: 992px) {
+  .payment-container {
+    padding: 20px 20px;
+  }
+  
+  
+  .payment-form-container {
+    padding: 40px 25px 25px;
+  }
+  
+  .payment-title {
+    font-size: 26px;
+    margin-bottom: 25px;
+  }
+  
+  .field-title {
+    font-size: 26px;
+    margin-bottom: 15px;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 25px;
+  }
+  
+  .expiration-group,
+  .cvv-group {
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .card-number-input,
+  .form-select,
+  .cvv-input {
+    height: 70px;
+    font-size: 17px;
+  }
+  
+  .pay-button {
+    height: 70px;
+    font-size: 26px;
+  }
+}
+
+/* 768px */
+@media (max-width: 768px) {
+  .payment-container {
+    padding: 15px 15px;
+  }
+  
+  
+  .payment-form-container {
+    padding: 35px 20px 20px;
+  }
+  
+  .payment-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .field-title {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+  
+  .form-row {
+    gap: 20px;
+  }
+  
+  .expiration-fields {
+    gap: 15px;
+  }
+  
+  .card-number-input,
+  .form-select,
+  .cvv-input {
+    height: 65px;
+    font-size: 16px;
+    padding: 0 15px;
+  }
+  
+  .card-number-input::placeholder,
+  .cvv-input::placeholder {
+    font-size: 16px;
+  }
+  
+  .pay-button {
+    height: 65px;
+    font-size: 24px;
+  }
+}
+
+/* 480px */
+@media (max-width: 480px) {
+  .payment-container {
+    padding: 10px 10px;
+  }
+  
+  
+  .payment-form-container {
+    padding: 25px 15px 15px;
+    border-radius: 8px;
+  }
+  
+  .payment-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  
+  .field-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .form-row {
+    gap: 15px;
+  }
+  
+  .expiration-fields {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .card-number-input,
+  .form-select,
+  .cvv-input {
+    height: 55px;
+    font-size: 14px;
+    padding: 0 12px;
+    text-align: center;
+  }
+  
+  .card-number-input::placeholder,
+  .cvv-input::placeholder {
+    font-size: 14px;
+  }
+  
+  .form-select {
+    text-align-last: center;
+    padding-right: 35px;
+  }
+  
+  .select-arrow {
+    right: 10px;
+    width: 16px;
+    height: 16px;
+  }
+  
+  .pay-button {
+    height: 55px;
+    font-size: 20px;
+    margin-top: 15px;
+  }
+}
+
+/* Form Validation Styles */
+.form-input:focus,
+.form-select:focus {
+  box-shadow: 0 0 0 3px rgba(22, 76, 13, 0.1);
+  border: 2px solid #164C0D;
+}
+
+.form-input.error,
+.form-select.error {
+  border: 2px solid #ff6b6b;
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+}
+
+/* Loading States */
+.payment-form-container.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Animation for smooth transitions */
+* {
+  transition: all 0.3s ease;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none;
+  }
+}

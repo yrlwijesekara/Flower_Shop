@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
 import Footer from '../components/Footer';
+import ProgressSteps from '../components/ProgressSteps';
 import { FiHome, FiChevronRight } from 'react-icons/fi';
 import './Checkout.css';
 
@@ -20,6 +21,8 @@ const Checkout = () => {
     phoneNumber: '',
     emailAddress: ''
   });
+
+  const [paymentMethod, setPaymentMethod] = useState('cod');
 
   // Load cart from localStorage on component mount
   useEffect(() => {
@@ -71,15 +74,20 @@ const Checkout = () => {
   };
 
   const handleOrderSubmit = () => {
-    setIsLoading(true);
-    // Simulate order processing
-    setTimeout(() => {
-      setIsLoading(false);
-      alert('Order placed successfully!');
-      // Clear cart and redirect to order complete page
-      localStorage.removeItem('flowerShopCart');
-      navigate('/order-complete');
-    }, 2000);
+    if (paymentMethod === 'online') {
+      // Save form data to localStorage for payment page
+      localStorage.setItem('checkoutFormData', JSON.stringify(formData));
+      navigate('/payment');
+    } else {
+      // Cash on delivery - process order directly
+      setIsLoading(true);
+      setTimeout(() => {
+        setIsLoading(false);
+        alert('Order placed successfully!');
+        localStorage.removeItem('flowerShopCart');
+        navigate('/order-complete');
+      }, 2000);
+    }
   };
 
   // Show loading or empty state while cart is being loaded
@@ -112,30 +120,7 @@ const Checkout = () => {
       
       <div className="checkout-container">
         {/* Progress Steps */}
-        <div className="progress-steps">
-          <div className="step completed">
-            <div className="step-circle">
-              <span>1</span>
-            </div>
-            <span className="step-label">Shopping Cart</span>
-            <div className="step-arrow"></div>
-          </div>
-          
-          <div className="step active">
-            <div className="step-circle">
-              <span>2</span>
-            </div>
-            <span className="step-label">Checkout Details</span>
-            <div className="step-arrow"></div>
-          </div>
-          
-          <div className="step">
-            <div className="step-circle">
-              <span>3</span>
-            </div>
-            <span className="step-label">Order Complete</span>
-          </div>
-        </div>
+        <ProgressSteps currentStep={2} />
 
         {/* Main Content */}
         <div className="checkout-content">
@@ -245,12 +230,39 @@ const Checkout = () => {
                 />
               </div>
 
+              <div className="payment-method-section">
+                <h3>Payment Method</h3>
+                <p style={{fontSize: '14px', color: '#666', marginBottom: '10px'}}>Current: {paymentMethod}</p>
+                <div className="payment-options">
+                  <label className="payment-option">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="cod"
+                      checked={paymentMethod === 'cod'}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                    />
+                    <span>Cash on Delivery</span>
+                  </label>
+                  <label className="payment-option">
+                    <input
+                      type="radio"
+                      name="paymentMethod"
+                      value="online"
+                      checked={paymentMethod === 'online'}
+                      onChange={(e) => setPaymentMethod(e.target.value)}
+                    />
+                    <span>Online Payment</span>
+                  </label>
+                </div>
+              </div>
+
               <button 
                 type="submit" 
                 className="order-button"
                 disabled={isLoading}
               >
-                {isLoading ? 'Processing...' : 'ORDER'}
+                {isLoading ? 'Processing...' : (paymentMethod === 'online' ? 'PROCEED TO PAYMENT' : 'ORDER')}
               </button>
             </form>
           </div>
