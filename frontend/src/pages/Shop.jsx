@@ -82,7 +82,7 @@ const Shop = () => {
         name: "MONSTERA DELICIOSA",
         category: "Tropical",
         price: 79,
-        image: "/images/monstera.jpg",
+        image: "/images/fiddle-leaf.jpg",
         isRecent: true,
         isPopular: true,
         isSpecial: false
@@ -92,7 +92,7 @@ const Shop = () => {
         name: "RUBBER PLANT",
         category: "Indoor Tree",
         price: 59,
-        image: "/images/rubber-plant.jpg",
+        image: "/images/fiddle-leaf.jpg",
         isRecent: false,
         isPopular: false,
         isSpecial: true
@@ -102,7 +102,7 @@ const Shop = () => {
         name: "ZZ PLANT",
         category: "Low Light",
         price: 35,
-        image: "/images/zz-plant.jpg",
+        image: "/images/fiddle-leaf.jpg",
         isRecent: true,
         isPopular: true,
         isSpecial: true
@@ -112,7 +112,7 @@ const Shop = () => {
         name: "PHILODENDRON",
         category: "Tropical",
         price: 55,
-        image: "/images/philodendron.jpg",
+        image: "/images/fiddle-leaf.jpg",
         isRecent: false,
         isPopular: true,
         isSpecial: false
@@ -122,7 +122,7 @@ const Shop = () => {
         name: "SPIDER PLANT",
         category: "Air Purifying",
         price: 25,
-        image: "/images/spider-plant.jpg",
+        image: "/images/fiddle-leaf.jpg",
         isRecent: true,
         isPopular: false,
         isSpecial: true
@@ -132,7 +132,7 @@ const Shop = () => {
         name: "DRACAENA",
         category: "Low Light",
         price: 65,
-        image: "/images/dracaena.jpg",
+        image: "/images/fiddle-leaf.jpg",
         isRecent: false,
         isPopular: true,
         isSpecial: true

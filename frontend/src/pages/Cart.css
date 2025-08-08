@@ -167,6 +167,17 @@
   font-weight: 700;
   font-size: 20px;
   color: #000000;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-word;
+  cursor: help;
+  transition: all 0.3s ease;
+}
+
+.cart-product-name:hover {
+  color: #164C0D;
 }
 
 /* Price styling */
@@ -464,6 +475,7 @@
   
   .cart-product-name {
     font-size: 18px;
+    max-width: 180px;
   }
   
   .cart-price, .cart-subtotal {
@@ -615,6 +627,7 @@
   
   .cart-product-name {
     font-size: 16px;
+    max-width: 150px;
   }
   
   .cart-price, .cart-subtotal, .cart-quantity {
@@ -672,6 +685,7 @@
   
   .cart-product-name {
     font-size: 14px;
+    max-width: 120px;
   }
   
   .cart-price, .cart-subtotal, .cart-quantity {

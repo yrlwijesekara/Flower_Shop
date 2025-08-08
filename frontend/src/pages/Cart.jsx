@@ -21,38 +21,12 @@ const Cart = () => {
         const parsedCart = JSON.parse(savedCart);
         if (parsedCart && parsedCart.length > 0) {
           setCart(parsedCart);
-          return;
         }
       } catch (error) {
+        console.error('Error parsing cart from localStorage:', error);
       }
     }
-    
-    // Always add sample items for demonstration if no valid cart exists
-    const sampleCart = [
-      {
-        id: 1,
-        name: "Homolomena",
-        price: 200,
-        image: "/images/homalomena.jpg",
-        quantity: 1
-      },
-      {
-        id: 2,
-        name: "Alovera", 
-        price: 250,
-        image: "/images/candelabra-aloe.jpg",
-        quantity: 1
-      },
-      {
-        id: 3,
-        name: "Rose",
-        price: 350,
-        image: "/images/placeholder.jpg",
-        quantity: 1
-      }
-    ];
-    setCart(sampleCart);
-    localStorage.setItem('flowerShopCart', JSON.stringify(sampleCart));
+    // No sample cart - cart will be empty until products are added from shop
   }, []);
 
   // Save cart to localStorage whenever cart changes
@@ -81,21 +55,28 @@ const Cart = () => {
       return;
     }
 
-    setCart(prevCart =>
-      prevCart.map(item =>
+    setCart(prevCart => {
+      const updatedCart = prevCart.map(item =>
         item.id === productId
           ? { ...item, quantity: newQuantity }
           : item
-      )
-    );
+      );
+      localStorage.setItem('flowerShopCart', JSON.stringify(updatedCart));
+      return updatedCart;
+    });
   };
 
   const removeFromCart = (productId) => {
-    setCart(prevCart => prevCart.filter(item => item.id !== productId));
+    setCart(prevCart => {
+      const updatedCart = prevCart.filter(item => item.id !== productId);
+      localStorage.setItem('flowerShopCart', JSON.stringify(updatedCart));
+      return updatedCart;
+    });
   };
 
   const clearCart = () => {
     setCart([]);
+    localStorage.removeItem('flowerShopCart');
   };
 
   const calculateSubtotal = () => {
@@ -196,7 +177,7 @@ const Cart = () => {
                     <div className="item-cell cart-product-cell">
                       <div className="cart-product-info">
                         <img src={item.image} alt={item.name} className="cart-product-image" />
-                        <span className="cart-product-name">{item.name}</span>
+                        <span className="cart-product-name" title={item.name}>{item.name}</span>
                       </div>
                     </div>
                     <div className="item-cell price-cell">
