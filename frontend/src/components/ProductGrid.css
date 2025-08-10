@@ -58,10 +58,18 @@
   }
   
   .grid-container {
-    grid-template-columns: repeat(3, minmax(220px, 260px));
-    gap: 20px 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
     padding: 0 10px;
     max-width: calc(100vw - 30px);
+  }
+  
+  .grid-container > * {
+    flex: 0 0 calc(50% - 10px);
+    max-width: 300px;
+    min-width: 260px;
   }
 }
 
