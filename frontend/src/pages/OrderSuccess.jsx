@@ -33,7 +33,28 @@ const OrderSuccess = () => {
 
       if (storedOrderData) {
         // Use stored order data
-        setOrderData(JSON.parse(storedOrderData));
+        const orderData = JSON.parse(storedOrderData);
+        setOrderData(orderData);
+        
+        // Ensure purchased items are removed from cart
+        const savedFullCart = localStorage.getItem('flowerShopFullCart');
+        if (savedFullCart) {
+          try {
+            const fullCart = JSON.parse(savedFullCart);
+            const purchasedItemIds = orderData.items.map(item => item.id);
+            const remainingItems = fullCart.filter(item => !purchasedItemIds.includes(item.id));
+            
+            if (remainingItems.length > 0) {
+              localStorage.setItem('flowerShopCart', JSON.stringify(remainingItems));
+            } else {
+              localStorage.setItem('flowerShopCart', JSON.stringify([]));
+            }
+            // Always clear the full cart after successful purchase
+            localStorage.removeItem('flowerShopFullCart');
+          } catch (error) {
+            console.error('Error updating cart after successful order:', error);
+          }
+        }
       } else {
         // Fallback to sample data if no order data found
         const fallbackOrderData = {
