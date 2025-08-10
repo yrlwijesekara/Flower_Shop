@@ -1,39 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import './OtherProducts.css';
 
-const OtherProducts = ({ className = "" }) => {
+const OtherProducts = ({ className = "", onAddToCart }) => {
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const otherProducts = [
     {
-      id: 1,
+      id: 101,
       name: "CANDELABRA ALOE",
       price: 28,
       rating: 5,
       image: "/images/candelabra-aloe.jpg"
     },
     {
-      id: 2,
-      name: "",
+      id: 102,
+      name: "HOMALOMENA",
       price: 25,
       rating: 4,
       image: "/images/homalomena.jpg"
     },
     {
-      id: 3,
+      id: 103,
       name: "SNAKE PLANT",
       price: 48,
       rating: 3,
       image: "/images/snake-plant.jpg"
     },
     {
-      id: 4,
+      id: 104,
       name: "GOLDEN POTHOS",
       price: 17,
       rating: 2,
       image: "/images/golden-pothos.jpg"
     },
     {
-      id: 5,
-      name: "cactus",
+      id: 105,
+      name: "MINI CACTUS",
       price: 8,
       rating: 5,
       image: "/images/placeholder.jpg"
@@ -62,6 +64,100 @@ const OtherProducts = ({ className = "" }) => {
     return stars;
   };
 
+  const handleProductClick = (product) => {
+    setSelectedProduct(product);
+  };
+
+  const closeModal = () => {
+    setSelectedProduct(null);
+  };
+
+  const addToCart = (product) => {
+    // If parent has onAddToCart handler, use it (for Shop page)
+    if (onAddToCart) {
+      onAddToCart(product);
+    } else {
+      // Fallback to direct localStorage update (for other pages)
+      const existingCart = JSON.parse(localStorage.getItem('flowerShopCart') || '[]');
+      const existingItem = existingCart.find(item => item.id === product.id);
+      
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        existingCart.push({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.image,
+          quantity: 1
+        });
+      }
+      
+      localStorage.setItem('flowerShopCart', JSON.stringify(existingCart));
+    }
+    
+    closeModal();
+  };
+
+  // Modal component using portal
+  const Modal = ({ product, onClose }) => {
+    useEffect(() => {
+      // Prevent body scroll when modal is open
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = 'unset';
+      };
+    }, []);
+
+    const modalContent = (
+      <div className="product-modal-overlay" onClick={onClose}>
+        <div className="product-modal-card" onClick={(e) => e.stopPropagation()}>
+          <button className="modal-close-btn" onClick={onClose}>×</button>
+          
+          <div className="modal-product-image">
+            <img 
+              src={product.image} 
+              alt={product.name}
+              onError={(e) => {
+                e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjBGMEYwIiByeD0iMTAiLz4KPHN2ZyB4PSI3NSIgeT0iNzUiIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjNUJDNTU5Ij4KPHA0aCBkPSJNMTIgMkw2IDhIMTBWMThIMTRWOEgxOEwxMiAyWiIvPgo8L3N2Zz4KPC9zdmc+Cg==';
+              }}
+            />
+          </div>
+          
+          <div className="modal-product-info">
+            <h3 className="modal-product-name">{product.name || 'Product'}</h3>
+            
+            <div className="modal-rating">
+              <div className="modal-stars">
+                {renderStars(product.rating)}
+              </div>
+              <span className="modal-rating-text">({product.rating}/5)</span>
+            </div>
+            
+            <div className="modal-price">
+              <span className="modal-price-text">${product.price}</span>
+            </div>
+            
+            <div className="modal-description">
+              <p>Premium quality plant perfect for your home or office. Easy to care for and adds natural beauty to any space.</p>
+            </div>
+            
+            <div className="modal-actions">
+              <button 
+                className="modal-add-to-cart-btn"
+                onClick={() => addToCart(product)}
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
+    return createPortal(modalContent, document.body);
+  };
+
   return (
     <div className={`other-products-container ${className}`}>
       {/* Other Products Header */}
@@ -76,7 +172,13 @@ const OtherProducts = ({ className = "" }) => {
         {otherProducts.map((product, index) => (
           <div key={product.id} className="other-products-item">
             <div className="other-products-card-frame">
-              <div className="other-products-card-background">
+              <div 
+                className="other-products-card-background"
+                onClick={() => handleProductClick(product)}
+                role="button"
+                tabIndex={0}
+                onKeyPress={(e) => e.key === 'Enter' && handleProductClick(product)}
+              >
                 {/* Product Image */}
                 <div className="other-products-image-container">
                   <img 
@@ -110,6 +212,9 @@ const OtherProducts = ({ className = "" }) => {
           </div>
         ))}
       </div>
+
+      {/* Product Detail Modal using Portal */}
+      {selectedProduct && <Modal product={selectedProduct} onClose={closeModal} />}
     </div>
   );
 };

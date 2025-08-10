@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
 import Footer from '../components/Footer';
+import ProgressSteps from '../components/ProgressSteps';
 import { FiHome, FiMinus, FiPlus, FiTrash2, FiShoppingBag } from 'react-icons/fi';
 import './Cart.css';
 
@@ -10,23 +11,65 @@ const Cart = () => {
   const navigate = useNavigate();
   const [cart, setCart] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState('cod');
+  const [selectedItems, setSelectedItems] = useState(new Set());
   
 
   // Load cart from localStorage on component mount
   useEffect(() => {
-    const savedCart = localStorage.getItem('flowerShopCart');
-    
-    if (savedCart && savedCart !== '[]') {
-      try {
-        const parsedCart = JSON.parse(savedCart);
-        if (parsedCart && parsedCart.length > 0) {
-          setCart(parsedCart);
+    const loadCartFromStorage = () => {
+      // First check if there's a full cart saved (when user returns from checkout/payment)
+      const savedFullCart = localStorage.getItem('flowerShopFullCart');
+      const savedCart = localStorage.getItem('flowerShopCart');
+      
+      if (savedFullCart && savedFullCart !== '[]' && savedFullCart !== 'null') {
+        try {
+          const parsedFullCart = JSON.parse(savedFullCart);
+          if (Array.isArray(parsedFullCart) && parsedFullCart.length > 0) {
+            setCart(parsedFullCart);
+            // Clear the full cart storage since we've loaded it
+            localStorage.removeItem('flowerShopFullCart');
+            // Update the regular cart with the full cart
+            localStorage.setItem('flowerShopCart', JSON.stringify(parsedFullCart));
+            return;
+          }
+        } catch (error) {
+          console.error('Error parsing full cart from localStorage:', error);
         }
-      } catch (error) {
-        console.error('Error parsing cart from localStorage:', error);
       }
-    }
-    // No sample cart - cart will be empty until products are added from shop
+      
+      // Load regular cart if no full cart found
+      if (savedCart && savedCart !== '[]' && savedCart !== 'null') {
+        try {
+          const parsedCart = JSON.parse(savedCart);
+          if (Array.isArray(parsedCart) && parsedCart.length > 0) {
+            setCart(parsedCart);
+          } else {
+            setCart([]);
+          }
+        } catch (error) {
+          console.error('Error parsing cart from localStorage:', error);
+          setCart([]);
+        }
+      } else {
+        setCart([]);
+      }
+    };
+
+    loadCartFromStorage();
+
+    // Listen for storage changes from other tabs/windows
+    const handleStorageChange = (e) => {
+      if (e.key === 'flowerShopCart') {
+        loadCartFromStorage();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
 
   // Save cart to localStorage whenever cart changes
@@ -80,24 +123,82 @@ const Cart = () => {
   };
 
   const calculateSubtotal = () => {
-    return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    return cart
+      .filter(item => selectedItems.has(item.id))
+      .reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
   const calculateShipping = () => {
-    return 250; // Fixed shipping fee as shown in design
+    return selectedItems.size > 0 ? 250 : 0; // Only charge shipping if items are selected
   };
 
   const calculateTotal = () => {
     return calculateSubtotal() + calculateShipping();
   };
 
+  const handlePaymentChange = (e) => {
+    setSelectedPayment(e.target.value);
+  };
+
+  const handleItemSelection = (productId) => {
+    setSelectedItems(prevSelected => {
+      const newSelected = new Set(prevSelected);
+      if (newSelected.has(productId)) {
+        newSelected.delete(productId);
+      } else {
+        newSelected.add(productId);
+      }
+      return newSelected;
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (selectedItems.size === cart.length) {
+      // If all items are selected, deselect all
+      setSelectedItems(new Set());
+    } else {
+      // Select all items
+      setSelectedItems(new Set(cart.map(item => item.id)));
+    }
+  };
+
   const handleCheckout = () => {
+    if (cart.length === 0) {
+      alert('Your cart is empty. Please add items before checkout.');
+      return;
+    }
+    
+    // Validate item selection
+    if (selectedItems.size === 0) {
+      alert('Please select at least one item to proceed with checkout.');
+      return;
+    }
+    
+    // Validate payment method selection
+    if (!selectedPayment) {
+      alert('Please select a payment method to proceed.');
+      return;
+    }
+    
     setIsLoading(true);
-    // Simulate checkout process
+    
+    // Filter only selected items for checkout
+    const selectedCartItems = cart.filter(item => selectedItems.has(item.id));
+    
+    // Save the full original cart (to preserve unchecked items when user returns)
+    localStorage.setItem('flowerShopFullCart', JSON.stringify(cart));
+    
+    // Save selected items for checkout process
+    localStorage.setItem('flowerShopCart', JSON.stringify(selectedCartItems));
+    
+    // Save selected payment method to localStorage
+    localStorage.setItem('selectedPaymentMethod', selectedPayment);
+    
+    // Navigate to checkout page for both payment types (checkout page will handle the routing)
     setTimeout(() => {
       setIsLoading(false);
-      alert('Checkout functionality would be implemented here!');
-    }, 1500);
+      navigate('/checkout');
+    }, 500);
   };
 
   const continueShopping = () => {
@@ -138,28 +239,20 @@ const Cart = () => {
       />
       
       <div className="cart-container">
-        <div className="cart-steps">
-          <div className="step active">
-            <span className="step-number">1</span>
-            <span className="step-label">Shopping Cart</span>
-          </div>
-          <div className="step-arrow">→</div>
-          <div className="step">
-            <span className="step-number">2</span>
-            <span className="step-label">Checkout Details</span>
-          </div>
-          <div className="step-arrow">→</div>
-          <div className="step">
-            <span className="step-number">3</span>
-            <span className="step-label">Order Complete</span>
-          </div>
-        </div>
+        <ProgressSteps currentStep={1} />
 
         <div className="cart-content">
           <div className="cart-table-container">
             <div className="cart-table">
               <div className="cart-table-header">
-                <div className="header-cell checkbox-cell"></div>
+                <div className="header-cell checkbox-cell">
+                  <input 
+                    type="checkbox" 
+                    className="select-all-checkbox"
+                    checked={selectedItems.size === cart.length && cart.length > 0}
+                    onChange={handleSelectAll}
+                  />
+                </div>
                 <div className="header-cell cart-product-cell">Product</div>
                 <div className="header-cell price-cell">Price</div>
                 <div className="header-cell qty-cell">Qty.</div>
@@ -172,7 +265,12 @@ const Cart = () => {
                   return (
                   <div key={item.id} className="cart-item-row">
                     <div className="item-cell checkbox-cell">
-                      <input type="checkbox" className="item-checkbox" />
+                      <input 
+                        type="checkbox" 
+                        className="item-checkbox"
+                        checked={selectedItems.has(item.id)}
+                        onChange={() => handleItemSelection(item.id)}
+                      />
                     </div>
                     <div className="item-cell cart-product-cell">
                       <div className="cart-product-info">
@@ -236,22 +334,71 @@ const Cart = () => {
 
               <div className="payment-options">
                 <label className="payment-option">
-                  <input type="radio" name="payment" value="cod" defaultChecked />
+                  <input 
+                    type="radio" 
+                    name="payment" 
+                    value="cod" 
+                    checked={selectedPayment === 'cod'}
+                    onChange={handlePaymentChange}
+                  />
                   <span>Cash On Delivery</span>
                 </label>
                 <label className="payment-option">
-                  <input type="radio" name="payment" value="online" />
+                  <input 
+                    type="radio" 
+                    name="payment" 
+                    value="online"
+                    checked={selectedPayment === 'online'}
+                    onChange={handlePaymentChange}
+                  />
                   <span>Online Payment</span>
                 </label>
               </div>
+
+              {selectedItems.size === 0 && (
+                <div className="selection-notice">
+                  <p style={{ 
+                    color: '#ff9800', 
+                    fontSize: '14px', 
+                    textAlign: 'center', 
+                    margin: '10px 0',
+                    padding: '10px',
+                    backgroundColor: '#fff3e0',
+                    borderRadius: '5px',
+                    border: '1px solid #ffcc02'
+                  }}>
+                    ⚠️ Please select items to checkout by ticking the checkboxes
+                  </p>
+                </div>
+              )}
+
+              {!selectedPayment && selectedItems.size > 0 && (
+                <div className="payment-notice">
+                  <p style={{ 
+                    color: '#2196f3', 
+                    fontSize: '14px', 
+                    textAlign: 'center', 
+                    margin: '10px 0',
+                    padding: '10px',
+                    backgroundColor: '#e3f2fd',
+                    borderRadius: '5px',
+                    border: '1px solid #bbdefb'
+                  }}>
+                    ℹ️ Please select a payment method to continue
+                  </p>
+                </div>
+              )}
 
               <div className="cart-actions">
                 <button 
                   className="checkout-btn"
                   onClick={handleCheckout}
-                  disabled={isLoading}
+                  disabled={isLoading || !selectedPayment || selectedItems.size === 0}
                 >
-                  {isLoading ? 'Processing...' : 'Check Out'}
+                  {isLoading ? 'Processing...' : 
+                   selectedItems.size === 0 ? 'Select Items to Checkout' :
+                   !selectedPayment ? 'Select Payment Method' : 
+                   `Check Out (${selectedItems.size} item${selectedItems.size > 1 ? 's' : ''})`}
                 </button>
                 <button 
                   className="continue-shopping-btn"

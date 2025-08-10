@@ -31,9 +31,7 @@ const Shop = () => {
 
   // Save cart to localStorage whenever cart changes
   useEffect(() => {
-    if (cart.length > 0) {
-      localStorage.setItem('flowerShopCart', JSON.stringify(cart));
-    }
+    localStorage.setItem('flowerShopCart', JSON.stringify(cart));
   }, [cart]);
 
   // Sample product data based on active tab and search query
@@ -381,7 +379,7 @@ const Shop = () => {
           
           {/* Other Products Sidebar - Spans all 3 rows */}
           <div className="other-products-sidebar">
-            <OtherProducts />
+            <OtherProducts onAddToCart={handleAddToCart} />
           </div>
         </div>
         
