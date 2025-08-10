@@ -349,13 +349,14 @@
   .other-products-list {
     height: auto;
     overflow: visible;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
   
   .other-products-item {
-    height: 100px;
+    height: 90px;
+    width: 100%;
   }
   
   .other-products-card-background {
