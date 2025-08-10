@@ -418,9 +418,9 @@
   .other-products-list {
     height: auto;
     overflow: visible;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
   
   .other-products-item {
