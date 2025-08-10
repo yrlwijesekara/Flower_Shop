@@ -628,6 +628,12 @@
     border-radius: 15px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
+  
+  .cart-summary {
+    margin: 20px auto !important;
+    max-width: 600px !important;
+    display: block !important;
+  }
 }
 
 /* 480px to 767px - Mobile Large */
@@ -668,6 +674,13 @@
     order: 2;
     z-index: 10;
   }
+  
+  .cart-summary {
+    margin: 15px auto !important;
+    max-width: 500px !important;
+    width: 90% !important;
+    display: block !important;
+  }
 }
 
 /* Below 480px - Mobile Small */
@@ -707,5 +720,12 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.08);
     order: 2;
     z-index: 10;
+  }
+  
+  .cart-summary {
+    margin: 10px auto !important;
+    max-width: 100% !important;
+    width: 95% !important;
+    display: block !important;
   }
 }
