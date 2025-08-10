@@ -31,9 +31,8 @@ const Shop = () => {
 
   // Save cart to localStorage whenever cart changes
   useEffect(() => {
-    if (cart.length > 0) {
-      localStorage.setItem('flowerShopCart', JSON.stringify(cart));
-    }
+    console.log('Shop saving cart to localStorage:', cart);
+    localStorage.setItem('flowerShopCart', JSON.stringify(cart));
   }, [cart]);
 
   // Sample product data based on active tab and search query
@@ -230,17 +229,26 @@ const Shop = () => {
   };
 
   const handleAddToCart = (product) => {
+    console.log('Shop handleAddToCart called with:', product);
+    
     setCart(prevCart => {
+      console.log('Previous cart state:', prevCart);
       const existingItem = prevCart.find(item => item.id === product.id);
+      
+      let newCart;
       if (existingItem) {
-        return prevCart.map(item =>
+        newCart = prevCart.map(item =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
+        console.log('Updated existing item in cart:', newCart);
       } else {
-        return [...prevCart, { ...product, quantity: 1 }];
+        newCart = [...prevCart, { ...product, quantity: 1 }];
+        console.log('Added new item to cart:', newCart);
       }
+      
+      return newCart;
     });
     
     // Simple notification
@@ -381,7 +389,7 @@ const Shop = () => {
           
           {/* Other Products Sidebar - Spans all 3 rows */}
           <div className="other-products-sidebar">
-            <OtherProducts />
+            <OtherProducts onAddToCart={handleAddToCart} />
           </div>
         </div>
         

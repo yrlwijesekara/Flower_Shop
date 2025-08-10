@@ -2,40 +2,40 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import './OtherProducts.css';
 
-const OtherProducts = ({ className = "" }) => {
+const OtherProducts = ({ className = "", onAddToCart }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const otherProducts = [
     {
-      id: 1,
+      id: 101,
       name: "CANDELABRA ALOE",
       price: 28,
       rating: 5,
       image: "/images/candelabra-aloe.jpg"
     },
     {
-      id: 2,
-      name: "",
+      id: 102,
+      name: "HOMALOMENA",
       price: 25,
       rating: 4,
       image: "/images/homalomena.jpg"
     },
     {
-      id: 3,
+      id: 103,
       name: "SNAKE PLANT",
       price: 48,
       rating: 3,
       image: "/images/snake-plant.jpg"
     },
     {
-      id: 4,
+      id: 104,
       name: "GOLDEN POTHOS",
       price: 17,
       rating: 2,
       image: "/images/golden-pothos.jpg"
     },
     {
-      id: 5,
-      name: "cactus",
+      id: 105,
+      name: "MINI CACTUS",
       price: 8,
       rating: 5,
       image: "/images/placeholder.jpg"
@@ -70,6 +70,43 @@ const OtherProducts = ({ className = "" }) => {
 
   const closeModal = () => {
     setSelectedProduct(null);
+  };
+
+  const addToCart = (product) => {
+    console.log('OtherProducts addToCart called with:', product);
+    
+    // If parent has onAddToCart handler, use it (for Shop page)
+    if (onAddToCart) {
+      console.log('Using parent onAddToCart handler');
+      onAddToCart(product);
+    } else {
+      // Fallback to direct localStorage update (for other pages)
+      const existingCart = JSON.parse(localStorage.getItem('flowerShopCart') || '[]');
+      console.log('Existing cart before adding:', existingCart);
+      
+      const existingItem = existingCart.find(item => item.id === product.id);
+      
+      if (existingItem) {
+        existingItem.quantity += 1;
+        console.log('Updated existing item quantity:', existingItem);
+      } else {
+        const newItem = {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.image,
+          quantity: 1
+        };
+        existingCart.push(newItem);
+        console.log('Added new item to cart:', newItem);
+      }
+      
+      console.log('Final cart before saving:', existingCart);
+      localStorage.setItem('flowerShopCart', JSON.stringify(existingCart));
+      console.log('Cart saved to localStorage');
+    }
+    
+    closeModal();
   };
 
   // Modal component using portal
@@ -116,7 +153,10 @@ const OtherProducts = ({ className = "" }) => {
             </div>
             
             <div className="modal-actions">
-              <button className="modal-add-to-cart-btn">
+              <button 
+                className="modal-add-to-cart-btn"
+                onClick={() => addToCart(product)}
+              >
                 Add to Cart
               </button>
             </div>

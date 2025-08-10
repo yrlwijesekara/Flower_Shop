@@ -17,36 +17,71 @@ const Cart = () => {
 
   // Load cart from localStorage on component mount
   useEffect(() => {
-    // First check if there's a full cart saved (when user returns from checkout/payment)
-    const savedFullCart = localStorage.getItem('flowerShopFullCart');
-    const savedCart = localStorage.getItem('flowerShopCart');
-    
-    if (savedFullCart && savedFullCart !== '[]') {
-      try {
-        const parsedFullCart = JSON.parse(savedFullCart);
-        if (parsedFullCart && parsedFullCart.length > 0) {
-          setCart(parsedFullCart);
-          // DON'T clear the full cart storage yet - keep it until order is completed
-          // This way if user navigates back and forth, we preserve the original cart
-          return;
+    const loadCartFromStorage = () => {
+      console.log('Loading cart from storage...');
+      
+      // First check if there's a full cart saved (when user returns from checkout/payment)
+      const savedFullCart = localStorage.getItem('flowerShopFullCart');
+      const savedCart = localStorage.getItem('flowerShopCart');
+      
+      console.log('savedFullCart:', savedFullCart);
+      console.log('savedCart:', savedCart);
+      
+      if (savedFullCart && savedFullCart !== '[]' && savedFullCart !== 'null') {
+        try {
+          const parsedFullCart = JSON.parse(savedFullCart);
+          console.log('Parsed full cart:', parsedFullCart);
+          if (Array.isArray(parsedFullCart) && parsedFullCart.length > 0) {
+            setCart(parsedFullCart);
+            console.log('Loaded full cart into state (user returned from checkout)');
+            // Clear the full cart storage since we've loaded it
+            localStorage.removeItem('flowerShopFullCart');
+            // Update the regular cart with the full cart
+            localStorage.setItem('flowerShopCart', JSON.stringify(parsedFullCart));
+            return;
+          }
+        } catch (error) {
+          console.error('Error parsing full cart from localStorage:', error);
         }
-      } catch (error) {
-        console.error('Error parsing full cart from localStorage:', error);
       }
-    }
-    
-    // If no full cart, load regular cart
-    if (savedCart && savedCart !== '[]') {
-      try {
-        const parsedCart = JSON.parse(savedCart);
-        if (parsedCart && parsedCart.length > 0) {
-          setCart(parsedCart);
+      
+      // Load regular cart if no full cart found
+      if (savedCart && savedCart !== '[]' && savedCart !== 'null') {
+        try {
+          const parsedCart = JSON.parse(savedCart);
+          console.log('Parsed regular cart:', parsedCart);
+          if (Array.isArray(parsedCart) && parsedCart.length > 0) {
+            setCart(parsedCart);
+            console.log('Loaded regular cart into state');
+          } else {
+            setCart([]);
+            console.log('Set empty cart (parsed cart was empty or invalid)');
+          }
+        } catch (error) {
+          console.error('Error parsing cart from localStorage:', error);
+          setCart([]);
         }
-      } catch (error) {
-        console.error('Error parsing cart from localStorage:', error);
+      } else {
+        setCart([]);
+        console.log('Set empty cart (no saved cart found)');
       }
-    }
-    // No sample cart - cart will be empty until products are added from shop
+    };
+
+    loadCartFromStorage();
+
+    // Listen for storage changes from other tabs/windows
+    const handleStorageChange = (e) => {
+      console.log('Storage change detected:', e.key, e.newValue);
+      if (e.key === 'flowerShopCart') {
+        loadCartFromStorage();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
 
   // Save cart to localStorage whenever cart changes
