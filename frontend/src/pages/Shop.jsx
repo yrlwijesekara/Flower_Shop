@@ -31,7 +31,6 @@ const Shop = () => {
 
   // Save cart to localStorage whenever cart changes
   useEffect(() => {
-    console.log('Shop saving cart to localStorage:', cart);
     localStorage.setItem('flowerShopCart', JSON.stringify(cart));
   }, [cart]);
 
@@ -229,26 +228,17 @@ const Shop = () => {
   };
 
   const handleAddToCart = (product) => {
-    console.log('Shop handleAddToCart called with:', product);
-    
     setCart(prevCart => {
-      console.log('Previous cart state:', prevCart);
       const existingItem = prevCart.find(item => item.id === product.id);
-      
-      let newCart;
       if (existingItem) {
-        newCart = prevCart.map(item =>
+        return prevCart.map(item =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
-        console.log('Updated existing item in cart:', newCart);
       } else {
-        newCart = [...prevCart, { ...product, quantity: 1 }];
-        console.log('Added new item to cart:', newCart);
+        return [...prevCart, { ...product, quantity: 1 }];
       }
-      
-      return newCart;
     });
     
     // Simple notification

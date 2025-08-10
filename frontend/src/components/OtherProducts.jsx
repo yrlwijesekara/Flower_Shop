@@ -73,37 +73,27 @@ const OtherProducts = ({ className = "", onAddToCart }) => {
   };
 
   const addToCart = (product) => {
-    console.log('OtherProducts addToCart called with:', product);
-    
     // If parent has onAddToCart handler, use it (for Shop page)
     if (onAddToCart) {
-      console.log('Using parent onAddToCart handler');
       onAddToCart(product);
     } else {
       // Fallback to direct localStorage update (for other pages)
       const existingCart = JSON.parse(localStorage.getItem('flowerShopCart') || '[]');
-      console.log('Existing cart before adding:', existingCart);
-      
       const existingItem = existingCart.find(item => item.id === product.id);
       
       if (existingItem) {
         existingItem.quantity += 1;
-        console.log('Updated existing item quantity:', existingItem);
       } else {
-        const newItem = {
+        existingCart.push({
           id: product.id,
           name: product.name,
           price: product.price,
           image: product.image,
           quantity: 1
-        };
-        existingCart.push(newItem);
-        console.log('Added new item to cart:', newItem);
+        });
       }
       
-      console.log('Final cart before saving:', existingCart);
       localStorage.setItem('flowerShopCart', JSON.stringify(existingCart));
-      console.log('Cart saved to localStorage');
     }
     
     closeModal();
