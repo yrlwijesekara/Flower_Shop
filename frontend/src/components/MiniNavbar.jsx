@@ -9,7 +9,9 @@ const MiniNavbar = ({
   ],
   showFilters = true,
   onFilterToggle = () => {},
-  isFilterOpen = false
+  isFilterOpen = false,
+  activeFilter = 'all',
+  onFilterSelect = () => {}
 }) => {
   const [filtersOpen, setFiltersOpen] = useState(isFilterOpen);
 
@@ -17,6 +19,17 @@ const MiniNavbar = ({
     setFiltersOpen(!filtersOpen);
     onFilterToggle(!filtersOpen);
   };
+
+  const handleFilterSelect = (filter) => {
+    onFilterSelect(filter);
+  };
+
+  const filterOptions = [
+    { key: 'all', label: 'All Products' },
+    { key: 'valentine', label: 'Valentine' },
+    { key: 'wedding', label: 'Wedding' },
+    { key: 'houseplants', label: 'House Plants' }
+  ];
 
   return (
     <div className="mini-navbar">
@@ -52,6 +65,25 @@ const MiniNavbar = ({
           </button>
         )}
       </div>
+
+      {/* Filter Options Dropdown */}
+      {showFilters && filtersOpen && (
+        <div className="filter-dropdown">
+          <div className="filter-dropdown-container">
+            <div className="filter-options">
+              {filterOptions.map((option) => (
+                <button
+                  key={option.key}
+                  className={`filter-option ${activeFilter === option.key ? 'active' : ''}`}
+                  onClick={() => handleFilterSelect(option.key)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -46,7 +46,7 @@ function HomePage() {
                 Maecenas eget condimentum velit, sit amet feugiat lectus. 
                 Class aptent taciti
               </p>
-              <button className="checkout-btn" onClick={handleCheckout}>Checkout</button>
+              <button className="checkout-btn" onClick={handleCheckout}>View</button>
             </div>
           </div>
         </div>
@@ -62,7 +62,7 @@ function HomePage() {
                 Maecenas eget condimentum velit, sit amet feugiat lectus. 
                 Class aptent taciti
               </p>
-              <button className="checkout-btn" onClick={handleCheckout}>Checkout</button>
+              <button className="checkout-btn" onClick={handleCheckout}>View</button>
             </div>
             <div className="category-image">
               <img 
@@ -94,7 +94,7 @@ function HomePage() {
                 condimentum velit, sit amet feugiat lectus. Class aptent 
                 taciti
               </p>
-              <button className="checkout-btn" onClick={handleCheckout}>Checkout</button>
+              <button className="checkout-btn" onClick={handleCheckout}>View</button>
             </div>
           </div>
         </div>
