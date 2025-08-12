@@ -94,6 +94,9 @@ const OtherProducts = ({ className = "", onAddToCart }) => {
       }
       
       localStorage.setItem('flowerShopCart', JSON.stringify(existingCart));
+      
+      // Trigger cart update event for navbar
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
     }
     
     closeModal();

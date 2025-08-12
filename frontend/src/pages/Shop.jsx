@@ -13,6 +13,7 @@ const Shop = () => {
   const [activeTab, setActiveTab] = useState('recent');
   const [searchQuery, setSearchQuery] = useState('');
   const [cart, setCart] = useState([]);
+  const [isCartLoaded, setIsCartLoaded] = useState(false);
 
   // Load cart from localStorage on component mount
   useEffect(() => {
@@ -27,12 +28,17 @@ const Shop = () => {
         console.error('Error parsing cart from localStorage:', error);
       }
     }
+    setIsCartLoaded(true);
   }, []);
 
   // Save cart to localStorage whenever cart changes
   useEffect(() => {
-    localStorage.setItem('flowerShopCart', JSON.stringify(cart));
-  }, [cart]);
+    if (isCartLoaded) {
+      localStorage.setItem('flowerShopCart', JSON.stringify(cart));
+      // Trigger cart update event for navbar after localStorage is updated
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+    }
+  }, [cart, isCartLoaded]);
 
   // Sample product data based on active tab and search query
   const getProductsByTab = (tab) => {
