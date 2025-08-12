@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
 import ProductGrid from '../components/ProductGrid';
@@ -9,6 +10,7 @@ import { BiSearch } from 'react-icons/bi';
 import './Shop.css';
 
 const Shop = () => {
+  const location = useLocation();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('recent');
   const [searchQuery, setSearchQuery] = useState('');
@@ -31,6 +33,17 @@ const Shop = () => {
     }
     setIsCartLoaded(true);
   }, []);
+
+  // Handle URL parameters for filtering
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const filterParam = urlParams.get('filter');
+    
+    if (filterParam && ['valentine', 'wedding', 'houseplants'].includes(filterParam)) {
+      setCategoryFilter(filterParam);
+      setIsFilterOpen(true); // Open the filter dropdown to show the active filter
+    }
+  }, [location.search]);
 
   // Save cart to localStorage whenever cart changes
   useEffect(() => {

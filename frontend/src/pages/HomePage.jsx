@@ -13,6 +13,18 @@ function HomePage() {
   const handleCheckout = () => {
     navigate('/shop');
   };
+
+  const handleValentineCategory = () => {
+    navigate('/shop?filter=valentine');
+  };
+
+  const handleWeddingCategory = () => {
+    navigate('/shop?filter=wedding');
+  };
+
+  const handleHousePlantsCategory = () => {
+    navigate('/shop?filter=houseplants');
+  };
     
   return (
     <div>
@@ -46,7 +58,7 @@ function HomePage() {
                 Maecenas eget condimentum velit, sit amet feugiat lectus. 
                 Class aptent taciti
               </p>
-              <button className="checkout-btn" onClick={handleCheckout}>View</button>
+              <button className="checkout-btn" onClick={handleValentineCategory}>View</button>
             </div>
           </div>
         </div>
@@ -62,7 +74,7 @@ function HomePage() {
                 Maecenas eget condimentum velit, sit amet feugiat lectus. 
                 Class aptent taciti
               </p>
-              <button className="checkout-btn" onClick={handleCheckout}>View</button>
+              <button className="checkout-btn" onClick={handleWeddingCategory}>View</button>
             </div>
             <div className="category-image">
               <img 
@@ -94,7 +106,7 @@ function HomePage() {
                 condimentum velit, sit amet feugiat lectus. Class aptent 
                 taciti
               </p>
-              <button className="checkout-btn" onClick={handleCheckout}>View</button>
+              <button className="checkout-btn" onClick={handleHousePlantsCategory}>View</button>
             </div>
           </div>
         </div>
