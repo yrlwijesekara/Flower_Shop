@@ -157,6 +157,9 @@ const Checkout = () => {
         } 
         // Always clear the full cart after successful purchase
         localStorage.removeItem('flowerShopFullCart');
+        
+        // Trigger cart update event for navbar
+        window.dispatchEvent(new CustomEvent('cartUpdated'));
       } catch (error) {
         console.error('Error updating full cart:', error);
       }

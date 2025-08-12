@@ -13,12 +13,21 @@ const Navbar = () => {
   // Load cart count from localStorage
   useEffect(() => {
     const updateCartCount = () => {
-      const savedCart = localStorage.getItem('flowerShopCart');
-      if (savedCart) {
-        const cart = JSON.parse(savedCart);
-        const totalCount = cart.reduce((total, item) => total + item.quantity, 0);
-        setCartItemCount(totalCount);
-      } else {
+      try {
+        const savedCart = localStorage.getItem('flowerShopCart');
+        if (savedCart && savedCart !== '[]') {
+          const cart = JSON.parse(savedCart);
+          if (Array.isArray(cart)) {
+            const totalCount = cart.reduce((total, item) => total + (item.quantity || 0), 0);
+            setCartItemCount(totalCount);
+          } else {
+            setCartItemCount(0);
+          }
+        } else {
+          setCartItemCount(0);
+        }
+      } catch (error) {
+        console.error('Error updating cart count:', error);
         setCartItemCount(0);
       }
     };

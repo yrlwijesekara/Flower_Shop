@@ -105,6 +105,10 @@ const Cart = () => {
           : item
       );
       localStorage.setItem('flowerShopCart', JSON.stringify(updatedCart));
+      
+      // Trigger cart update event for navbar
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+      
       return updatedCart;
     });
   };
@@ -113,6 +117,10 @@ const Cart = () => {
     setCart(prevCart => {
       const updatedCart = prevCart.filter(item => item.id !== productId);
       localStorage.setItem('flowerShopCart', JSON.stringify(updatedCart));
+      
+      // Trigger cart update event for navbar
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+      
       return updatedCart;
     });
   };
@@ -120,6 +128,9 @@ const Cart = () => {
   const clearCart = () => {
     setCart([]);
     localStorage.removeItem('flowerShopCart');
+    
+    // Trigger cart update event for navbar
+    window.dispatchEvent(new CustomEvent('cartUpdated'));
   };
 
   const calculateSubtotal = () => {
