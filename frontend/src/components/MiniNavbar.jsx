@@ -25,10 +25,30 @@ const MiniNavbar = ({
   };
 
   const filterOptions = [
-    { key: 'all', label: 'All Products' },
-    { key: 'valentine', label: 'Valentine' },
-    { key: 'wedding', label: 'Wedding' },
-    { key: 'houseplants', label: 'House Plants' }
+    { 
+      key: 'all', 
+      label: 'All Products',
+      description: 'Browse all available products',
+      icon: '🌸'
+    },
+    { 
+      key: 'valentine', 
+      label: 'Valentine',
+      description: 'Romantic flowers for special moments',
+      icon: '💕'
+    },
+    { 
+      key: 'wedding', 
+      label: 'Wedding',
+      description: 'Perfect arrangements for your big day',
+      icon: '👰'
+    },
+    { 
+      key: 'houseplants', 
+      label: 'House Plants',
+      description: 'Beautiful plants for your home',
+      icon: '🪴'
+    }
   ];
 
   return (
@@ -66,19 +86,36 @@ const MiniNavbar = ({
         )}
       </div>
 
-      {/* Filter Options Dropdown */}
+      {/* Filter Sidebar */}
       {showFilters && filtersOpen && (
-        <div className="filter-dropdown">
-          <div className="filter-dropdown-container">
-            <div className="filter-options">
+        <div className="filter-sidebar-overlay">
+          <div className="filter-sidebar">
+            <div className="filter-sidebar-header">
+              <h3>Filter Products</h3>
+              <button 
+                className="filter-close-btn"
+                onClick={() => setFiltersOpen(false)}
+              >
+                ✕
+              </button>
+            </div>
+            
+            <div className="filter-cards-container">
               {filterOptions.map((option) => (
-                <button
+                <div
                   key={option.key}
-                  className={`filter-option ${activeFilter === option.key ? 'active' : ''}`}
+                  className={`filter-card ${activeFilter === option.key ? 'active' : ''}`}
                   onClick={() => handleFilterSelect(option.key)}
                 >
-                  {option.label}
-                </button>
+                  <div className="filter-card-icon">{option.icon}</div>
+                  <div className="filter-card-content">
+                    <h4 className="filter-card-title">{option.label}</h4>
+                    <p className="filter-card-description">{option.description}</p>
+                  </div>
+                  <div className="filter-card-check">
+                    {activeFilter === option.key && <span>✓</span>}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
