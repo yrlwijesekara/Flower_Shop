@@ -70,7 +70,7 @@ function About() {
 
     </div>
     <div class="HistoryText">
-    <h1>OUR HISTORY</h1>\
+    <h1>OUR HISTORY</h1>
     <p>From timeless floral beauty to modern plant care — we’ve got it all in one place. Whether you’re styling your home, garden, or office, our shop offers a carefully selected range of flowers, potted plants, natural decor pieces, and fertilizers for all plant types.
 Inspired by nature and ancient traditions, we also celebrate the use of natural materials like wood, stone, and moss — transforming any space into a green, peaceful retreat.</p>
     </div>

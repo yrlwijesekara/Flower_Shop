@@ -1,7 +1,14 @@
+.img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
 .img img {
   width: 100%;
   height: 600px;
-
+  object-fit: cover;
 }
 
 .aboutContainter {
@@ -70,8 +77,11 @@ align-items: center;
 
 .experiencecontainer{
   display: flex;
-  
-
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }  
 
 .experienceimg {
@@ -112,7 +122,13 @@ margin-right: 30px;
 
 .Historycontainer{
     display: flex;
+    justify-content: center;
+    align-items: flex-start;
     margin-top: 100px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
 }
 
 .HistoryText{
@@ -132,27 +148,24 @@ margin-right: 30px;
 
 
 .Result {
-
 width: 90%;
+max-width: 1200px;
 height: 568px;
 display: flex;
 flex-direction: column;
-margin-left: 50px;
-
-margin-top: 110px;
+margin: 110px auto 0 auto;
 background-color: rgb(4, 36, 0);
-
-   
+position: relative;
 }
 
 .bg-overlay img {
-    width: 90%;
+    width: 100%;
     height: 568px;
     object-fit: cover;
     opacity: 0.2;
     position: absolute;
-
-
+    top: 0;
+    left: 0;
 }
 
 
@@ -232,18 +245,15 @@ background-color: rgb(4, 36, 0);
 }
 
 .Clientbox{
-    width: 90% ;
-    height: 422px ;
-    display : flex;
+    width: 90%;
+    max-width: 1200px;
+    height: 422px;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 100px;
-    margin-left: 50px;
+    margin: 100px auto 0 auto;
     border: solid 2px #000000;
-   
-   
-
 }
 
 .Clientbox h1{
@@ -321,11 +331,11 @@ background-color: rgb(4, 36, 0);
   .Result {
     width: 95%;
     height: 500px;
-    margin-left: 30px;
+    margin: 110px auto 0 auto;
   }
   
   .bg-overlay img {
-    width: 95%;
+    width: 100%;
     height: 500px;
   }
   
@@ -336,7 +346,7 @@ background-color: rgb(4, 36, 0);
   
   .Clientbox {
     width: 95%;
-    margin-left: 30px;
+    margin: 100px auto 0 auto;
   }
   
   .Clientbox h1 {
@@ -437,11 +447,11 @@ background-color: rgb(4, 36, 0);
   .Result {
     width: 90%;
     height: 450px;
-    margin-left: 5%;
+    margin: 110px auto 0 auto;
   }
   
   .bg-overlay img {
-    width: 90%;
+    width: 100%;
     height: 450px;
   }
   
@@ -461,7 +471,7 @@ background-color: rgb(4, 36, 0);
   .Clientbox {
     width: 90%;
     height: 380px;
-    margin-left: 5%;
+    margin: 100px auto 0 auto;
   }
   
   .Clientbox h1 {
@@ -554,11 +564,11 @@ background-color: rgb(4, 36, 0);
   .Result {
     width: 95%;
     height: 400px;
-    margin-left: 2.5%;
+    margin: 110px auto 0 auto;
   }
   
   .bg-overlay img {
-    width: 95%;
+    width: 100%;
     height: 400px;
   }
   
@@ -590,7 +600,7 @@ background-color: rgb(4, 36, 0);
   .Clientbox {
     width: 95%;
     height: 350px;
-    margin-left: 2.5%;
+    margin: 100px auto 0 auto;
   }
   
   .Clientbox h1 {
@@ -678,12 +688,11 @@ background-color: rgb(4, 36, 0);
   .Result {
     width: 98%;
     height: 350px;
-    margin-left: 1%;
-    margin-top: 50px;
+    margin: 50px auto 0 auto;
   }
   
   .bg-overlay img {
-    width: 98%;
+    width: 100%;
     height: 350px;
   }
   
@@ -714,8 +723,7 @@ background-color: rgb(4, 36, 0);
   .Clientbox {
     width: 98%;
     height: 320px;
-    margin-left: 1%;
-    margin-top: 50px;
+    margin: 50px auto 0 auto;
   }
   
   .Clientbox h1 {
@@ -830,8 +838,7 @@ background-color: rgb(4, 36, 0);
   .Result {
     width: 100%;
     height: 300px;
-    margin-left: 0;
-    margin-top: 30px;
+    margin: 30px auto 0 auto;
   }
   
   .bg-overlay img {
@@ -874,8 +881,7 @@ background-color: rgb(4, 36, 0);
     width: 100%;
     height: auto;
     min-height: 280px;
-    margin-left: 0;
-    margin-top: 30px;
+    margin: 30px auto 0 auto;
     padding: 20px 0;
   }
   
