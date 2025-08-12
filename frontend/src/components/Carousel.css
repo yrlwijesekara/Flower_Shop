@@ -31,14 +31,26 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  /* background: rgba(0,0,0,0.4); */
-  color: black;
-  border: none;
-  font-size: 2rem;
-  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.8);
+  color: #0B3204;
+  border: 2px solid #0B3204;
+  font-size: 1.5rem;
+  padding: 0.5rem 0.8rem;
   cursor: pointer;
   z-index: 2;
-  background: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.carousel-btn:hover {
+  background: #0B3204;
+  color: white;
+  transform: translateY(-50%) scale(1.1);
 }
 .carousel-btn.prev {
   left: 10px;
@@ -71,6 +83,34 @@
 .carousel-order-btn:hover {
   background: #0B3204;
   color: white;
+}
+
+.carousel-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 2;
+}
+
+.carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.carousel-dot.active {
+  background: white;
+}
+
+.carousel-dot:hover {
+  background: rgba(255, 255, 255, 0.7);
 }
 
 @media (max-width: 1400px) {

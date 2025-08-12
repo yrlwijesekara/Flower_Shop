@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Navbar from '../components/Navbar'
 import Carousel from '../components/Carousel'
 import ShopnowCard from '../components/shopnowCard'
@@ -6,24 +6,7 @@ import TopSellingFlowers from '../components/TopSelling'
 import Footer from '../components/Footer'
 import './HomePage.css'
 
-
-const slides = [
-        { src: "/slider/sliderImg.jpg", alt: "Slide 1" },
-        { src: "", alt: "Slide 2" },
-        { src: "", alt: "Slide 3" },
-    ];
-
 function HomePage() {
-
-    const [current, setCurrent] = useState(0);
-    
-        const prevSlide = () => {
-        setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-        };
-    
-        const nextSlide = () => {
-            setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-        };
     
   return (
     <div>
@@ -31,23 +14,6 @@ function HomePage() {
         <Carousel/>
         <ShopnowCard/>
         <TopSellingFlowers/>
-        <div className='slider-container'>
-           
-            <div className="slider-track"
-                style={{
-                transform: `translateX(-${current * 100}%)`,
-                }}
-            >
-                {slides.map((slide, idx) => (
-                <div className="slide" key={idx}>
-                    <img src={slide.src} alt={slide.alt} />
-                </div>
-                ))}
-            </div>
-            <button className="slider-btn prev" onClick={prevSlide}>&lt;</button>
-            <button className="slider-btn next" onClick={nextSlide}>&gt;</button>
-    
-        </div>
         <div className="categories-container">
       <h1 className="categories-title">
         <span className="green-text">MOST POPULAR</span> CATEGORIES
