@@ -130,6 +130,32 @@
           color: white;
         }
 
+        /* Styling for ProductCard within TopSelling layout */
+        .top-selling-card {
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .top-selling-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Override ProductCard styles to match TopSelling design */
+        .top-selling-plants-grid .product-card {
+          max-width: none;
+          width: 100%;
+        }
+
+        .top-selling-plants-grid .product-card .card-background {
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          border: 1px solid #f0f0f0;
+        }
+
+        .top-selling-plants-grid .product-card:hover .card-background {
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
         @media (max-width: 768px) {
           .top-selling-plants-grid {
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
