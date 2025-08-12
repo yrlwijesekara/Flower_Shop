@@ -22,6 +22,15 @@
   grid-template-columns: 277px 1fr 1fr 1fr 1fr;
   gap: 40px;
   align-items: start;
+  align-content: start; /* Align grid content to start */
+}
+
+/* Specific alignment fix for Contact Us section */
+.footer-content .footer-section:nth-child(3) {
+  margin-top: 0;
+  padding-top: 0;
+  align-self: start;
+  gap: 15px; /* Reduce gap for better alignment */
 }
 
 /* Logo Section */
@@ -40,6 +49,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  align-self: start; /* Ensure all sections start at the same level */
 }
 
 .footer-title {
@@ -49,6 +59,7 @@
   line-height: 28px;
   color: #23B540;
   margin: 0;
+  margin-bottom: 0; /* Ensure consistent spacing */
   text-align: center;
 }
 
@@ -82,13 +93,20 @@
 .contact-info {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px; /* Reduce gap to align better */
+  margin-top: 0; /* Remove any default margin */
+  padding-top: 0; /* Ensure no extra padding */
 }
 
 .contact-item {
   display: flex;
   align-items: flex-start;
   gap: 12px;
+  margin-bottom: 0; /* Remove any extra margin */
+}
+
+.contact-item:first-child {
+  margin-top: -5px; /* Pull up the first contact item slightly */
 }
 
 .contact-icon {
