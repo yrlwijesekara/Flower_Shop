@@ -1,0 +1,104 @@
+.home-card {
+  max-width: 900px;
+  max-height: 250px;
+  margin: 70px auto;
+  background: #F2F2F2;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  gap: 32px;
+  overflow: visible; /* Allow image to overflow */
+}
+
+.home-card-left{
+    flex: 5;
+    display: flex;
+    align-items: center;
+    /* background-color: yellowgreen; */
+   
+}
+.des{
+     max-width: 483px;
+     /* background-color: steelblue; */
+      display: grid;
+     font-family: 'Familjen Grotesk', sans-serif;
+     justify-items: center;
+}
+.des p{
+    text-align: center;
+}
+
+.home-card-btn {
+  border: 3px solid #0B3204;
+  background-color: #0B3204;
+  color: white;
+  padding: 0.25rem 1.0rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  
+}
+
+
+.home-card-right{
+    flex: 2;
+    /* background-color: violet; */
+}
+
+.shopCard-img {
+  position: relative;
+  /* display: flex; */
+  justify-content: center;
+  align-items: flex-start;
+  
+}
+
+.shopCard-img img {
+  max-width: 220px;
+  max-height: 220px;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+  transform: scale(1.15); /* Zoom effect */
+  margin-top: -40px; /* Lift image above card */
+  /* box-shadow: 0 8px 32px rgba(0,0,0,0.12); */
+  z-index: 2;
+  transition: transform 0.3s;
+  background: none;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 1400px) {
+  .home-card { max-width: 960px; padding: 28px 20px; }
+  .shopCard-img img { max-width: 180px; max-height: 180px; margin-top: -32px; }
+}
+@media (max-width: 1200px) {
+  .home-card { max-width: 800px; padding: 24px 16px; }
+  .shopCard-img img { max-width: 150px; max-height: 150px; margin-top: -28px; }
+}
+@media (max-width: 992px) {
+  .home-card {
+    max-width: 600px;
+    padding: 20px 12px;
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+    max-height: none;
+  }
+  .shopCard-img img { max-width: 120px; max-height: 120px; margin-top: -20px; }
+}
+@media (max-width: 768px) {
+  .home-card { max-width: 90vw; padding: 16px 8px; font-size: 1rem; }
+  .shopCard-img img { max-width: 100px; max-height: 100px; margin-top: -16px; }
+}
+@media (max-width: 480px) {
+  .home-card { max-width: 98vw; padding: 12px 4px; font-size: 0.95rem; margin: 40px auto; }
+  .shopCard-img img { max-width: 80px; max-height: 80px; margin-top: -10px; }
+}

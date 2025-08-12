@@ -1,5 +1,6 @@
-import React from 'react';
-import { FiShoppingCart } from 'react-icons/fi';
+import React, { useState, useEffect } from 'react';
+import { FiShoppingCart, FiHeart } from 'react-icons/fi';
+import { HiHeart } from 'react-icons/hi';
 import './ProductCard.css';
 
 const ProductCard = ({
@@ -9,13 +10,62 @@ const ProductCard = ({
   price = 149,
   image = "/images/snake-plant.jpg",
   onAddToCart,
+  onToggleFavorite,
   className = ""
 }) => {
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  // Load favorite status from localStorage on component mount
+  useEffect(() => {
+    const savedFavorites = localStorage.getItem('flowerShopFavorites');
+    if (savedFavorites) {
+      try {
+        const favorites = JSON.parse(savedFavorites);
+        setIsFavorite(favorites.includes(id));
+      } catch (error) {
+        console.error('Error parsing favorites from localStorage:', error);
+      }
+    }
+  }, [id]);
+
   const handleAddToCart = () => {
     if (onAddToCart) {
       onAddToCart({ id, name, category, price, image });
     }
     console.log(`Added ${name} to cart`);
+  };
+
+  const handleToggleFavorite = () => {
+    const newFavoriteStatus = !isFavorite;
+    setIsFavorite(newFavoriteStatus);
+
+    // Update localStorage
+    const savedFavorites = localStorage.getItem('flowerShopFavorites');
+    let favorites = [];
+    if (savedFavorites) {
+      try {
+        favorites = JSON.parse(savedFavorites);
+      } catch (error) {
+        console.error('Error parsing favorites from localStorage:', error);
+      }
+    }
+
+    if (newFavoriteStatus) {
+      if (!favorites.includes(id)) {
+        favorites.push(id);
+      }
+    } else {
+      favorites = favorites.filter(fav => fav !== id);
+    }
+
+    localStorage.setItem('flowerShopFavorites', JSON.stringify(favorites));
+
+    // Call parent callback if provided
+    if (onToggleFavorite) {
+      onToggleFavorite(id, newFavoriteStatus);
+    }
+
+    console.log(`${newFavoriteStatus ? 'Added to' : 'Removed from'} favorites: ${name}`);
   };
 
   return (
@@ -25,6 +75,19 @@ const ProductCard = ({
         
         {/* Product Image Frame */}
         <div className="image-frame">
+          {/* Favorite Heart Icon */}
+          <button 
+            className={`favorite-btn ${isFavorite ? 'favorite' : ''}`}
+            onClick={handleToggleFavorite}
+            aria-label={`${isFavorite ? 'Remove from' : 'Add to'} favorites`}
+          >
+            {isFavorite ? (
+              <HiHeart className="heart-icon filled" size={20} />
+            ) : (
+              <FiHeart className="heart-icon outline" size={20} />
+            )}
+          </button>
+          
           <div className="image-container">
             <img 
               src={image} 
