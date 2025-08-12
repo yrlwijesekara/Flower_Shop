@@ -175,6 +175,39 @@ const Shop = () => {
         isRecent: false,
         isPopular: true,
         isSpecial: true
+      },
+      {
+        id: 13,
+        name: "BRIDAL BOUQUET ROSE",
+        category: "Wedding Flowers",
+        filterCategory: "wedding",
+        price: 189,
+        image: "/images/wedding-1.jpg",
+        isRecent: true,
+        isPopular: true,
+        isSpecial: true
+      },
+      {
+        id: 14,
+        name: "WHITE LILY ARRANGEMENT",
+        category: "Wedding Flowers",
+        filterCategory: "wedding",
+        price: 145,
+        image: "/images/wedding-2.jpg",
+        isRecent: true,
+        isPopular: true,
+        isSpecial: false
+      },
+      {
+        id: 15,
+        name: "WEDDING CENTERPIECE",
+        category: "Wedding Flowers",
+        filterCategory: "wedding",
+        price: 225,
+        image: "/images/wedding-3.jpg",
+        isRecent: false,
+        isPopular: true,
+        isSpecial: true
       }
     ];
 

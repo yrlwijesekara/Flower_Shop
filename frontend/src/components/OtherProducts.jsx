@@ -39,6 +39,20 @@ const OtherProducts = ({ className = "", onAddToCart }) => {
       price: 8,
       rating: 5,
       image: "/images/placeholder.jpg"
+    },
+    {
+      id: 106,
+      name: "BRIDAL BOUQUET",
+      price: 95,
+      rating: 5,
+      image: "/images/wedding-1.jpg"
+    },
+    {
+      id: 107,
+      name: "WEDDING ARRANGEMENT",
+      price: 78,
+      rating: 4,
+      image: "/images/wedding-2.jpg"
     }
   ];
 
