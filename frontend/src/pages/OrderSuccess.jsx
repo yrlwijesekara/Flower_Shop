@@ -51,9 +51,17 @@ const OrderSuccess = () => {
             }
             // Always clear the full cart after successful purchase
             localStorage.removeItem('flowerShopFullCart');
+            
+            // Trigger cart update event for navbar
+            window.dispatchEvent(new CustomEvent('cartUpdated'));
           } catch (error) {
             console.error('Error updating cart after successful order:', error);
           }
+        } else {
+          // If no full cart exists, clear the regular cart since order was successful
+          localStorage.setItem('flowerShopCart', JSON.stringify([]));
+          // Trigger cart update event for navbar
+          window.dispatchEvent(new CustomEvent('cartUpdated'));
         }
       } else {
         // Fallback to sample data if no order data found
