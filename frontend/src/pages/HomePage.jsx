@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Carousel from '../components/Carousel'
 import ShopnowCard from '../components/shopnowCard'
@@ -7,6 +8,11 @@ import Footer from '../components/Footer'
 import './HomePage.css'
 
 function HomePage() {
+  const navigate = useNavigate();
+
+  const handleCheckout = () => {
+    navigate('/shop');
+  };
     
   return (
     <div>
@@ -40,7 +46,7 @@ function HomePage() {
                 Maecenas eget condimentum velit, sit amet feugiat lectus. 
                 Class aptent taciti
               </p>
-              <button className="checkout-btn">Checkout</button>
+              <button className="checkout-btn" onClick={handleCheckout}>Checkout</button>
             </div>
           </div>
         </div>
@@ -56,7 +62,7 @@ function HomePage() {
                 Maecenas eget condimentum velit, sit amet feugiat lectus. 
                 Class aptent taciti
               </p>
-              <button className="checkout-btn">Checkout</button>
+              <button className="checkout-btn" onClick={handleCheckout}>Checkout</button>
             </div>
             <div className="category-image">
               <img 
@@ -88,7 +94,7 @@ function HomePage() {
                 condimentum velit, sit amet feugiat lectus. Class aptent 
                 taciti
               </p>
-              <button className="checkout-btn">Checkout</button>
+              <button className="checkout-btn" onClick={handleCheckout}>Checkout</button>
             </div>
           </div>
         </div>

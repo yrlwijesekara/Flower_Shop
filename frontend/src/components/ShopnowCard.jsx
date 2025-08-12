@@ -1,7 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './ShopnowCard.css'
 
 function ShopnowCard() {
+  const navigate = useNavigate();
+
+  const handleShopNow = () => {
+    navigate('/shop');
+  };
   return (
     <div className="home-card">
       <div className='home-card-left'>
@@ -12,7 +18,7 @@ function ShopnowCard() {
                 Valentine's Day, also called Saint Valentine's Day or the Feast of Saint Valentine, is celebrated annually on February 14.
             </p>
             
-            <button className="home-card-btn">SHOP NOW</button>
+            <button className="home-card-btn" onClick={handleShopNow}>SHOP NOW</button>
         </div>
       </div>
       <div className='home-card-right'>

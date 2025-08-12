@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import '../components/carousel.css'
 
 
@@ -11,6 +12,11 @@ function Carousel() {
     const [current, setCurrent] = useState(0);
     const [autoPlay, setAutoPlay] = useState(true);
     const autoPlayInterval = 5000; // 5 seconds between slides
+    const navigate = useNavigate();
+
+    const handleOrderNow = () => {
+        navigate('/shop');
+    };
 
     const prevSlide = useCallback(() => {
       setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
@@ -60,7 +66,7 @@ function Carousel() {
       </div>
       <button className="carousel-btn prev" onClick={prevSlide}>&lt;</button>
       <button className="carousel-btn next" onClick={nextSlide}>&gt;</button>
-      <button className="carousel-order-btn">ORDER NOW</button>
+      <button className="carousel-order-btn" onClick={handleOrderNow}>ORDER NOW</button>
       
       <div className="carousel-dots">
         {slides.map((_, index) => (
