@@ -62,6 +62,20 @@ const Navbar = () => {
     navigate('/cart');
   };
 
+  // Handle profile navigation
+  const handleProfileClick = () => {
+    closeMenu(); // Close mobile menu if open
+    
+    // Check if user is logged in
+    const isLoggedIn = localStorage.getItem('userLoggedIn');
+    
+    if (isLoggedIn === 'true') {
+      navigate('/profile');
+    } else {
+      navigate('/login');
+    }
+  };
+
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMenuOpen) {
@@ -139,7 +153,7 @@ const Navbar = () => {
                   <span className="cart-badge">{cartItemCount > 99 ? '99+' : cartItemCount}</span>
                 )}
               </button>
-              <button className="action-btn user-btn" aria-label="User Account">
+              <button className="action-btn user-btn" aria-label="User Account" onClick={handleProfileClick}>
                 <FiUser size={32} color="#164C0D" />
               </button>
             </div>
@@ -156,7 +170,7 @@ const Navbar = () => {
                 <span className="cart-badge">{cartItemCount > 99 ? '99+' : cartItemCount}</span>
               )}
             </button>
-            <button className="action-btn user-btn" aria-label="User Account">
+            <button className="action-btn user-btn" aria-label="User Account" onClick={handleProfileClick}>
               <FiUser size={32} color="#164C0D" />
             </button>
           </div>

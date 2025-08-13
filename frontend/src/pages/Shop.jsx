@@ -18,6 +18,7 @@ const Shop = () => {
   const [cart, setCart] = useState([]);
   const [isCartLoaded, setIsCartLoaded] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const [notification, setNotification] = useState('');
 
   // Load cart from localStorage on component mount
   useEffect(() => {
@@ -367,8 +368,13 @@ const Shop = () => {
       }
     });
     
-    // Simple notification
-    alert(`${product.name} added to cart!`);
+    // Show notification banner
+    setNotification(`${product.name} added to cart!`);
+    
+    // Clear notification after 3 seconds
+    setTimeout(() => {
+      setNotification('');
+    }, 3000);
   };
 
   return (
@@ -382,6 +388,13 @@ const Shop = () => {
         activeFilter={categoryFilter}
         onFilterSelect={handleCategoryFilter}
       />
+      
+      {/* Notification */}
+      {notification && (
+        <div className="shop-notification">
+          {notification}
+        </div>
+      )}
       
       {/* Search Section */}
       <section className="search-section">

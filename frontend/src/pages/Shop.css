@@ -11,6 +11,43 @@
   padding: 0;
 }
 
+/* Shop Notification */
+.shop-notification {
+  background: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin: 20px;
+  font-weight: 600;
+  text-align: center;
+  animation: slideIn 0.3s ease-out, slideOut 0.3s ease-in 2.7s;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+  z-index: 1000;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
 /* Search Section Container */
 .search-section {
   position: relative;

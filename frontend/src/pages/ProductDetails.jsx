@@ -14,6 +14,7 @@ const ProductDetails = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [product, setProduct] = useState(null);
   const [activeTab, setActiveTab] = useState('description');
+  const [notification, setNotification] = useState('');
 
   // Generate shop URL with preserved state
   const getShopUrl = () => {
@@ -477,8 +478,13 @@ const ProductDetails = () => {
       // Trigger cart update event for navbar
       window.dispatchEvent(new CustomEvent('cartUpdated'));
       
-      // Show success message or redirect
-      alert(`Added ${quantity} ${product.name}(s) to cart!`);
+      // Show notification banner
+      setNotification(`Added ${quantity} ${product.name}(s) to cart!`);
+      
+      // Clear notification after 3 seconds
+      setTimeout(() => {
+        setNotification('');
+      }, 3000);
     }
   };
 
@@ -539,6 +545,13 @@ const ProductDetails = () => {
         ]}
         showFilters={false}
       />
+      
+      {/* Notification */}
+      {notification && (
+        <div className="product-details-notification">
+          {notification}
+        </div>
+      )}
       
       <div className="product-details-container">
         <div className="product-content">

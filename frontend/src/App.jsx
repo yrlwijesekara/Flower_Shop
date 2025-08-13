@@ -10,6 +10,9 @@ import Contact from './pages/contact';
 import About from './pages/About';
 import ProductDetails from './pages/ProductDetails';
 import WishList from './pages/WishList';
+import UserProfile from './pages/Userprofile';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 import './App.css';
 
 function App() {
@@ -25,6 +28,9 @@ function App() {
           <Route path="/payment" element={<Payment />} />
           <Route path="/order-success" element={<OrderSuccess />} />
           <Route path="/wishlist" element={<WishList />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/profile" element={<UserProfile />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
