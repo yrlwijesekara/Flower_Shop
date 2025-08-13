@@ -6,6 +6,20 @@ import './Userprofile.css';
 
 function Userprofile() {
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Clear authentication data
+    localStorage.removeItem('userLoggedIn');
+    localStorage.removeItem('flowerShopUser');
+    
+    // Clear any other user-related data if needed
+    localStorage.removeItem('flowerShopCart'); // Optional: clear cart on logout
+    
+    console.log('User logged out successfully');
+    
+    // Redirect to home page
+    navigate('/');
+  };
   const [userData, setUserData] = useState({
     firstName: '',
     lastName: '',
@@ -450,7 +464,7 @@ function Userprofile() {
                 
                 <div className='ProName'>
                   <h1>{userData.firstName.toUpperCase()} {userData.lastName.toUpperCase()}</h1>
-                  <div>
+                  <div className='profile-actions'>
                     {isEditing ? (
                       <div className='edit-buttons'>
                         <button className='save-button' onClick={handleSaveChanges} disabled={isSaving}>
@@ -459,7 +473,10 @@ function Userprofile() {
                         <button className='cancel-button' onClick={handleCancelEdit} disabled={isSaving}>CANCEL</button>
                       </div>
                     ) : (
-                      <button onClick={handleEditToggle}>EDIT PROFILE</button>
+                      <>
+                        <button onClick={handleEditToggle}>EDIT PROFILE</button>
+                        <button className='logout-button' onClick={handleLogout}>LOGOUT</button>
+                      </>
                     )}
                   </div>
                 </div>

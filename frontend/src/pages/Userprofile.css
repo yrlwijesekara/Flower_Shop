@@ -1250,6 +1250,56 @@
     color: #666;
 }
 
+/* Profile Actions Styles */
+.profile-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.logout-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+.logout-button:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.logout-button:active {
+    transform: translateY(0);
+}
+
+/* Update existing button styles to work with profile-actions */
+.profile-actions button {
+    margin: 0;
+}
+
+/* Mobile responsiveness for profile actions */
+@media (max-width: 768px) {
+    .profile-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .logout-button {
+        width: 100%;
+        padding: 12px 20px;
+    }
+}
+
 /* Extra large devices (large desktops, 1400px and up) */
 @media (max-width: 1400px) {
     .myprofile {
