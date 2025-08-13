@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiHome } from 'react-icons/fi';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
@@ -7,47 +7,169 @@ import './WishList.css';
 import TopSellingFlowers from '../components/TopSelling';
 
 const WishList = () => {
-  const [cartItems, setCartItems] = useState([
-    {
+  const [wishlistItems, setWishlistItems] = useState([]);
+
+  // Product data - ideally this would come from an API or context
+  const productData = {
+    1: {
       id: 1,
       name: 'SNAKE PLANT',
       category: 'Cactus',
       price: 149,
-      quantity: 1,
-      image: '/topselling/top1.jpg',
-      selected: false
+      image: '/topselling/top1.jpg'
     },
-    {
+    2: {
       id: 2,
       name: 'CANDELABRA ALOE',
       category: 'Aloe Vera',
       price: 149,
-      quantity: 1,
-      image: '/topselling/top2.jpg',
-      selected: false
+      image: '/topselling/top2.jpg'
     },
-    {
+    3: {
       id: 3,
       name: 'GOLDEN POTHOS',
       category: 'Pothos',
       price: 69,
-      quantity: 1,
-      image: '/topselling/top3.jpg',
-      selected: true
+      image: '/topselling/top3.jpg'
     },
-    {
+    4: {
       id: 4,
       name: 'HOMALOMENA',
-      category: 'Bonsai',
+      category: 'Tropical',
       price: 119,
-      quantity: 1,
-      image: '/topselling/top4.jpg',
-      selected: false
+      image: '/topselling/top4.jpg'
+    },
+    5: {
+      id: 5,
+      name: 'FIDDLE LEAF FIG',
+      category: 'Indoor Tree',
+      price: 89,
+      image: '/images/fiddle-leaf.jpg'
+    },
+    6: {
+      id: 6,
+      name: 'PEACE LILY',
+      category: 'Flowering',
+      price: 45,
+      image: '/images/peace-lily.jpg'
+    },
+    7: {
+      id: 7,
+      name: 'MONSTERA DELICIOSA',
+      category: 'Tropical',
+      price: 79,
+      image: '/images/fiddle-leaf.jpg'
+    },
+    8: {
+      id: 8,
+      name: 'RUBBER PLANT',
+      category: 'Indoor Tree',
+      price: 59,
+      image: '/images/fiddle-leaf.jpg'
+    },
+    9: {
+      id: 9,
+      name: 'ZZ PLANT',
+      category: 'Low Light',
+      price: 35,
+      image: '/images/fiddle-leaf.jpg'
+    },
+    10: {
+      id: 10,
+      name: 'PHILODENDRON',
+      category: 'Tropical',
+      price: 55,
+      image: '/images/fiddle-leaf.jpg'
+    },
+    11: {
+      id: 11,
+      name: 'SPIDER PLANT',
+      category: 'Air Purifying',
+      price: 25,
+      image: '/images/fiddle-leaf.jpg'
+    },
+    12: {
+      id: 12,
+      name: 'DRACAENA',
+      category: 'Low Light',
+      price: 65,
+      image: '/images/fiddle-leaf.jpg'
+    },
+    13: {
+      id: 13,
+      name: 'BRIDAL BOUQUET ROSE',
+      category: 'Wedding Flowers',
+      price: 189,
+      image: '/images/wedding-1.jpg'
+    },
+    14: {
+      id: 14,
+      name: 'WHITE LILY ARRANGEMENT',
+      category: 'Wedding Flowers',
+      price: 145,
+      image: '/images/wedding-2.jpg'
+    },
+    15: {
+      id: 15,
+      name: 'WEDDING CENTERPIECE',
+      category: 'Wedding Flowers',
+      price: 225,
+      image: '/images/wedding-3.jpg'
     }
-  ]);
+  };
+
+  // Load favorites from localStorage on component mount
+  useEffect(() => {
+    const loadWishlistItems = () => {
+      const savedFavorites = localStorage.getItem('flowerShopFavorites');
+      if (savedFavorites) {
+        try {
+          const favoriteIds = JSON.parse(savedFavorites);
+          const wishlistProducts = favoriteIds
+            .map(id => {
+              const product = productData[id];
+              return product ? {
+                ...product,
+                quantity: 1,
+                selected: false
+              } : null;
+            })
+            .filter(item => item !== null);
+          
+          setWishlistItems(wishlistProducts);
+        } catch (error) {
+          console.error('Error parsing favorites from localStorage:', error);
+          setWishlistItems([]);
+        }
+      }
+    };
+
+    loadWishlistItems();
+
+    // Listen for storage changes to update wishlist in real-time
+    const handleStorageChange = (e) => {
+      if (e.key === 'flowerShopFavorites') {
+        loadWishlistItems();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Also listen for custom events when favorites change in the same tab
+    const handleFavoritesChange = () => {
+      loadWishlistItems();
+    };
+
+    window.addEventListener('favoritesChanged', handleFavoritesChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('favoritesChanged', handleFavoritesChange);
+    };
+  }, []);
 
   const updateQuantity = (id, change) => {
-    setCartItems(items =>
+    setWishlistItems(items =>
       items.map(item =>
         item.id === id
           ? { ...item, quantity: Math.max(1, item.quantity + change) }
@@ -57,11 +179,27 @@ const WishList = () => {
   };
 
   const removeItem = (id) => {
-    setCartItems(items => items.filter(item => item.id !== id));
+    // Remove from wishlist state
+    setWishlistItems(items => items.filter(item => item.id !== id));
+    
+    // Remove from localStorage favorites
+    const savedFavorites = localStorage.getItem('flowerShopFavorites');
+    if (savedFavorites) {
+      try {
+        let favorites = JSON.parse(savedFavorites);
+        favorites = favorites.filter(fav => fav !== id);
+        localStorage.setItem('flowerShopFavorites', JSON.stringify(favorites));
+        
+        // Dispatch custom event to notify other components
+        window.dispatchEvent(new CustomEvent('favoritesChanged'));
+      } catch (error) {
+        console.error('Error updating favorites in localStorage:', error);
+      }
+    }
   };
 
   const toggleSelection = (id) => {
-    setCartItems(items =>
+    setWishlistItems(items =>
       items.map(item => ({
         ...item,
         selected: item.id === id
@@ -97,7 +235,8 @@ const WishList = () => {
         <h1 className="wishlist-title">WISH LIST</h1>
         
         <div className="wishlist-items">
-          {cartItems.map(item => (
+          {wishlistItems.length > 0 ? (
+            wishlistItems.map(item => (
             <div key={item.id} className="wishlist-item">
               <div className="wishlist-item-checkbox">
                 <input
@@ -147,7 +286,21 @@ const WishList = () => {
                 </button>
               </div>
             </div>
-          ))}
+            ))
+          ) : (
+            <div className="empty-wishlist">
+              <div className="empty-wishlist-content">
+                <div className="empty-wishlist-icon">💝</div>
+                <h2 className="empty-wishlist-title">Your Wishlist is Empty</h2>
+                <p className="empty-wishlist-text">
+                  Start adding your favorite plants by clicking the heart icon on product cards!
+                </p>
+                <a href="/shop" className="browse-products-btn">
+                  Browse Products
+                </a>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       

@@ -70,6 +70,9 @@ const ProductCard = ({
 
     localStorage.setItem('flowerShopFavorites', JSON.stringify(favorites));
 
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new CustomEvent('favoritesChanged'));
+
     // Call parent callback if provided
     if (onToggleFavorite) {
       onToggleFavorite(id, newFavoriteStatus);
