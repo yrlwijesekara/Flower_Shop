@@ -21,7 +21,7 @@ const ProductDetails = () => {
       category: "Pothos",
       price: 129,
       rating: 5,
-      description: "Plants are mainly multicellular organisms, predominantly photosynthetic eukaryotes of the kingdom Plantae. Historically, plants were treated as one of two kingdoms including all living things that were not animals, and all algae and fungi were treated as plants. However, all current definitions of Plantae exclude the fungi and some algae, as well as the prokaryotes.",
+      description: "The Golden Pothos is one of the most popular and easy-to-care-for houseplants. Known for its heart-shaped leaves with beautiful golden variegation, this trailing plant is perfect for hanging baskets or climbing up moss poles. It's incredibly forgiving and can thrive in various light conditions, making it ideal for beginners. The Golden Pothos is also known for its air-purifying qualities, helping to remove common household toxins from the air. This fast-growing plant can reach impressive lengths and creates a lush, tropical atmosphere in any space.",
       features: [
         "Free shipping on all orders over $100",
         "14 days easy refund & returns",
@@ -41,7 +41,7 @@ const ProductDetails = () => {
       category: "Cactus",
       price: 149,
       rating: 5,
-      description: "The Snake Plant, also known as Sansevieria, is a hardy succulent that can grow anywhere between 6 inches to several feet. These plants are very easy to grow and require minimal care, making them perfect for beginners.",
+      description: "The Snake Plant, scientifically known as Sansevieria trifasciata, is the ultimate low-maintenance houseplant. With its striking sword-like leaves featuring dark green coloration and yellow edges, this architectural plant adds modern elegance to any space. Known as one of the best air-purifying plants, it releases oxygen at night, making it perfect for bedrooms. The Snake Plant is incredibly drought-tolerant and can survive in low light conditions, making it ideal for busy plant parents or those new to plant care. Its upright growth pattern makes it a perfect floor plant for corners and tight spaces.",
       features: [
         "Free shipping on all orders over $100",
         "14 days easy refund & returns",
@@ -61,7 +61,7 @@ const ProductDetails = () => {
       category: "Lily",
       price: 89,
       rating: 4,
-      description: "Peace Lilies are beautiful flowering plants that thrive in low light conditions. They're excellent for improving indoor air quality and add a touch of elegance to any space.",
+      description: "The Peace Lily is an elegant flowering houseplant renowned for its stunning white blooms and glossy, dark green foliage. This graceful plant naturally indicates when it needs water by gently drooping its leaves, making plant care intuitive and stress-free. Peace Lilies are exceptional air purifiers, removing harmful toxins like ammonia, benzene, and formaldehyde from indoor air. They thrive in medium to low light conditions and prefer consistent moisture. When happy, they produce beautiful white spathes that can bloom throughout the year, bringing natural beauty and serenity to any living space.",
       features: [
         "Free shipping on all orders over $100",
         "14 days easy refund & returns",
@@ -81,7 +81,7 @@ const ProductDetails = () => {
       category: "Fig",
       price: 199,
       rating: 5,
-      description: "The Fiddle Leaf Fig is a popular indoor tree with large, glossy leaves. It's a statement piece that can grow quite tall and adds a dramatic touch to any room.",
+      description: "The Fiddle Leaf Fig is the ultimate statement plant for modern homes. With its large, violin-shaped leaves and impressive height potential (up to 6-10 feet indoors), this stunning plant creates a dramatic focal point in any room. Native to western Africa, the Fiddle Leaf Fig features thick, glossy leaves with prominent veining that catches and reflects light beautifully. While it requires bright, indirect light and consistent care, the reward is a magnificent tree-like plant that brings natural architecture to your space. Perfect for corners, next to windows, or as a living sculpture in minimalist interiors.",
       features: [
         "Free shipping on all orders over $100",
         "14 days easy refund & returns",
@@ -101,7 +101,7 @@ const ProductDetails = () => {
       category: "Tropical",
       price: 119,
       rating: 4,
-      description: "Homalomena is a beautiful tropical plant with heart-shaped leaves. It's perfect for adding a tropical feel to your indoor garden and thrives in medium to bright indirect light.",
+      description: "Homalomena is an exotic tropical houseplant that brings lush, jungle vibes to any indoor space. Known for its stunning heart-shaped leaves with unique silver-green patterns and burgundy undersides, this plant is a true conversation starter. Native to Southeast Asia, Homalomena thrives in warm, humid conditions and bright, indirect light. Its compact growth habit makes it perfect for tabletops, shelves, or as part of a plant collection. The plant's beautiful foliage changes color throughout the day as light shifts, creating a dynamic display of natural artistry. Easy to care for once established, it's perfect for plant enthusiasts looking for something unique.",
       features: [
         "Free shipping on all orders over $100",
         "14 days easy refund & returns",
@@ -121,7 +121,7 @@ const ProductDetails = () => {
       category: "Succulent",
       price: 89,
       rating: 5,
-      description: "The Candelabra Aloe is a striking succulent with tall, branching stems. It's drought-tolerant and perfect for those who want a low-maintenance plant with architectural appeal.",
+      description: "The Candelabra Aloe is a spectacular architectural succulent that commands attention with its unique tree-like structure. This striking plant features thick, fleshy stems that branch out like a candelabra, topped with rosettes of blue-green, serrated leaves. Native to South Africa, this drought-tolerant beauty can grow up to 6 feet tall, making it an impressive floor plant. The Candelabra Aloe requires minimal water and thrives in bright light, making it perfect for sunny windows or outdoor patios in warm climates. Its sculptural form and low-maintenance nature make it ideal for modern, minimalist spaces or xerophytic gardens.",
       features: [
         "Free shipping on all orders over $100",
         "14 days easy refund & returns",
