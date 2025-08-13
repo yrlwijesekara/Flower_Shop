@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FiShoppingCart, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiShoppingCart, FiChevronLeft, FiChevronRight, FiHome } from 'react-icons/fi';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
 import Footer from '../components/Footer';
@@ -416,7 +416,7 @@ const ProductDetails = () => {
       <Navbar />
       <MiniNavbar 
         breadcrumbs={[
-          { icon: <span>🏠</span>, href: '/' },
+          { icon: <FiHome size={25} color="#000000" />, href: '/' },
           { label: 'Shop', href: getShopUrl() },
           { label: 'Product Details', href: '#' }
         ]}

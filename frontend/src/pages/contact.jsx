@@ -10,7 +10,7 @@ const Contact = () => {
   const [showFilters, setShowFilters] = useState(false);
 
   const breadcrumbData = [
-    { icon: <FiHome />, label: 'Home', link: '/' },
+    { icon: <FiHome size={25} color="#000000" />, label: 'Home', link: '/' },
     { label: 'Contact' }
   ];
 
