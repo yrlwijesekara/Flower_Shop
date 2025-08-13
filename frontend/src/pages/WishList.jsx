@@ -8,6 +8,9 @@ import TopSellingFlowers from '../components/TopSelling';
 
 const WishList = () => {
   const [wishlistItems, setWishlistItems] = useState([]);
+  const [cart, setCart] = useState([]);
+  const [isCartLoaded, setIsCartLoaded] = useState(false);
+  const [notification, setNotification] = useState('');
 
   // Product data - ideally this would come from an API or context
   const productData = {
@@ -118,6 +121,31 @@ const WishList = () => {
     }
   };
 
+  // Load cart from localStorage on component mount
+  useEffect(() => {
+    const savedCart = localStorage.getItem('flowerShopCart');
+    if (savedCart && savedCart !== '[]') {
+      try {
+        const parsedCart = JSON.parse(savedCart);
+        if (parsedCart && parsedCart.length > 0) {
+          setCart(parsedCart);
+        }
+      } catch (error) {
+        console.error('Error parsing cart from localStorage:', error);
+      }
+    }
+    setIsCartLoaded(true);
+  }, []);
+
+  // Save cart to localStorage whenever cart changes
+  useEffect(() => {
+    if (isCartLoaded) {
+      localStorage.setItem('flowerShopCart', JSON.stringify(cart));
+      // Trigger cart update event for navbar after localStorage is updated
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+    }
+  }, [cart, isCartLoaded]);
+
   // Load favorites from localStorage on component mount
   useEffect(() => {
     const loadWishlistItems = () => {
@@ -207,6 +235,38 @@ const WishList = () => {
     );
   };
 
+  const handleAddToCart = (item) => {
+    console.log('Adding to cart:', item);
+    
+    setCart(prevCart => {
+      const existingItem = prevCart.find(cartItem => cartItem.id === item.id);
+      if (existingItem) {
+        // If item already exists, increase quantity by the wishlist item's quantity
+        return prevCart.map(cartItem =>
+          cartItem.id === item.id
+            ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
+            : cartItem
+        );
+      } else {
+        // Add new item to cart
+        return [...prevCart, { 
+          ...item, 
+          image: item.image || '/images/placeholder.jpg' 
+        }];
+      }
+    });
+    
+    // Show success feedback
+    setNotification(`${item.name} added to cart! Quantity: ${item.quantity}`);
+    
+    // Clear notification after 3 seconds
+    setTimeout(() => {
+      setNotification('');
+    }, 3000);
+    
+    console.log('Item added to cart successfully');
+  };
+
   // const calculateTotals = () => {
   //   const selectedItem = cartItems.find(item => item.selected);
   //   const itemsTotal = selectedItem ? selectedItem.price * selectedItem.quantity : 0;
@@ -233,6 +293,13 @@ const WishList = () => {
       <div className="wishlist-container">
       <div className="wishlist-main">
         <h1 className="wishlist-title">WISH LIST</h1>
+        
+        {/* Notification */}
+        {notification && (
+          <div className="wishlist-notification">
+            {notification}
+          </div>
+        )}
         
         <div className="wishlist-items">
           {wishlistItems.length > 0 ? (
@@ -281,7 +348,10 @@ const WishList = () => {
                   </button>
                 </div>
                 
-                <button className="wishlist-add-to-cart-btn">
+                <button 
+                  className="wishlist-add-to-cart-btn"
+                  onClick={() => handleAddToCart(item)}
+                >
                   ADD TO CART ↗
                 </button>
               </div>
