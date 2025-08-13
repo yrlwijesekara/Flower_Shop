@@ -41,7 +41,7 @@ const ProductDetails = () => {
   const productData = {
     1: {
       id: 1,
-      name: "Snake Plant",
+      name: "SNAKE PLANT",
       category: "Cactus",
       price: 149,
       rating: 5,
@@ -95,7 +95,7 @@ const ProductDetails = () => {
     },
     2: {
       id: 2,
-      name: "Candelabra Aloe",
+      name: "CANDELABRA ALOE",
       category: "Aloe Vera",
       price: 39,
       rating: 5,
@@ -141,7 +141,7 @@ const ProductDetails = () => {
     },
     3: {
       id: 3,
-      name: "Golden Pothos",
+      name: "GOLDEN POTHOS",
       category: "Pothos",
       price: 69,
       rating: 5,
@@ -195,7 +195,7 @@ const ProductDetails = () => {
     },
     4: {
       id: 4,
-      name: "Homalomena",
+      name: "HOMALOMENA",
       category: "Tropical",
       price: 119,
       rating: 4,
