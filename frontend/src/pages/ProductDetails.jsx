@@ -474,6 +474,9 @@ const ProductDetails = () => {
       
       localStorage.setItem('flowerShopCart', JSON.stringify(existingCart));
       
+      // Trigger cart update event for navbar
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+      
       // Show success message or redirect
       alert(`Added ${quantity} ${product.name}(s) to cart!`);
     }
