@@ -39,26 +39,6 @@ const ProductDetails = () => {
   const productData = {
     1: {
       id: 1,
-      name: "Golden Pothos",
-      category: "Pothos",
-      price: 129,
-      rating: 5,
-      description: "The Golden Pothos is one of the most popular and easy-to-care-for houseplants. Known for its heart-shaped leaves with beautiful golden variegation, this trailing plant is perfect for hanging baskets or climbing up moss poles. It's incredibly forgiving and can thrive in various light conditions, making it ideal for beginners. The Golden Pothos is also known for its air-purifying qualities, helping to remove common household toxins from the air. This fast-growing plant can reach impressive lengths and creates a lush, tropical atmosphere in any space.",
-      features: [
-        "Free shipping on all orders over $100",
-        "14 days easy refund & returns",
-        "Product taxes and customs duties included"
-      ],
-      images: [
-        "/images/golden-pothos.jpg",
-        "/images/product-1.png",
-        "/images/product-2.png",
-        "/images/product-3.png"
-      ],
-      inStock: true
-    },
-    2: {
-      id: 2,
       name: "Snake Plant",
       category: "Cactus",
       price: 149,
@@ -77,20 +57,40 @@ const ProductDetails = () => {
       ],
       inStock: true
     },
-    3: {
-      id: 3,
-      name: "Peace Lily",
-      category: "Lily",
-      price: 89,
-      rating: 4,
-      description: "The Peace Lily is an elegant flowering houseplant renowned for its stunning white blooms and glossy, dark green foliage. This graceful plant naturally indicates when it needs water by gently drooping its leaves, making plant care intuitive and stress-free. Peace Lilies are exceptional air purifiers, removing harmful toxins like ammonia, benzene, and formaldehyde from indoor air. They thrive in medium to low light conditions and prefer consistent moisture. When happy, they produce beautiful white spathes that can bloom throughout the year, bringing natural beauty and serenity to any living space.",
+    2: {
+      id: 2,
+      name: "Candelabra Aloe",
+      category: "Aloe Vera",
+      price: 39,
+      rating: 5,
+      description: "The Candelabra Aloe is a spectacular architectural succulent that commands attention with its unique tree-like structure. This striking plant features thick, fleshy stems that branch out like a candelabra, topped with rosettes of blue-green, serrated leaves. Native to South Africa, this drought-tolerant beauty can grow up to 6 feet tall, making it an impressive floor plant. The Candelabra Aloe requires minimal water and thrives in bright light, making it perfect for sunny windows or outdoor patios in warm climates. Its sculptural form and low-maintenance nature make it ideal for modern, minimalist spaces or xerophytic gardens.",
       features: [
         "Free shipping on all orders over $100",
         "14 days easy refund & returns",
         "Product taxes and customs duties included"
       ],
       images: [
-        "/images/peace-lily.jpg",
+        "/images/candelabra-aloe.jpg",
+        "/images/product-1.png",
+        "/images/product-2.png",
+        "/images/product-3.png"
+      ],
+      inStock: true
+    },
+    3: {
+      id: 3,
+      name: "Golden Pothos",
+      category: "Pothos",
+      price: 69,
+      rating: 5,
+      description: "The Golden Pothos is one of the most popular and easy-to-care-for houseplants. Known for its heart-shaped leaves with beautiful golden variegation, this trailing plant is perfect for hanging baskets or climbing up moss poles. It's incredibly forgiving and can thrive in various light conditions, making it ideal for beginners. The Golden Pothos is also known for its air-purifying qualities, helping to remove common household toxins from the air. This fast-growing plant can reach impressive lengths and creates a lush, tropical atmosphere in any space.",
+      features: [
+        "Free shipping on all orders over $100",
+        "14 days easy refund & returns",
+        "Product taxes and customs duties included"
+      ],
+      images: [
+        "/images/golden-pothos.jpg",
         "/images/product-1.png",
         "/images/product-2.png",
         "/images/product-3.png"
@@ -99,26 +99,6 @@ const ProductDetails = () => {
     },
     4: {
       id: 4,
-      name: "Fiddle Leaf",
-      category: "Fig",
-      price: 199,
-      rating: 5,
-      description: "The Fiddle Leaf Fig is the ultimate statement plant for modern homes. With its large, violin-shaped leaves and impressive height potential (up to 6-10 feet indoors), this stunning plant creates a dramatic focal point in any room. Native to western Africa, the Fiddle Leaf Fig features thick, glossy leaves with prominent veining that catches and reflects light beautifully. While it requires bright, indirect light and consistent care, the reward is a magnificent tree-like plant that brings natural architecture to your space. Perfect for corners, next to windows, or as a living sculpture in minimalist interiors.",
-      features: [
-        "Free shipping on all orders over $100",
-        "14 days easy refund & returns",
-        "Product taxes and customs duties included"
-      ],
-      images: [
-        "/images/fiddle-leaf.jpg",
-        "/images/product-1.png",
-        "/images/product-2.png",
-        "/images/product-3.png"
-      ],
-      inStock: true
-    },
-    5: {
-      id: 5,
       name: "Homalomena",
       category: "Tropical",
       price: 119,
@@ -137,20 +117,40 @@ const ProductDetails = () => {
       ],
       inStock: true
     },
-    6: {
-      id: 6,
-      name: "Candelabra Aloe",
-      category: "Succulent",
+    5: {
+      id: 5,
+      name: "Fiddle Leaf Fig",
+      category: "Indoor Tree",
       price: 89,
       rating: 5,
-      description: "The Candelabra Aloe is a spectacular architectural succulent that commands attention with its unique tree-like structure. This striking plant features thick, fleshy stems that branch out like a candelabra, topped with rosettes of blue-green, serrated leaves. Native to South Africa, this drought-tolerant beauty can grow up to 6 feet tall, making it an impressive floor plant. The Candelabra Aloe requires minimal water and thrives in bright light, making it perfect for sunny windows or outdoor patios in warm climates. Its sculptural form and low-maintenance nature make it ideal for modern, minimalist spaces or xerophytic gardens.",
+      description: "The Fiddle Leaf Fig is the ultimate statement plant for modern homes. With its large, violin-shaped leaves and impressive height potential (up to 6-10 feet indoors), this stunning plant creates a dramatic focal point in any room. Native to western Africa, the Fiddle Leaf Fig features thick, glossy leaves with prominent veining that catches and reflects light beautifully. While it requires bright, indirect light and consistent care, the reward is a magnificent tree-like plant that brings natural architecture to your space. Perfect for corners, next to windows, or as a living sculpture in minimalist interiors.",
       features: [
         "Free shipping on all orders over $100",
         "14 days easy refund & returns",
         "Product taxes and customs duties included"
       ],
       images: [
-        "/images/candelabra-aloe.jpg",
+        "/images/fiddle-leaf.jpg",
+        "/images/product-1.png",
+        "/images/product-2.png",
+        "/images/product-3.png"
+      ],
+      inStock: true
+    },
+    6: {
+      id: 6,
+      name: "Peace Lily",
+      category: "Flowering",
+      price: 45,
+      rating: 5,
+      description: "The Peace Lily is an elegant flowering houseplant renowned for its stunning white blooms and glossy, dark green foliage. This graceful plant naturally indicates when it needs water by gently drooping its leaves, making plant care intuitive and stress-free. Peace Lilies are exceptional air purifiers, removing harmful toxins like ammonia, benzene, and formaldehyde from indoor air. They thrive in medium to low light conditions and prefer consistent moisture. When happy, they produce beautiful white spathes that can bloom throughout the year, bringing natural beauty and serenity to any living space.",
+      features: [
+        "Free shipping on all orders over $100",
+        "14 days easy refund & returns",
+        "Product taxes and customs duties included"
+      ],
+      images: [
+        "/images/peace-lily.jpg",
         "/images/product-1.png",
         "/images/product-2.png",
         "/images/product-3.png"
