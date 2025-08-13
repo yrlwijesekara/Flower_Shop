@@ -134,6 +134,186 @@ const ProductDetails = () => {
         "/images/product-3.png"
       ],
       inStock: true
+    },
+    7: {
+      id: 7,
+      name: "Monstera Deliciosa",
+      category: "Tropical",
+      price: 79,
+      rating: 5,
+      description: "The Monstera Deliciosa, also known as the Swiss Cheese Plant, is a stunning tropical houseplant famous for its large, glossy leaves with distinctive natural holes called fenestrations. This Instagram-worthy plant creates dramatic split leaves as it matures, making it a true statement piece in any home. Native to Central America, the Monstera is a climbing plant that can grow quite large indoors with proper support. It's surprisingly easy to care for and thrives in bright, indirect light with regular watering. The unique leaf patterns and rapid growth make it a favorite among plant enthusiasts and interior designers alike.",
+      features: [
+        "Free shipping on all orders over $100",
+        "14 days easy refund & returns",
+        "Product taxes and customs duties included"
+      ],
+      images: [
+        "/images/fiddle-leaf.jpg",
+        "/images/product-1.png",
+        "/images/product-2.png",
+        "/images/product-3.png"
+      ],
+      inStock: true
+    },
+    8: {
+      id: 8,
+      name: "Rubber Plant",
+      category: "Indoor Tree",
+      price: 59,
+      rating: 4,
+      description: "The Rubber Plant (Ficus elastica) is a classic houseplant known for its thick, glossy, deep green leaves and impressive height potential. This elegant plant can grow into a beautiful indoor tree, making it perfect for corners that need a bold, natural focal point. Originally from India, the Rubber Plant is incredibly hardy and forgiving, tolerating various light conditions and occasional neglect. Its waxy leaves are easy to clean and maintain their shine with minimal care. The plant's upright growth habit and substantial presence make it an excellent choice for both modern and traditional home decor.",
+      features: [
+        "Free shipping on all orders over $100",
+        "14 days easy refund & returns",
+        "Product taxes and customs duties included"
+      ],
+      images: [
+        "/images/fiddle-leaf.jpg",
+        "/images/product-1.png",
+        "/images/product-2.png",
+        "/images/product-3.png"
+      ],
+      inStock: true
+    },
+    9: {
+      id: 9,
+      name: "ZZ Plant",
+      category: "Low Light",
+      price: 35,
+      rating: 5,
+      description: "The ZZ Plant (Zamioculcas zamiifolia) is the ultimate low-maintenance houseplant, perfect for anyone who wants greenery without the commitment. With its thick, waxy leaves that store water and its ability to thrive in low light conditions, the ZZ Plant is virtually indestructible. This resilient beauty can go weeks without water and still look stunning. Its glossy, dark green foliage grows in an attractive upright pattern, adding modern sophistication to any space. Native to Eastern Africa, the ZZ Plant is drought-tolerant and can adapt to various indoor environments, making it perfect for offices, apartments, or homes with limited natural light.",
+      features: [
+        "Free shipping on all orders over $100",
+        "14 days easy refund & returns",
+        "Product taxes and customs duties included"
+      ],
+      images: [
+        "/images/fiddle-leaf.jpg",
+        "/images/product-1.png",
+        "/images/product-2.png",
+        "/images/product-3.png"
+      ],
+      inStock: true
+    },
+    10: {
+      id: 10,
+      name: "Philodendron",
+      category: "Tropical",
+      price: 55,
+      rating: 4,
+      description: "The Philodendron is a diverse family of tropical plants beloved for their heart-shaped leaves and easy-going nature. These versatile plants come in both climbing and non-climbing varieties, with beautiful foliage that ranges from deep green to variegated patterns. Philodendrons are perfect for beginners as they're very forgiving and adapt well to indoor conditions. They thrive in bright, indirect light and prefer their soil to dry out slightly between waterings. Many varieties can be trained to climb moss poles or left to trail gracefully from hanging baskets, making them incredibly versatile for any home decor style.",
+      features: [
+        "Free shipping on all orders over $100",
+        "14 days easy refund & returns",
+        "Product taxes and customs duties included"
+      ],
+      images: [
+        "/images/fiddle-leaf.jpg",
+        "/images/product-1.png",
+        "/images/product-2.png",
+        "/images/product-3.png"
+      ],
+      inStock: true
+    },
+    11: {
+      id: 11,
+      name: "Spider Plant",
+      category: "Air Purifying",
+      price: 25,
+      rating: 4,
+      description: "The Spider Plant (Chlorophytum comosum) is a cheerful, fast-growing houseplant known for its long, arching leaves and adorable baby plantlets that dangle like spiders from the mother plant. This NASA-approved air purifier is excellent at removing formaldehyde and xylene from indoor air. Spider Plants are incredibly easy to propagate - simply pot up the baby plants to create new plants for friends or to expand your collection. They thrive in bright, indirect light and are very tolerant of different growing conditions. With their cascading growth habit, they're perfect for hanging baskets or elevated planters where their babies can cascade freely.",
+      features: [
+        "Free shipping on all orders over $100",
+        "14 days easy refund & returns",
+        "Product taxes and customs duties included"
+      ],
+      images: [
+        "/images/fiddle-leaf.jpg",
+        "/images/product-1.png",
+        "/images/product-2.png",
+        "/images/product-3.png"
+      ],
+      inStock: true
+    },
+    12: {
+      id: 12,
+      name: "Dracaena",
+      category: "Low Light",
+      price: 65,
+      rating: 4,
+      description: "The Dracaena is an elegant, architectural plant known for its sword-like leaves and striking upright growth pattern. This diverse genus includes many varieties with different leaf colors and patterns, from solid green to dramatic red and yellow stripes. Dracaenas are excellent air purifiers and can tolerate low light conditions, making them perfect for offices or darker corners of your home. They're also very drought-tolerant and prefer to dry out between waterings. With their clean lines and modern appearance, Dracaenas add a touch of sophistication to any space while requiring minimal care and attention.",
+      features: [
+        "Free shipping on all orders over $100",
+        "14 days easy refund & returns",
+        "Product taxes and customs duties included"
+      ],
+      images: [
+        "/images/fiddle-leaf.jpg",
+        "/images/product-1.png",
+        "/images/product-2.png",
+        "/images/product-3.png"
+      ],
+      inStock: true
+    },
+    13: {
+      id: 13,
+      name: "Bridal Bouquet Rose",
+      category: "Wedding Flowers",
+      price: 189,
+      rating: 5,
+      description: "Our exquisite Bridal Bouquet Rose arrangement is crafted with the finest premium white and blush roses, symbolizing pure love and new beginnings. Each bouquet is hand-selected and artfully arranged by our master florists using only the freshest, most beautiful blooms. The soft color palette and elegant design make this bouquet perfect for weddings, anniversaries, or any romantic occasion. Wrapped in luxurious satin ribbon and finished with delicate baby's breath, this timeless arrangement captures the essence of romance and sophistication. Every rose is carefully chosen for its perfect bloom and lasting freshness to ensure your special day is absolutely perfect.",
+      features: [
+        "Hand-selected premium roses",
+        "Same-day delivery available",
+        "Professionally arranged by master florists"
+      ],
+      images: [
+        "/images/wedding-1.jpg",
+        "/images/product-1.png",
+        "/images/product-2.png",
+        "/images/product-3.png"
+      ],
+      inStock: true
+    },
+    14: {
+      id: 14,
+      name: "White Lily Arrangement",
+      category: "Wedding Flowers",
+      price: 145,
+      rating: 4,
+      description: "The White Lily Arrangement embodies pure elegance and grace, featuring stunning white lilies that symbolize rebirth and purity. This sophisticated arrangement is perfect for weddings, memorials, or any occasion requiring a touch of serene beauty. Each lily is carefully selected for its pristine white petals and sweet fragrance that fills the room with natural perfume. Our skilled florists arrange these majestic blooms with complementary greenery and delicate accent flowers to create a harmonious display. The timeless beauty of white lilies makes this arrangement a classic choice that never goes out of style.",
+      features: [
+        "Fresh, fragrant white lilies",
+        "Professional floral design",
+        "Suitable for various occasions"
+      ],
+      images: [
+        "/images/wedding-2.jpg",
+        "/images/product-1.png",
+        "/images/product-2.png",
+        "/images/product-3.png"
+      ],
+      inStock: true
+    },
+    15: {
+      id: 15,
+      name: "Wedding Centerpiece",
+      category: "Wedding Flowers",
+      price: 225,
+      rating: 5,
+      description: "Our spectacular Wedding Centerpiece is designed to be the crowning jewel of your reception tables. This luxurious arrangement features a carefully curated selection of premium flowers including roses, peonies, and seasonal blooms in romantic whites and soft pastels. Each centerpiece is custom-designed to complement your wedding theme while creating an atmosphere of romance and celebration. The arrangement includes elegant candles and sophisticated greenery to create depth and ambiance. Perfect for head tables, guest tables, or ceremony displays, this centerpiece will create unforgettable memories and stunning photographs that will last a lifetime.",
+      features: [
+        "Custom-designed for your wedding",
+        "Premium seasonal flowers",
+        "Includes elegant candle accents"
+      ],
+      images: [
+        "/images/wedding-3.jpg",
+        "/images/product-1.png",
+        "/images/product-2.png",
+        "/images/product-3.png"
+      ],
+      inStock: true
     }
   };
 
