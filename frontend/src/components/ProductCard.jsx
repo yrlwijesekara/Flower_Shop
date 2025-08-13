@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FiShoppingCart, FiHeart } from 'react-icons/fi';
 import { HiHeart } from 'react-icons/hi';
 import './ProductCard.css';
@@ -11,9 +12,11 @@ const ProductCard = ({
   image = "/images/snake-plant.jpg",
   onAddToCart,
   onToggleFavorite,
+  onProductClick,
   className = ""
 }) => {
   const [isFavorite, setIsFavorite] = useState(false);
+  const navigate = useNavigate();
 
   // Load favorite status from localStorage on component mount
   useEffect(() => {
@@ -33,6 +36,13 @@ const ProductCard = ({
       onAddToCart({ id, name, category, price, image });
     }
     console.log(`Added ${name} to cart`);
+  };
+
+  const handleProductClick = () => {
+    if (onProductClick) {
+      onProductClick();
+    }
+    navigate(`/product/${id}`);
   };
 
   const handleToggleFavorite = () => {
@@ -59,6 +69,9 @@ const ProductCard = ({
     }
 
     localStorage.setItem('flowerShopFavorites', JSON.stringify(favorites));
+
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new CustomEvent('favoritesChanged'));
 
     // Call parent callback if provided
     if (onToggleFavorite) {
@@ -93,6 +106,8 @@ const ProductCard = ({
               src={image} 
               alt={name}
               className="product-image"
+              onClick={handleProductClick}
+              style={{ cursor: 'pointer' }}
               onError={(e) => {
                 e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzM0IiBoZWlnaHQ9IjMzNCIgdmlld0JveD0iMCAwIDMzNCAzMzQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMzQiIGhlaWdodD0iMzM0IiBmaWxsPSIjRjBGMEYwIiByeD0iNSIvPgo8cGF0aCBkPSJNMTUwIDEwMEwxODQgMTM0TDE1MCAxNjhMMTE2IDEzNEwxNTAgMTAwWiIgZmlsbD0iIzVCQzU1OSIvPgo8cGF0aCBkPSJNMTY3IDIwMEwyMDEgMjM0TDE2NyAyNjhMMTMzIDIzNEwxNjcgMjAwWiIgZmlsbD0iIzVCQzU1OSIvPgo8L3N2Zz4K';
               }}

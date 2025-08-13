@@ -6,7 +6,7 @@ function About() {
   return (
     <>
     <Navbar />
-    <MiniNavbar />
+    <MiniNavbar showFilters={false} />
       <div class="img">  
         <img src="/About/aboutj.jpg" alt="Flowers" />
 
