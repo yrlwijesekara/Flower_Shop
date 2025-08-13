@@ -9,6 +9,7 @@ import OrderSuccess from './pages/OrderSuccess';
 import Contact from './pages/contact';
 import About from './pages/About';
 import ProductDetails from './pages/ProductDetails';
+import WishList from './pages/WishList';
 import './App.css';
 
 function App() {
@@ -23,7 +24,7 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/payment" element={<Payment />} />
           <Route path="/order-success" element={<OrderSuccess />} />
-          <Route path="/category" element={<div>Category Page Coming Soon</div>} />
+          <Route path="/wishlist" element={<WishList />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>

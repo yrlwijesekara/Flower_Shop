@@ -118,7 +118,7 @@ const Navbar = () => {
                 <Link to="/shop" className={`nav-link ${location.pathname === '/shop' ? 'active' : ''}`} onClick={closeMenu}>SHOP</Link>
               </li>
               <li className="nav-item">
-                <Link to="/category" className={`nav-link ${location.pathname === '/category' ? 'active' : ''}`} onClick={closeMenu}>CATEGORY</Link>
+                <Link to="/wishlist" className={`nav-link ${location.pathname === '/wishlist' ? 'active' : ''}`} onClick={closeMenu}>WISHLIST</Link>
               </li>
               <li className="nav-item">
                 <Link to="/about" className={`nav-link ${location.pathname === '/about' ? 'active' : ''}`} onClick={closeMenu}>ABOUT</Link>
