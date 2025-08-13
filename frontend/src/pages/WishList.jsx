@@ -83,7 +83,7 @@ const WishList = () => {
   // const selectedItem = cartItems.find(item => item.selected);
 
   return (
-    <>
+    <div className="wishlist-page">
       <Navbar />
       <MiniNavbar 
         breadcrumbs={[
@@ -92,57 +92,57 @@ const WishList = () => {
         ]}
         showFilters={false}
       />
-      <div className="cart-container">
-      <div className="cart-main">
-        <h1 className="cart-title">WISH LIST</h1>
+      <div className="wishlist-container">
+      <div className="wishlist-main">
+        <h1 className="wishlist-title">WISH LIST</h1>
         
-        <div className="cart-items">
+        <div className="wishlist-items">
           {cartItems.map(item => (
-            <div key={item.id} className="cart-item">
-              <div className="item-checkbox">
+            <div key={item.id} className="wishlist-item">
+              <div className="wishlist-item-checkbox">
                 <input
                   type="radio"
                   checked={item.selected}
                   onChange={() => toggleSelection(item.id)}
-                  className="checkbox"
+                  className="wishlist-checkbox"
                 />
               </div>
               
-              <div className="item-image">
+              <div className="wishlist-item-image">
                 <img src={item.image} alt={item.name} />
               </div>
               
-              <div className="item-details">
-                <h3 className="item-name">{item.name}</h3>
-                <p className="item-category">{item.category}</p>
-                <div className="item-price">${item.price}</div>
+              <div className="wishlist-item-details">
+                <h3 className="wishlist-item-name">{item.name}</h3>
+                <p className="wishlist-item-category">{item.category}</p>
+                <div className="wishlist-item-price">${item.price}</div>
               </div>
               
-              <div className="item-actions">
+              <div className="wishlist-item-actions">
                 <button
-                  className="remove-btn"
+                  className="wishlist-remove-btn"
                   onClick={() => removeItem(item.id)}
                 >
                   REMOVE
                 </button>
                 
-                <div className="quantity-controls">
+                <div className="wishlist-quantity-controls">
                   <button
-                    className="qty-btn"
+                    className="wishlist-qty-btn"
                     onClick={() => updateQuantity(item.id, -1)}
                   >
                     -
                   </button>
-                  <span className="quantity">{item.quantity}</span>
+                  <span className="wishlist-quantity">{item.quantity}</span>
                   <button
-                    className="qty-btn"
+                    className="wishlist-qty-btn"
                     onClick={() => updateQuantity(item.id, 1)}
                   >
                     +
                   </button>
                 </div>
                 
-                <button className="checkout-btn">
+                <button className="wishlist-add-to-cart-btn">
                   ADD TO CART ↗
                 </button>
               </div>
@@ -211,7 +211,7 @@ const WishList = () => {
       titleSecond='ALSO LIKE'
     />
     <Footer />
-    </>
+    </div>
   );
 };
 
