@@ -12,6 +12,7 @@ const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const [product, setProduct] = useState(null);
+  const [activeTab, setActiveTab] = useState('description');
 
   // Generate shop URL with preserved state
   const getShopUrl = () => {
@@ -55,6 +56,40 @@ const ProductDetails = () => {
         "/images/product-2.png",
         "/images/product-3.png"
       ],
+      reviews: [
+        {
+          id: 1,
+          name: "Sarah Johnson",
+          rating: 5,
+          date: "2024-01-15",
+          comment: "Amazing plant! I've had it for 6 months and it's thriving with minimal care. Perfect for beginners like me. The leaves are so beautiful and architectural.",
+          verified: true
+        },
+        {
+          id: 2,
+          name: "Mike Chen",
+          rating: 5,
+          date: "2024-01-08",
+          comment: "This snake plant is exactly what I needed for my bedroom. It really does purify the air and I love that it releases oxygen at night. Highly recommend!",
+          verified: true
+        },
+        {
+          id: 3,
+          name: "Emma Williams",
+          rating: 4,
+          date: "2023-12-22",
+          comment: "Great quality plant, arrived in perfect condition. It's been growing steadily and looks fantastic in my living room corner.",
+          verified: true
+        },
+        {
+          id: 4,
+          name: "David Rodriguez",
+          rating: 5,
+          date: "2023-12-18",
+          comment: "I'm terrible with plants but this one is impossible to kill! It's been 4 months and it still looks amazing. The packaging was excellent too.",
+          verified: true
+        }
+      ],
       inStock: true
     },
     2: {
@@ -75,6 +110,32 @@ const ProductDetails = () => {
         "/images/product-2.png",
         "/images/product-3.png"
       ],
+      reviews: [
+        {
+          id: 1,
+          name: "Lisa Park",
+          rating: 5,
+          date: "2024-01-20",
+          comment: "Absolutely stunning succulent! The candelabra shape is so unique and adds such character to my patio. Very drought tolerant as advertised.",
+          verified: true
+        },
+        {
+          id: 2,
+          name: "James Thompson",
+          rating: 5,
+          date: "2024-01-12",
+          comment: "Perfect for my modern minimalist space. The architectural form is exactly what I was looking for. Great value for money!",
+          verified: true
+        },
+        {
+          id: 3,
+          name: "Anna Martinez",
+          rating: 4,
+          date: "2023-12-28",
+          comment: "Beautiful plant, smaller than expected but still gorgeous. It's been thriving in my sunny window for weeks.",
+          verified: true
+        }
+      ],
       inStock: true
     },
     3: {
@@ -94,6 +155,40 @@ const ProductDetails = () => {
         "/images/product-1.png",
         "/images/product-2.png",
         "/images/product-3.png"
+      ],
+      reviews: [
+        {
+          id: 1,
+          name: "Rachel Green",
+          rating: 5,
+          date: "2024-01-18",
+          comment: "Love this trailing plant! It's growing so fast and the golden variegation is beautiful. Perfect for my hanging basket.",
+          verified: true
+        },
+        {
+          id: 2,
+          name: "Tom Wilson",
+          rating: 5,
+          date: "2024-01-10",
+          comment: "Super easy to care for and propagate. I've already made 3 new plants from this one! Great air purifier too.",
+          verified: true
+        },
+        {
+          id: 3,
+          name: "Maria Garcia",
+          rating: 4,
+          date: "2023-12-30",
+          comment: "Beautiful plant that arrived healthy. It's been growing steadily and adds such a tropical feel to my home.",
+          verified: true
+        },
+        {
+          id: 4,
+          name: "Alex Kim",
+          rating: 5,
+          date: "2023-12-25",
+          comment: "Perfect beginner plant! Forgiving and beautiful. The heart-shaped leaves are so cute.",
+          verified: true
+        }
       ],
       inStock: true
     },
@@ -403,6 +498,24 @@ const ProductDetails = () => {
     ));
   };
 
+  const calculateReviewStats = (reviews) => {
+    if (!reviews || reviews.length === 0) return null;
+    
+    const totalReviews = reviews.length;
+    const averageRating = reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews;
+    const ratingCounts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+    
+    reviews.forEach(review => {
+      ratingCounts[review.rating]++;
+    });
+
+    return {
+      totalReviews,
+      averageRating: Math.round(averageRating * 10) / 10,
+      ratingCounts
+    };
+  };
+
   if (!product) {
     return (
       <div className="loading-container">
@@ -529,25 +642,149 @@ const ProductDetails = () => {
         {/* Product Tabs */}
         <div className="product-tabs">
           <div className="tab-nav">
-            <button className="tab-btn active">Description</button>
-            <button className="tab-btn">Reviews</button>
-            <button className="tab-btn">Shipping & Returns</button>
+            <button 
+              className={`tab-btn ${activeTab === 'description' ? 'active' : ''}`}
+              onClick={() => setActiveTab('description')}
+            >
+              Description
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'reviews' ? 'active' : ''}`}
+              onClick={() => setActiveTab('reviews')}
+            >
+              Reviews ({product.reviews ? product.reviews.length : 0})
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'shipping' ? 'active' : ''}`}
+              onClick={() => setActiveTab('shipping')}
+            >
+              Shipping & Returns
+            </button>
           </div>
           
           <div className="tab-content">
-            <div className="tab-section">
-              <h3 className="section-title">Your Personal Assistant</h3>
-              <p className="section-description">
-                Welcome to the next generation of assistance with our Future Helper Robot. Engineered with cutting-edge artificial intelligence, this robotic companion serves as your personal assistant, seamlessly integrating into your daily routine to enhance productivity and convenience. Whether you need help with scheduling, organization, or simply a friendly chat, our Future Helper Robot is always at your service, learning from your preferences and adapting to your needs over time.
-              </p>
-            </div>
-            
-            <div className="tab-section">
-              <h3 className="section-title">Effortless Household Management</h3>
-              <p className="section-description">
-                Say goodbye to mundane chores and hello to newfound freedom with our Future Helper Robot. Equipped with nimble mobility and dexterous manipulators, it effortlessly navigates through your home, tackling tasks with precision and efficiency.
-              </p>
-            </div>
+            {activeTab === 'description' && (
+              <>
+                <div className="tab-section">
+                  <h3 className="section-title">Plant Care Guide</h3>
+                  <p className="section-description">
+                    {product.description}
+                  </p>
+                </div>
+                
+                <div className="tab-section">
+                  <h3 className="section-title">What's Included</h3>
+                  <ul className="features-list">
+                    {product.features.map((feature, index) => (
+                      <li key={index}>{feature}</li>
+                    ))}
+                  </ul>
+                </div>
+              </>
+            )}
+
+            {activeTab === 'reviews' && (
+              <div className="reviews-section">
+                {product.reviews && product.reviews.length > 0 ? (
+                  <>
+                    <div className="reviews-summary">
+                      <div className="rating-overview">
+                        <div className="average-rating">
+                          <span className="rating-number">{calculateReviewStats(product.reviews)?.averageRating || 0}</span>
+                          <div className="rating-stars">
+                            {renderStars(Math.round(calculateReviewStats(product.reviews)?.averageRating || 0))}
+                          </div>
+                          <span className="review-count">
+                            {calculateReviewStats(product.reviews)?.totalReviews || 0} reviews
+                          </span>
+                        </div>
+                        
+                        <div className="rating-breakdown">
+                          {[5, 4, 3, 2, 1].map(rating => {
+                            const stats = calculateReviewStats(product.reviews);
+                            const count = stats?.ratingCounts[rating] || 0;
+                            const percentage = stats ? (count / stats.totalReviews) * 100 : 0;
+                            
+                            return (
+                              <div key={rating} className="rating-bar">
+                                <span className="rating-label">{rating} ★</span>
+                                <div className="bar-container">
+                                  <div 
+                                    className="bar-fill" 
+                                    style={{ width: `${percentage}%` }}
+                                  ></div>
+                                </div>
+                                <span className="rating-count">({count})</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="reviews-list">
+                      <h3 className="section-title">Customer Reviews</h3>
+                      {product.reviews.map((review, index) => (
+                        <div key={review.id} className="review-item">
+                          <div className="review-header">
+                            <div className="reviewer-info">
+                              <span className="reviewer-name">{review.name}</span>
+                              {review.verified && (
+                                <span className="verified-badge">✓ Verified Purchase</span>
+                              )}
+                            </div>
+                            <div className="review-meta">
+                              <div className="review-rating">
+                                {renderStars(review.rating)}
+                              </div>
+                              <span className="review-date">
+                                {new Date(review.date).toLocaleDateString('en-US', { 
+                                  year: 'numeric', 
+                                  month: 'long', 
+                                  day: 'numeric' 
+                                })}
+                              </span>
+                            </div>
+                          </div>
+                          <p className="review-comment">{review.comment}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div className="no-reviews">
+                    <h3>No reviews yet</h3>
+                    <p>Be the first to review this product!</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'shipping' && (
+              <>
+                <div className="tab-section">
+                  <h3 className="section-title">Shipping Information</h3>
+                  <ul className="shipping-list">
+                    <li>Free shipping on orders over $100</li>
+                    <li>Standard delivery: 3-5 business days</li>
+                    <li>Express delivery: 1-2 business days (additional charges apply)</li>
+                    <li>Carefully packaged to ensure plant safety</li>
+                    <li>Tracking information provided via email</li>
+                  </ul>
+                </div>
+                
+                <div className="tab-section">
+                  <h3 className="section-title">Returns & Refunds</h3>
+                  <ul className="shipping-list">
+                    <li>14-day return policy for live plants</li>
+                    <li>Plants must be in original condition</li>
+                    <li>Photo documentation required for damaged plants</li>
+                    <li>Refunds processed within 5-7 business days</li>
+                    <li>Return shipping costs covered for damaged items</li>
+                  </ul>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
