@@ -12,6 +12,7 @@ const ProductCard = ({
   image = "/images/snake-plant.jpg",
   onAddToCart,
   onToggleFavorite,
+  onProductClick,
   className = ""
 }) => {
   const [isFavorite, setIsFavorite] = useState(false);
@@ -38,6 +39,9 @@ const ProductCard = ({
   };
 
   const handleProductClick = () => {
+    if (onProductClick) {
+      onProductClick();
+    }
     navigate(`/product/${id}`);
   };
 

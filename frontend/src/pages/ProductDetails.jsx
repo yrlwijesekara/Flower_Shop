@@ -13,6 +13,28 @@ const ProductDetails = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [product, setProduct] = useState(null);
 
+  // Generate shop URL with preserved state
+  const getShopUrl = () => {
+    const savedState = sessionStorage.getItem('returnFromProduct');
+    if (savedState) {
+      const state = JSON.parse(savedState);
+      const params = new URLSearchParams();
+      
+      if (state.categoryFilter && state.categoryFilter !== 'all') {
+        params.set('filter', state.categoryFilter);
+      }
+      if (state.activeTab && state.activeTab !== 'recent') {
+        params.set('tab', state.activeTab);
+      }
+      if (state.searchQuery && state.searchQuery.trim()) {
+        params.set('search', encodeURIComponent(state.searchQuery));
+      }
+      
+      return params.toString() ? `/shop?${params.toString()}` : '/shop';
+    }
+    return '/shop';
+  };
+
   // Sample product data - in a real app, this would come from an API
   const productData = {
     1: {
@@ -395,7 +417,7 @@ const ProductDetails = () => {
       <MiniNavbar 
         breadcrumbs={[
           { icon: <span>🏠</span>, href: '/' },
-          { label: 'Shop', href: '/shop' },
+          { label: 'Shop', href: getShopUrl() },
           { label: 'Product Details', href: '#' }
         ]}
         showFilters={false}

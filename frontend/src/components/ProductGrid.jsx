@@ -2,7 +2,7 @@ import React from 'react';
 import ProductCard from './ProductCard';
 import './ProductGrid.css';
 
-const ProductGrid = ({ products = [], onAddToCart, className = "" }) => {
+const ProductGrid = ({ products = [], onAddToCart, onProductClick, className = "" }) => {
   // Default sample products if none provided
   const defaultProducts = [
     {
@@ -64,6 +64,7 @@ const ProductGrid = ({ products = [], onAddToCart, className = "" }) => {
             price={product.price}
             image={product.image}
             onAddToCart={onAddToCart}
+            onProductClick={onProductClick}
           />
         ))}
       </div>

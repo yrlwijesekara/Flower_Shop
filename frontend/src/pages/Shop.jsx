@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
 import ProductGrid from '../components/ProductGrid';
@@ -11,6 +11,7 @@ import './Shop.css';
 
 const Shop = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('recent');
   const [searchQuery, setSearchQuery] = useState('');
@@ -34,14 +35,37 @@ const Shop = () => {
     setIsCartLoaded(true);
   }, []);
 
-  // Handle URL parameters for filtering
+  // Handle URL parameters and localStorage for filtering
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const filterParam = urlParams.get('filter');
+    const tabParam = urlParams.get('tab');
+    const searchParam = urlParams.get('search');
     
-    if (filterParam && ['valentine', 'wedding', 'houseplants'].includes(filterParam)) {
-      setCategoryFilter(filterParam);
-      setIsFilterOpen(true); // Open the filter dropdown to show the active filter
+    // Check if we're returning from a product page
+    const returnFromProduct = sessionStorage.getItem('returnFromProduct');
+    if (returnFromProduct) {
+      // Restore previous filter state
+      const savedState = JSON.parse(returnFromProduct);
+      setCategoryFilter(savedState.categoryFilter || 'all');
+      setActiveTab(savedState.activeTab || 'recent');
+      setSearchQuery(savedState.searchQuery || '');
+      setIsFilterOpen(savedState.isFilterOpen || false);
+      
+      // Clear the storage
+      sessionStorage.removeItem('returnFromProduct');
+    } else {
+      // Handle URL parameters for direct navigation
+      if (filterParam && ['valentine', 'wedding', 'houseplants', 'all'].includes(filterParam)) {
+        setCategoryFilter(filterParam);
+        setIsFilterOpen(true);
+      }
+      if (tabParam && ['recent', 'popular', 'special'].includes(tabParam)) {
+        setActiveTab(tabParam);
+      }
+      if (searchParam) {
+        setSearchQuery(decodeURIComponent(searchParam));
+      }
     }
   }, [location.search]);
 
@@ -271,6 +295,28 @@ const Shop = () => {
     }
   ];
 
+  // Function to update URL with current filter state
+  const updateURL = ({ filter, tab, search }) => {
+    const params = new URLSearchParams();
+    if (filter && filter !== 'all') params.set('filter', filter);
+    if (tab && tab !== 'recent') params.set('tab', tab);
+    if (search && search.trim()) params.set('search', encodeURIComponent(search));
+    
+    const newURL = params.toString() ? `/shop?${params.toString()}` : '/shop';
+    navigate(newURL, { replace: true });
+  };
+
+  // Function to save current state for return navigation
+  const saveCurrentState = () => {
+    const currentState = {
+      categoryFilter,
+      activeTab,
+      searchQuery,
+      isFilterOpen
+    };
+    sessionStorage.setItem('returnFromProduct', JSON.stringify(currentState));
+  };
+
   const handleFilterToggle = (isOpen) => {
     setIsFilterOpen(isOpen);
     console.log('Filters are now:', isOpen ? 'open' : 'closed');
@@ -278,11 +324,13 @@ const Shop = () => {
 
   const handleCategoryFilter = (filter) => {
     setCategoryFilter(filter);
+    updateURL({ filter, tab: activeTab, search: searchQuery });
     console.log('Category filter:', filter);
   };
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
+    updateURL({ filter: categoryFilter, tab: tabName, search: searchQuery });
     console.log('Active tab:', tabName);
   };
 
@@ -292,7 +340,7 @@ const Shop = () => {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    // Search is handled automatically by getProductsByTab function
+    updateURL({ filter: categoryFilter, tab: activeTab, search: searchQuery });
   };
 
   const handleVoiceSearch = () => {
@@ -302,6 +350,7 @@ const Shop = () => {
 
   const handleClearSearch = () => {
     setSearchQuery('');
+    updateURL({ filter: categoryFilter, tab: activeTab, search: '' });
   };
 
   const handleAddToCart = (product) => {
@@ -445,6 +494,7 @@ const Shop = () => {
                       <ProductGrid 
                         products={rowProducts}
                         onAddToCart={handleAddToCart}
+                        onProductClick={saveCurrentState}
                         className="row-products-only"
                       />
                     </div>
@@ -458,7 +508,7 @@ const Shop = () => {
           
           {/* Other Products Sidebar - Spans all 3 rows */}
           <div className="other-products-sidebar">
-            <OtherProducts onAddToCart={handleAddToCart} />
+            <OtherProducts onAddToCart={handleAddToCart} onProductClick={saveCurrentState} />
           </div>
         </div>
         
