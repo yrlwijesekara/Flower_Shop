@@ -4,6 +4,7 @@ import { FiShoppingCart, FiChevronLeft, FiChevronRight, FiHome } from 'react-ico
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
 import Footer from '../components/Footer';
+import TopSellingFlowers from '../components/TopSelling';
 import './ProductDetails.css';
 
 const ProductDetails = () => {
@@ -788,6 +789,11 @@ const ProductDetails = () => {
           </div>
         </div>
       </div>
+      
+      <TopSellingFlowers
+        titleFirst='YOU MAY'
+        titleSecond='ALSO LIKE'
+      />
       
       <Footer />
     </div>
