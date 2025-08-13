@@ -35,28 +35,28 @@ const TopSellingFlowers = () => {
 
   const plants = [
     {
-      id: 101,
+      id: 2,
       name: "SNAKE PLANT",
       category: "Cactus",
       price: 149,
       image: "/topselling/top1.jpg"
     },
     {
-      id: 102,
+      id: 6,
       name: "CANDELABRA ALOE",
       category: "Aloe Vera",
       price: 39,
       image: "/topselling/top2.jpg"
     },
     {
-      id: 103,
+      id: 1,
       name: "GOLDEN POTHOS",
       category: "Pothos",
-      price: 69,
+      price: 129,
       image: "/topselling/top3.jpg"
     },
     {
-      id: 104,
+      id: 5,
       name: "HOMALOMENA",
       category: "Bonnie",
       price: 119,

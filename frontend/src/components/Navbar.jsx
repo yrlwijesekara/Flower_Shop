@@ -95,7 +95,7 @@ const Navbar = () => {
         <div className="navbar-container">
           {/* Logo */}
           <div className="navbar-logo">
-            <img src="./navbar/nav.png" alt="Flora Shop Logo" />
+            <img src="/navbar/nav.png" alt="Flora Shop Logo" />
           </div>
 
           {/* Mobile Menu Toggle */}

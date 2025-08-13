@@ -8,6 +8,7 @@ import Payment from './pages/Payment';
 import OrderSuccess from './pages/OrderSuccess';
 import Contact from './pages/contact';
 import About from './pages/About';
+import ProductDetails from './pages/ProductDetails';
 import './App.css';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/payment" element={<Payment />} />
