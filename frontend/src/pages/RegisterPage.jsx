@@ -88,7 +88,7 @@ export default function RegisterPage() {
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleInputChange}
-                className="form-input"
+                className="register-form-input"
               />
             </div>
             
@@ -99,7 +99,7 @@ export default function RegisterPage() {
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleInputChange}
-                className="form-input"
+                className="register-form-input"
               />
             </div>
           </div>
@@ -127,7 +127,7 @@ export default function RegisterPage() {
                   name="country"
                   value={formData.country}
                   onChange={handleInputChange}
-                  className="form-input country-field"
+                  className="register-form-input register-country-field"
                 />
               </div>
             </div>
@@ -141,7 +141,7 @@ export default function RegisterPage() {
                   name="phoneNumber"
                   value={formData.phoneNumber}
                   onChange={handleInputChange}
-                  className="form-input phone-field"
+                  className="register-form-input register-phone-field"
                 />
               </div>
             </div>
@@ -156,11 +156,11 @@ export default function RegisterPage() {
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="form-input password-field"
+                  className="register-form-input register-password-field"
                 />
                 <button
                   type="button"
-                  className="password-toggle"
+                  className="register-password-toggle"
                   onClick={togglePasswordVisibility}
                 >
                   👁
@@ -176,11 +176,11 @@ export default function RegisterPage() {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  className="form-input password-field"
+                  className="register-form-input register-password-field"
                 />
                 <button
                   type="button"
-                  className="password-toggle"
+                  className="register-password-toggle"
                   onClick={toggleConfirmPasswordVisibility}
                 >
                   👁
@@ -191,7 +191,7 @@ export default function RegisterPage() {
           
           <button 
             type="button" 
-            className="register-button"
+            className="register-submit-button"
             onClick={handleSubmit}
           >
             Register
@@ -202,7 +202,7 @@ export default function RegisterPage() {
           <span className="signin-text">Already have an account? </span>
           <button 
             type="button" 
-            className="signin-link"
+            className="register-signin-link"
             onClick={handleSignIn}
           >
             Sign in

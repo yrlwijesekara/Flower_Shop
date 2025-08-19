@@ -1,4 +1,5 @@
 import React from 'react';
+import './Adminpage.css';
 
 const Orders = () => (
   <div className="admin-orders-section">

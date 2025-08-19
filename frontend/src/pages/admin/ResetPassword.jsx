@@ -1,4 +1,5 @@
 import React from 'react';
+import './Adminpage.css';
 
 const ResetPassword = () => (
   <div className="admin-password-container">

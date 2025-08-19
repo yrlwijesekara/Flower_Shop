@@ -1,4 +1,6 @@
-* {
+/* Scoped reset only for register page */
+.register-container,
+.register-container * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -71,23 +73,39 @@
   text-align: left;
 }
 
-.form-input {
+.register-form-input {
   width: 100%;
   padding: 15px 18px;
-  border: none;
+  border: none !important;
   border-radius: 12px;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.9) !important;
   font-size: 14px;
-  color: #2d3748;
-  outline: none;
+  color: #2d3748 !important;
+  outline: none !important;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+  box-shadow: none !important;
 }
 
-.form-input:focus {
-  background-color: rgba(255, 255, 255, 1);
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+.register-form-input:focus {
+  background-color: rgba(255, 255, 255, 1) !important;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1) !important;
   transform: translateY(-1px);
+  border: none !important;
+  outline: none !important;
+}
+
+/* Override browser validation styles */
+.register-form-input:invalid {
+  border: none !important;
+  box-shadow: none !important;
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.register-form-input:valid {
+  border: none !important;
+  box-shadow: none !important;
+  background-color: rgba(255, 255, 255, 0.9) !important;
 }
 
 .country-input {
@@ -128,7 +146,7 @@
                    #FF4500 66.66%, #FF4500 100%);
 } */
 
-.country-field {
+.register-country-field {
   padding-left: 50px;
 }
 
@@ -147,7 +165,7 @@
   font-weight: 500;
 }
 
-.phone-field {
+.register-phone-field {
   padding-left: 45px;
 }
 
@@ -155,30 +173,30 @@
   position: relative;
 }
 
-.password-field {
+.register-password-field {
   padding-right: 50px;
 }
 
-.password-toggle {
+.register-password-toggle {
   position: absolute;
   right: 15px;
   top: 50%;
   transform: translateY(-50%);
-  background: none;
+  background: none !important;
   border: none;
   cursor: pointer;
   font-size: 16px;
-  color: #666;
+  color: #666 !important;
   padding: 5px;
   transition: color 0.3s ease;
 }
 
-.password-toggle:hover {
-  color: #2d3748;
+.register-password-toggle:hover {
+  color: #2d3748 !important ;
 }
 
-.register-button {
-  background: #26B539;
+.register-submit-button {
+  background: #26B539 !important;
   color: white;
   border: none;
   padding: 16px 32px;
@@ -191,13 +209,13 @@
   box-shadow: 0 4px 15px rgba(56, 161, 105, 0.3);
 }
 
-.register-button:hover {
-  background: linear-gradient(135deg, #2f855a 0%, #276749 100%);
+.register-submit-button:hover {
+  background: linear-gradient(135deg, #2f855a 0%, #276749 100%) !important;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(56, 161, 105, 0.4);
 }
 
-.register-button:active {
+.register-submit-button:active {
   transform: translateY(0);
 }
 
@@ -210,18 +228,18 @@
   color: #666;
 }
 
-.signin-link {
-  background: none;
+.register-signin-link {
+  background: none !important;
   border: none;
-  color: #3182ce;
+  color: #3182ce !important;
   cursor: pointer;
   text-decoration: underline;
   font-size: 14px;
   transition: color 0.3s ease;
 }
 
-.signin-link:hover {
-  color: #2c5282;
+.register-signin-link:hover {
+  color: #2c5282 !important;
 }
 
 /* Responsive Design */
@@ -261,20 +279,20 @@
     font-size: 32px;
   }
   
-  .form-input {
+  .register-form-input {
     padding: 14px 16px;
     font-size: 13px;
   }
   
-  .country-field {
+  .register-country-field {
     padding-left: 45px;
   }
   
-  .phone-field {
+  .register-phone-field {
     padding-left: 40px;
   }
   
-  .password-field {
+  .register-password-field {
     padding-right: 45px;
   }
 }
@@ -303,16 +321,16 @@
     gap: 20px;
   }
   
-  .form-input {
+  .register-form-input {
     padding: 13px 15px;
     font-size: 14px;
   }
   
-  .country-field {
+  .register-country-field {
     padding-left: 50px;
   }
   
-  .phone-field {
+  .register-phone-field {
     padding-left: 45px;
   }
 }
@@ -339,7 +357,7 @@
     margin-bottom: 30px;
   }
   
-  .form-input {
+  .register-form-input {
     padding: 12px 14px;
     font-size: 14px;
   }
@@ -348,7 +366,7 @@
     gap: 18px;
   }
   
-  .register-button {
+  .register-submit-button {
     padding: 14px 28px;
     font-size: 15px;
   }

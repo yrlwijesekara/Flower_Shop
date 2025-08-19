@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import './Adminpage.css';
 
 const navLinks = [
   { to: '/admin', label: 'Dashboard' },
@@ -63,7 +62,7 @@ const AdminLayout = () => {
   }
 
   return (
-    <div className="admin-dashboard-container">
+    <div className="admin-dashboard-container" data-admin-panel="true">
       <button className="admin-mobile-menu-toggle" onClick={toggleSidebar}>☰</button>
       <div
         className={`admin-sidebar-overlay ${isSidebarOpen ? 'admin-sidebar-open' : ''}`}

@@ -1,6 +1,7 @@
-/* Admin Panel Specific Styles - All classes prefixed with 'admin-' */
+/* Admin Panel Specific Styles - All classes prefixed with 'admin-' and wrapped in admin route */
 
 /* Admin Panel Container */
+body:has([data-admin-panel="true"]) .admin-dashboard-container,
 .admin-dashboard-container {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   background: #f0f6f0;

@@ -1,4 +1,6 @@
-* {
+/* Scoped reset only for login page */
+.login-container,
+.login-container * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -52,33 +54,49 @@
   position: relative;
 }
 
-.form-input {
+.login-form-input {
   width: 100%;
   padding: 18px 24px;
-  border: none;
+  border: none !important;
   border-radius: 50px;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.9) !important;
   font-size: 16px;
-  color: #2d3748;
-  outline: none;
+  color: #2d3748 !important;
+  outline: none !important;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+  box-shadow: none !important;
 }
 
-.form-input::placeholder {
+.login-form-input::placeholder {
   color: #a0a0a0;
 }
 
-.form-input:focus {
-  background-color: rgba(255, 255, 255, 1);
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+.login-form-input:focus {
+  background-color: rgba(255, 255, 255, 1) !important;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1) !important;
   transform: translateY(-1px);
+  border: none !important;
+  outline: none !important;
 }
 
-.forgot-password-link {
+/* Override browser validation styles */
+.login-form-input:invalid {
+  border: none !important;
+  box-shadow: none !important;
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.login-form-input:valid {
+  border: none !important;
+  box-shadow: none !important;
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.login-forgot-password-link {
   background: none !important;
   border: none;
-  color: #3182ce;
+  color: #3182ce !important;
   font-size: 14px;
   cursor: pointer;
   text-align: left;
@@ -88,12 +106,12 @@
   transition: color 0.3s ease;
 }
 
-.forgot-password-link:hover {
-  color: #2c5282;
+.login-forgot-password-link:hover {
+  color: #2c5282 !important;
 }
 
-.login-button {
-  background: #26B539 ;
+.login-submit-button {
+  background: #26B539 !important;
   color: white;
   border: none;
   padding: 18px 32px;
@@ -106,13 +124,13 @@
   box-shadow: 0 4px 15px rgba(56, 161, 105, 0.3);
 }
 
-.login-button:hover {
-  background: #44de58;
+.login-submit-button:hover {
+  background: #44de58 !important;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(56, 161, 105, 0.4);
 }
 
-.login-button:active {
+.login-submit-button:active {
   transform: translateY(0);
 }
 
@@ -125,18 +143,18 @@
   color: #666;
 }
 
-.signup-link {
-  background: none ;
+.login-signup-link {
+  background: none !important; ;
   border: none;
-  color: #3182ce;
+  color: #3182ce !important;
   cursor: pointer;
   text-decoration: underline;
   font-size: 14px;
   transition: color 0.3s ease;
 }
 
-.signup-link:hover {
-  color: #2c5282;
+.login-signup-link:hover {
+  color: #2c5282 !important;
 }
 
 .admin-login-section {
@@ -145,7 +163,7 @@
   border-top: 1px solid #e2e8f0;
 }
 
-.admin-login-link {
+.login-admin-link {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #ffffff;
   border: none;
@@ -159,7 +177,7 @@
   letter-spacing: 0.5px;
 }
 
-.admin-login-link:hover {
+.login-admin-link:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
 }
@@ -197,12 +215,12 @@
     font-size: 34px;
   }
   
-  .form-input {
+  .login-form-input {
     padding: 16px 20px;
     font-size: 15px;
   }
   
-  .login-button {
+  .login-submit-button {
     padding: 16px 28px;
     font-size: 17px;
   }
@@ -227,12 +245,12 @@
     font-size: 15px;
   }
   
-  .form-input {
+  .login-form-input {
     padding: 15px 18px;
     font-size: 14px;
   }
   
-  .login-button {
+  .login-submit-button {
     padding: 15px 25px;
     font-size: 16px;
   }
@@ -261,12 +279,12 @@
     margin-bottom: 35px;
   }
   
-  .form-input {
+  .login-form-input {
     padding: 14px 16px;
     font-size: 14px;
   }
   
-  .login-button {
+  .login-submit-button {
     padding: 14px 22px;
     font-size: 15px;
   }
@@ -275,7 +293,7 @@
     gap: 18px;
   }
   
-  .admin-login-link {
+  .login-admin-link {
     padding: 12px 20px;
     font-size: 13px;
   }

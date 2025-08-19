@@ -96,7 +96,7 @@ export default function LoginPage() {
                 placeholder="Username or Email Address"
                 value={formData.username}
                 onChange={handleInputChange}
-                className="form-input"
+                className="login-form-input"
               />
             </div>
             
@@ -107,13 +107,13 @@ export default function LoginPage() {
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleInputChange}
-                className="form-input"
+                className="login-form-input"
               />
             </div>
             
             <button 
               type="button" 
-              className="forgot-password-link"
+              className="login-forgot-password-link"
               onClick={handleForgotPassword}
             >
               Forgot Password
@@ -121,7 +121,7 @@ export default function LoginPage() {
             
             <button 
               type="button" 
-              className="login-button"
+              className="login-submit-button"
               onClick={handleSubmit}
             >
               Login
@@ -132,7 +132,7 @@ export default function LoginPage() {
             <span className="signup-text">Don't have an account? </span>
             <button 
               type="button" 
-              className="signup-link"
+              className="login-signup-link"
               onClick={handleSignUp}
             >
               Sign Up
@@ -142,7 +142,7 @@ export default function LoginPage() {
           <div className="admin-login-section">
             <button 
               type="button" 
-              className="admin-login-link"
+              className="login-admin-link"
               onClick={handleAdminLogin}
             >
               Admin Login

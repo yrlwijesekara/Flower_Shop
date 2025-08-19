@@ -1,4 +1,5 @@
 import React from 'react';
+import './Adminpage.css';
 
 const Customers = () => (
   <div className="admin-customers-container">

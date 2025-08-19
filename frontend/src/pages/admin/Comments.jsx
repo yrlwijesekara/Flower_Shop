@@ -1,4 +1,5 @@
 import React from 'react';
+import './Adminpage.css';
 
 const Comments = () => (
   <div className="admin-feedback-container">
