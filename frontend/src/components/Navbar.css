@@ -434,24 +434,25 @@ html {
 
 /* Ensure content doesn't hide behind fixed navbar */
 /* Note: MiniNavbar uses position sticky, so body only needs main navbar padding */
-body {
+/* Exclude admin pages from body padding */
+body:not(.admin-page) {
   padding-top: 100px;
 }
 
 @media (max-width: 992px) {
-  body {
+  body:not(.admin-page) {
     padding-top: 80px;
   }
 }
 
 @media (max-width: 768px) {
-  body {
+  body:not(.admin-page) {
     padding-top: 70px;
   }
 }
 
 @media (max-width: 480px) {
-  body {
+  body:not(.admin-page) {
     padding-top: 60px;
   }
 }

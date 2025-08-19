@@ -16,10 +16,13 @@ const AdminLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  // Check admin authentication
+  // Check admin authentication and set body class
   useEffect(() => {
     const isAdminLoggedIn = localStorage.getItem('adminLoggedIn');
     const adminUserData = localStorage.getItem('adminUser');
+    
+    // Add admin-page class to body to prevent navbar padding
+    document.body.classList.add('admin-page');
     
     if (isAdminLoggedIn !== 'true' || !adminUserData) {
       navigate('/admin/login');
@@ -33,6 +36,11 @@ const AdminLayout = () => {
       console.error('Error parsing admin user data:', error);
       navigate('/admin/login');
     }
+    
+    // Cleanup function to remove class when component unmounts
+    return () => {
+      document.body.classList.remove('admin-page');
+    };
   }, [navigate]);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);

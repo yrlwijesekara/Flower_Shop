@@ -1,9 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AdminLogin.css';
 
 export default function AdminLogin() {
   const navigate = useNavigate();
+  
+  // Add admin-page class to body to prevent navbar padding
+  useEffect(() => {
+    document.body.classList.add('admin-page');
+    
+    // Cleanup function to remove class when component unmounts
+    return () => {
+      document.body.classList.remove('admin-page');
+    };
+  }, []);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
