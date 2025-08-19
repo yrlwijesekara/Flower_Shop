@@ -11,6 +11,71 @@
   padding: 0;
 }
 
+/* Ensure all SVG icons are visible globally in shop page */
+.shop-page svg {
+  display: inline-block !important;
+  vertical-align: middle;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Force icon visibility with highest specificity */
+.search-container .search-icon,
+.search-container .mic-icon {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Alternative fallback using Unicode symbols if SVG fails */
+.search-icon::after {
+  content: "🔍";
+  font-size: 20px;
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.mic-icon::after {
+  content: "🎤";
+  font-size: 18px;
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Show fallback if SVG is not visible */
+.search-icon:not(:has(svg)),
+.search-icon svg:not(:visible) ~ .search-icon::after {
+  display: block !important;
+}
+
+/* Alternative: Pure CSS search icon */
+.search-icon.css-fallback::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 2px solid #000;
+  border-radius: 50%;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+}
+
+.search-icon.css-fallback::after {
+  content: '';
+  width: 2px;
+  height: 8px;
+  background: #000;
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  transform: rotate(45deg);
+}
+
 /* Shop Notification */
 .shop-notification {
   background: #4CAF50;
@@ -98,22 +163,53 @@
   opacity: 1;
 }
 
-/* Search Icon - search 1 */
+/* Search Icon - search 1 - RESET ALL STYLES */
 .search-icon {
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
+  position: absolute !important;
+  width: 40px !important;
+  height: 40px !important;
+  left: 20px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  z-index: 999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.3s ease !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  outline: none !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+}
+
+/* NUCLEAR OPTION - Force SVG icons to be visible with maximum specificity */
+.shop-page .search-section .search-container .search-icon svg,
+.shop-page .search-section .search-container form .search-icon svg {
+  all: unset !important;
+  display: block !important;
+  width: 28px !important;
+  height: 28px !important;
+  fill: #000000 !important;
+  color: #000000 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  stroke: #000000 !important;
+  stroke-width: 0 !important;
+  pointer-events: none !important;
+  position: static !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  clip: unset !important;
+  clip-path: unset !important;
 }
 
 .search-icon:hover {
@@ -125,22 +221,53 @@
   transform: translateY(-50%) scale(0.95);
 }
 
-/* Microphone Icon - mic 1 */
+/* Microphone Icon - mic 1 - RESET ALL STYLES */
 .mic-icon {
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
+  position: absolute !important;
+  width: 40px !important;
+  height: 40px !important;
+  right: 20px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  z-index: 999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.3s ease !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  outline: none !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+}
+
+/* NUCLEAR OPTION - Force microphone SVG icons to be visible with maximum specificity */
+.shop-page .search-section .search-container .mic-icon svg,
+.shop-page .search-section .search-container form .mic-icon svg {
+  all: unset !important;
+  display: block !important;
+  width: 26px !important;
+  height: 26px !important;
+  fill: none !important;
+  color: #000000 !important;
+  stroke: #000000 !important;
+  stroke-width: 2 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: none !important;
+  position: static !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  clip: unset !important;
+  clip-path: unset !important;
 }
 
 .mic-icon:hover {
