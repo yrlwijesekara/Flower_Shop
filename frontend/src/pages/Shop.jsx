@@ -5,11 +5,11 @@ import MiniNavbar from '../components/MiniNavbar';
 import ProductGrid from '../components/ProductGrid';
 import OtherProducts from '../components/OtherProducts';
 import Footer from '../components/Footer';
-import { FiHome, FiMic } from 'react-icons/fi';
+import { FiHome } from 'react-icons/fi';
 import { BiSearch } from 'react-icons/bi';
 
 // Test if icons are importing correctly
-console.log('Icons imported:', { FiHome, FiMic, BiSearch });
+console.log('Icons imported:', { FiHome, BiSearch });
 import './Shop.css';
 
 const Shop = () => {
@@ -347,10 +347,6 @@ const Shop = () => {
     updateURL({ filter: categoryFilter, tab: activeTab, search: searchQuery });
   };
 
-  const handleVoiceSearch = () => {
-    console.log('Voice search activated');
-    // Voice search functionality would go here
-  };
 
   const handleClearSearch = () => {
     setSearchQuery('');
@@ -415,46 +411,8 @@ const Shop = () => {
               type="submit" 
               className="search-icon"
               aria-label="Search"
-              style={{ 
-                display: 'flex !important', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                position: 'absolute',
-                left: '20px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                width: '40px',
-                height: '40px',
-                background: 'transparent',
-                border: 'none',
-                zIndex: 999
-              }}
             >
-              <BiSearch size={28} color="#000000" style={{ display: 'block', opacity: 1 }} />
-              <span style={{ fontSize: '24px', position: 'absolute' }}>🔍</span>
-            </button>
-            <button 
-              type="button" 
-              className="mic-icon"
-              onClick={handleVoiceSearch}
-              aria-label="Voice Search"
-              style={{ 
-                display: 'flex !important', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                position: 'absolute',
-                right: '20px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                width: '40px',
-                height: '40px',
-                background: 'transparent',
-                border: 'none',
-                zIndex: 999
-              }}
-            >
-              <FiMic size={26} color="#000000" style={{ display: 'block', opacity: 1 }} />
-              <span style={{ fontSize: '22px', position: 'absolute' }}>🎤</span>
+              <BiSearch size={28} color="#000000" />
             </button>
           </form>
         </div>

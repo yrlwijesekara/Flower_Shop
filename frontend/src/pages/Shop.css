@@ -20,8 +20,7 @@
 }
 
 /* Force icon visibility with highest specificity */
-.search-container .search-icon,
-.search-container .mic-icon {
+.search-container .search-icon {
   opacity: 1 !important;
   visibility: visible !important;
 }
@@ -37,15 +36,6 @@
   transform: translate(-50%, -50%);
 }
 
-.mic-icon::after {
-  content: "🎤";
-  font-size: 18px;
-  display: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
 
 /* Show fallback if SVG is not visible */
 .search-icon:not(:has(svg)),
@@ -151,7 +141,7 @@
   border-radius: 45px;
   border: none;
   outline: none;
-  padding: 0 70px;
+  padding: 0 60px 0 70px;
   font-family: 'Familjen Grotesk', sans-serif;
   font-size: 18px;
   color: #000000;
@@ -221,63 +211,6 @@
   transform: translateY(-50%) scale(0.95);
 }
 
-/* Microphone Icon - mic 1 - RESET ALL STYLES */
-.mic-icon {
-  position: absolute !important;
-  width: 40px !important;
-  height: 40px !important;
-  right: 20px !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  background: transparent !important;
-  border: none !important;
-  cursor: pointer !important;
-  z-index: 999 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  transition: all 0.3s ease !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  outline: none !important;
-  font-size: 0 !important;
-  line-height: 0 !important;
-}
-
-/* NUCLEAR OPTION - Force microphone SVG icons to be visible with maximum specificity */
-.shop-page .search-section .search-container .mic-icon svg,
-.shop-page .search-section .search-container form .mic-icon svg {
-  all: unset !important;
-  display: block !important;
-  width: 26px !important;
-  height: 26px !important;
-  fill: none !important;
-  color: #000000 !important;
-  stroke: #000000 !important;
-  stroke-width: 2 !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  pointer-events: none !important;
-  position: static !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: none !important;
-  background: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-  transform: none !important;
-  clip: unset !important;
-  clip-path: unset !important;
-}
-
-.mic-icon:hover {
-  opacity: 0.7;
-  transform: translateY(-50%) scale(1.1);
-}
-
-.mic-icon:active {
-  transform: translateY(-50%) scale(0.95);
-}
 
 /* Filter Tabs Container - Desktop */
 .filter-tabs.desktop-filters {
