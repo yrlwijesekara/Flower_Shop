@@ -4,6 +4,39 @@ import { FiShoppingCart, FiHeart } from 'react-icons/fi';
 import { HiHeart } from 'react-icons/hi';
 import './ProductCard.css';
 
+// Fallback SVG Heart Icons
+const HeartOutlineIcon = ({ size = 20, color = "#666", style = {} }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke={color} 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+    style={{ display: 'block', ...style }}
+  >
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+  </svg>
+);
+
+const HeartFilledIcon = ({ size = 20, color = "#ffffff", style = {} }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill={color} 
+    stroke={color} 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+    style={{ display: 'block', ...style }}
+  >
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+  </svg>
+);
+
 const ProductCard = ({
   id,
   name = "SNAKE PLANT",
@@ -93,11 +126,31 @@ const ProductCard = ({
             className={`favorite-btn ${isFavorite ? 'favorite' : ''}`}
             onClick={handleToggleFavorite}
             aria-label={`${isFavorite ? 'Remove from' : 'Add to'} favorites`}
+            style={{
+              position: 'absolute',
+              top: '12px',
+              right: '12px',
+              width: '40px',
+              height: '40px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 10
+            }}
           >
+            {/* Always show the fallback SVG as primary */}
             {isFavorite ? (
-              <HiHeart className="heart-icon filled" size={20} />
+              <HeartFilledIcon 
+                size={20} 
+                color="#ffffff" 
+                style={{ display: 'block' }} 
+              />
             ) : (
-              <FiHeart className="heart-icon outline" size={20} />
+              <HeartOutlineIcon 
+                size={20} 
+                color="#666" 
+                style={{ display: 'block' }} 
+              />
             )}
           </button>
           

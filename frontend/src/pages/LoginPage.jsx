@@ -28,6 +28,13 @@ export default function LoginPage() {
       return;
     }
     
+    // Check if this is an admin login attempt
+    if (formData.username === 'admin@flowershop.com' || formData.username === 'admin') {
+      alert('Admin users should use the admin login page. Redirecting...');
+      navigate('/admin/login');
+      return;
+    }
+    
     // Here you would typically make an API call to authenticate
     // For now, I'll simulate a successful login
     try {
@@ -65,6 +72,10 @@ export default function LoginPage() {
 
   const handleSignUp = () => {
     navigate('/register');
+  };
+
+  const handleAdminLogin = () => {
+    navigate('/admin/login');
   };
 
   return (
@@ -125,6 +136,16 @@ export default function LoginPage() {
               onClick={handleSignUp}
             >
               Sign Up
+            </button>
+          </div>
+          
+          <div className="admin-login-section">
+            <button 
+              type="button" 
+              className="admin-login-link"
+              onClick={handleAdminLogin}
+            >
+              Admin Login
             </button>
           </div>
         </div>

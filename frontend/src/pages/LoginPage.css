@@ -76,7 +76,7 @@
 }
 
 .forgot-password-link {
-  background: none;
+  background: none !important;
   border: none;
   color: #3182ce;
   font-size: 14px;
@@ -93,7 +93,7 @@
 }
 
 .login-button {
-  background: #26B539;
+  background: #26B539 ;
   color: white;
   border: none;
   padding: 18px 32px;
@@ -126,7 +126,7 @@
 }
 
 .signup-link {
-  background: none;
+  background: none ;
   border: none;
   color: #3182ce;
   cursor: pointer;
@@ -137,6 +137,31 @@
 
 .signup-link:hover {
   color: #2c5282;
+}
+
+.admin-login-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.admin-login-link {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-login-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
 }
 
 /* Responsive Design */
@@ -248,5 +273,10 @@
   
   .login-form {
     gap: 18px;
+  }
+  
+  .admin-login-link {
+    padding: 12px 20px;
+    font-size: 13px;
   }
 }
