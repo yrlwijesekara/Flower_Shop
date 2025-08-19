@@ -569,7 +569,6 @@ function Userprofile() {
 
                 <div className='action-buttons'>
                     <button onClick={handleOrdersClick}>MY ORDERS</button>
-                    <button onClick={handleCouponsClick}>MY COUPONS</button>
                     <button onClick={handlePaymentsClick}>MY PAYMENTS</button>
                 </div>
 

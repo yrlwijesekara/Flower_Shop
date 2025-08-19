@@ -2,20 +2,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
 
 /* Base styles for Order Success Page */
-.order-success-page {
+.ordersuccess-page {
   font-family: 'Poppins', sans-serif;
   background-color: #ffffff;
   min-height: 100vh;
 }
 
 /* Breadcrumb Section */
-.breadcrumb-section {
+.ordersuccess-breadcrumb-section {
   background-color: #4CAF50;
   padding: 20px 0;
   color: white;
 }
 
-.breadcrumb-container {
+.ordersuccess-breadcrumb-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
@@ -24,30 +24,30 @@
   gap: 10px;
 }
 
-.breadcrumb-item {
+.ordersuccess-breadcrumb-item {
   font-size: 16px;
   font-weight: 400;
 }
 
-.breadcrumb-arrow {
+.ordersuccess-breadcrumb-arrow {
   font-size: 14px;
 }
 
 /* Progress Section */
-.progress-section {
+.ordersuccess-progress-section {
   background-color: #f5f5f5;
   padding: 30px 0;
 }
 
 /* Main Container */
-.order-success-container {
+.ordersuccess-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
   position: relative;
 }
 
-.order-content {
+.ordersuccess-content {
   background: white;
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -55,12 +55,12 @@
 }
 
 /* Header Section */
-.order-header {
+.ordersuccess-header {
   text-align: left;
   margin-bottom: 40px;
 }
 
-.order-number {
+.ordersuccess-number {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 400;
@@ -70,7 +70,7 @@
   margin-bottom: 8px;
 }
 
-.thank-you-title {
+.ordersuccess-thank-you-title {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 800;
@@ -80,7 +80,7 @@
   margin-bottom: 15px;
 }
 
-.thank-you-message {
+.ordersuccess-thank-you-message {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 300;
@@ -91,24 +91,24 @@
 }
 
 /* Order Details Section */
-.order-details-section {
+.ordersuccess-details-section {
   margin-bottom: 50px;
 }
 
-.order-info-grid {
+.ordersuccess-info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 30px;
   margin-bottom: 40px;
 }
 
-.order-info-item {
+.ordersuccess-info-item {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.section-title {
+.ordersuccess-section-title {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 800;
@@ -118,7 +118,7 @@
   margin: 0;
 }
 
-.section-content {
+.ordersuccess-section-content {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 300;
@@ -128,13 +128,13 @@
   margin: 0;
 }
 
-.shipping-address {
+.ordersuccess-shipping-address {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.address-content {
+.ordersuccess-address-content {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 300;
@@ -143,16 +143,16 @@
   color: #000000;
 }
 
-.address-content p {
+.ordersuccess-address-content p {
   margin: 0;
 }
 
 /* Items Section */
-.items-section {
+.ordersuccess-items-section {
   margin-bottom: 40px;
 }
 
-.items-header {
+.ordersuccess-items-header {
   display: grid;
   grid-template-columns: 1fr auto auto;
   gap: 40px;
@@ -160,7 +160,7 @@
   margin-bottom: 20px;
 }
 
-.items-title {
+.ordersuccess-items-title {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 800;
@@ -170,8 +170,8 @@
   margin: 0;
 }
 
-.qty-header,
-.price-header {
+.ordersuccess-qty-header,
+.ordersuccess-price-header {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 800;
@@ -180,26 +180,26 @@
   color: #000000;
 }
 
-.qty-header {
+.ordersuccess-qty-header {
   width: 68px;
   text-align: center;
 }
 
-.price-header {
+.ordersuccess-price-header {
   width: 95px;
   text-align: right;
 }
 
-.items-divider,
-.items-bottom-divider,
-.total-divider {
+.ordersuccess-items-divider,
+.ordersuccess-items-bottom-divider,
+.ordersuccess-total-divider {
   width: 100%;
   height: 1px;
   background: #000000;
   margin: 20px 0;
 }
 
-.item-row {
+.ordersuccess-item-row {
   display: grid;
   grid-template-columns: 198px 1fr auto auto;
   gap: 40px;
@@ -207,7 +207,7 @@
   padding: 20px 0;
 }
 
-.item-image-container {
+.ordersuccess-item-image-container {
   width: 198px;
   height: 197px;
   border: 2px solid #000000;
@@ -215,20 +215,20 @@
   overflow: hidden;
 }
 
-.item-image {
+.ordersuccess-item-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.item-details {
+.ordersuccess-item-details {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.mobile-qty,
-.mobile-total {
+.ordersuccess-mobile-qty,
+.ordersuccess-mobile-total {
   display: none;
   font-family: 'Poppins';
   font-style: normal;
@@ -238,11 +238,11 @@
   color: #000000;
 }
 
-.mobile-total {
+.ordersuccess-mobile-total {
   font-weight: 600;
 }
 
-.item-name {
+.ordersuccess-item-name {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 700;
@@ -252,7 +252,7 @@
   margin: 0;
 }
 
-.item-category {
+.ordersuccess-item-category {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 300;
@@ -262,7 +262,7 @@
   margin: 0;
 }
 
-.item-price {
+.ordersuccess-item-price {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 300;
@@ -272,7 +272,7 @@
   margin: 0;
 }
 
-.item-quantity {
+.ordersuccess-item-quantity {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 300;
@@ -283,7 +283,7 @@
   width: 68px;
 }
 
-.item-total {
+.ordersuccess-item-total {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
@@ -295,18 +295,18 @@
 }
 
 /* Pricing Summary */
-.pricing-summary {
+.ordersuccess-pricing-summary {
   margin: 40px 0;
 }
 
-.pricing-row {
+.ordersuccess-pricing-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
 }
 
-.pricing-label {
+.ordersuccess-pricing-label {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 400;
@@ -315,7 +315,7 @@
   color: #000000;
 }
 
-.pricing-value {
+.ordersuccess-pricing-value {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
@@ -326,20 +326,20 @@
 }
 
 /* Total Section */
-.total-section {
+.ordersuccess-total-section {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 40px;
 }
 
-.total-row {
+.ordersuccess-total-row {
   display: flex;
   align-items: center;
   gap: 40px;
 }
 
-.total-label {
+.ordersuccess-total-label {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 800;
@@ -348,7 +348,7 @@
   color: #000000;
 }
 
-.total-value {
+.ordersuccess-total-value {
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 800;
@@ -357,7 +357,7 @@
   color: #000000;
 }
 
-.share-button {
+.ordersuccess-share-button {
   box-sizing: border-box;
   width: 200px;
   height: 45px;
@@ -375,12 +375,12 @@
   transition: all 0.3s ease;
 }
 
-.share-button:hover {
+.ordersuccess-share-button:hover {
   background: #1a5c0f;
   transform: translateY(-2px);
 }
 
-.share-button:active {
+.ordersuccess-share-button:active {
   transform: translateY(0);
 }
 
@@ -388,30 +388,30 @@
 
 /* 1400px and below */
 @media (max-width: 1400px) {
-  .order-success-container {
+  .ordersuccess-container {
     max-width: 1100px;
   }
   
-  .order-content {
+  .ordersuccess-content {
     padding: 35px;
   }
   
-  .thank-you-title {
+  .ordersuccess-thank-you-title {
     font-size: 36px;
     line-height: 54px;
   }
   
-  .thank-you-message {
+  .ordersuccess-thank-you-message {
     font-size: 28px;
     line-height: 42px;
   }
   
-  .section-title {
+  .ordersuccess-section-title {
     font-size: 32px;
     line-height: 48px;
   }
   
-  .section-content {
+  .ordersuccess-section-content {
     font-size: 28px;
     line-height: 42px;
   }
@@ -419,75 +419,75 @@
 
 /* 1200px and below */
 @media (max-width: 1200px) {
-  .order-success-container {
+  .ordersuccess-container {
     max-width: 960px;
   }
   
-  .order-content {
+  .ordersuccess-content {
     padding: 30px;
   }
   
-  .order-number {
+  .ordersuccess-number {
     font-size: 28px;
     line-height: 42px;
   }
   
-  .thank-you-title {
+  .ordersuccess-thank-you-title {
     font-size: 32px;
     line-height: 48px;
   }
   
-  .thank-you-message {
+  .ordersuccess-thank-you-message {
     font-size: 24px;
     line-height: 36px;
   }
   
-  .section-title {
+  .ordersuccess-section-title {
     font-size: 28px;
     line-height: 42px;
   }
   
-  .section-content {
+  .ordersuccess-section-content {
     font-size: 24px;
     line-height: 36px;
   }
   
-  .address-content {
+  .ordersuccess-address-content {
     font-size: 24px;
     line-height: 36px;
   }
   
-  .items-title,
-  .qty-header,
-  .price-header {
+  .ordersuccess-items-title,
+  .ordersuccess-qty-header,
+  .ordersuccess-price-header {
     font-size: 28px;
     line-height: 42px;
   }
   
-  .item-name {
+  .ordersuccess-item-name {
     font-size: 26px;
     line-height: 39px;
   }
   
-  .item-category,
-  .item-price {
+  .ordersuccess-item-category,
+  .ordersuccess-item-price {
     font-size: 22px;
     line-height: 33px;
   }
   
-  .item-quantity,
-  .item-total {
+  .ordersuccess-item-quantity,
+  .ordersuccess-item-total {
     font-size: 24px;
     line-height: 36px;
   }
   
-  .total-label,
-  .total-value {
+  .ordersuccess-total-label,
+  .ordersuccess-total-value {
     font-size: 28px;
     line-height: 42px;
   }
   
-  .share-button {
+  .ordersuccess-share-button {
     width: 220px;
     height: 50px;
     font-size: 26px;
@@ -497,70 +497,70 @@
 
 /* 992px and below */
 @media (max-width: 992px) {
-  .order-success-container {
+  .ordersuccess-container {
     max-width: 100%;
     padding: 30px 15px;
   }
   
-  .order-content {
+  .ordersuccess-content {
     padding: 25px;
   }
   
-  .order-info-grid {
+  .ordersuccess-info-grid {
     grid-template-columns: 1fr;
     gap: 30px;
   }
   
-  .items-header {
+  .ordersuccess-items-header {
     grid-template-columns: 1fr;
     gap: 20px;
     text-align: center;
   }
   
-  .qty-header,
-  .price-header {
+  .ordersuccess-qty-header,
+  .ordersuccess-price-header {
     display: none;
   }
   
-  .item-row {
+  .ordersuccess-item-row {
     grid-template-columns: 150px 1fr;
     gap: 20px;
     padding: 15px 0;
   }
   
-  .item-image-container {
+  .ordersuccess-item-image-container {
     width: 150px;
     height: 150px;
   }
   
-  .item-quantity,
-  .item-total {
+  .ordersuccess-item-quantity,
+  .ordersuccess-item-total {
     display: none;
   }
   
-  .item-details {
+  .ordersuccess-item-details {
     display: grid;
     grid-template-columns: 1fr auto auto;
     align-items: center;
     gap: 15px;
   }
   
-  .item-name {
+  .ordersuccess-item-name {
     font-size: 22px;
     line-height: 33px;
   }
   
-  .item-category {
+  .ordersuccess-item-category {
     font-size: 18px;
     line-height: 27px;
   }
   
-  .item-price {
+  .ordersuccess-item-price {
     font-size: 20px;
     line-height: 30px;
   }
   
-  .mobile-qty {
+  .ordersuccess-mobile-qty {
     display: block;
     font-family: 'Poppins';
     font-weight: 300;
@@ -568,7 +568,7 @@
     color: #000000;
   }
   
-  .mobile-total {
+  .ordersuccess-mobile-total {
     display: block;
     font-family: 'Poppins';
     font-weight: 600;
@@ -576,13 +576,13 @@
     color: #000000;
   }
   
-  .total-section {
+  .ordersuccess-total-section {
     flex-direction: column;
     gap: 30px;
     align-items: center;
   }
   
-  .share-button {
+  .ordersuccess-share-button {
     width: 200px;
     height: 45px;
     font-size: 22px;
@@ -592,94 +592,94 @@
 
 /* 768px and below */
 @media (max-width: 768px) {
-  .breadcrumb-container {
+  .ordersuccess-breadcrumb-container {
     padding: 0 15px;
   }
   
-  .order-content {
+  .ordersuccess-content {
     padding: 20px;
   }
   
-  .order-number {
+  .ordersuccess-number {
     font-size: 24px;
     line-height: 36px;
   }
   
-  .thank-you-title {
+  .ordersuccess-thank-you-title {
     font-size: 28px;
     line-height: 42px;
   }
   
-  .thank-you-message {
+  .ordersuccess-thank-you-message {
     font-size: 20px;
     line-height: 30px;
   }
   
-  .section-title {
+  .ordersuccess-section-title {
     font-size: 24px;
     line-height: 36px;
   }
   
-  .section-content {
+  .ordersuccess-section-content {
     font-size: 20px;
     line-height: 30px;
   }
   
-  .address-content {
+  .ordersuccess-address-content {
     font-size: 20px;
     line-height: 30px;
   }
   
-  .items-title {
+  .ordersuccess-items-title {
     font-size: 24px;
     line-height: 36px;
   }
   
-  .item-row {
+  .ordersuccess-item-row {
     grid-template-columns: 120px 1fr;
     gap: 15px;
   }
   
-  .item-image-container {
+  .ordersuccess-item-image-container {
     width: 120px;
     height: 120px;
   }
   
-  .item-details {
+  .ordersuccess-item-details {
     grid-template-columns: 1fr;
     gap: 10px;
   }
   
-  .item-name {
+  .ordersuccess-item-name {
     font-size: 18px;
     line-height: 27px;
   }
   
-  .item-category,
-  .item-price {
+  .ordersuccess-item-category,
+  .ordersuccess-item-price {
     font-size: 16px;
     line-height: 24px;
   }
   
-  .mobile-qty,
-  .mobile-total {
+  .ordersuccess-mobile-qty,
+  .ordersuccess-mobile-total {
     font-size: 16px;
     line-height: 24px;
   }
   
-  .pricing-label,
-  .pricing-value {
+  .ordersuccess-pricing-label,
+  .ordersuccess-pricing-value {
     font-size: 18px;
     line-height: 27px;
   }
   
-  .total-label,
-  .total-value {
+  .ordersuccess-total-label,
+  .ordersuccess-total-value {
     font-size: 24px;
     line-height: 36px;
   }
   
-  .share-button {
+  .ordersuccess-share-button {
     width: 180px;
     height: 40px;
     font-size: 18px;
@@ -689,104 +689,104 @@
 
 /* 480px and below */
 @media (max-width: 480px) {
-  .order-success-container {
+  .ordersuccess-container {
     padding: 20px 10px;
   }
   
-  .order-content {
+  .ordersuccess-content {
     padding: 15px;
   }
   
-  .order-header {
+  .ordersuccess-header {
     margin-bottom: 40px;
   }
   
-  .order-number {
+  .ordersuccess-number {
     font-size: 20px;
     line-height: 30px;
   }
   
-  .thank-you-title {
+  .ordersuccess-thank-you-title {
     font-size: 24px;
     line-height: 36px;
   }
   
-  .thank-you-message {
+  .ordersuccess-thank-you-message {
     font-size: 16px;
     line-height: 24px;
   }
   
-  .order-details-section {
+  .ordersuccess-details-section {
     margin-bottom: 40px;
   }
   
-  .order-info-grid {
+  .ordersuccess-info-grid {
     gap: 20px;
     margin-bottom: 30px;
   }
   
-  .section-title {
+  .ordersuccess-section-title {
     font-size: 20px;
     line-height: 30px;
   }
   
-  .section-content {
+  .ordersuccess-section-content {
     font-size: 16px;
     line-height: 24px;
   }
   
-  .address-content {
+  .ordersuccess-address-content {
     font-size: 16px;
     line-height: 24px;
   }
   
-  .items-title {
+  .ordersuccess-items-title {
     font-size: 20px;
     line-height: 30px;
   }
   
-  .item-row {
+  .ordersuccess-item-row {
     grid-template-columns: 100px 1fr;
     gap: 10px;
     padding: 10px 0;
   }
   
-  .item-image-container {
+  .ordersuccess-item-image-container {
     width: 100px;
     height: 100px;
   }
   
-  .item-name {
+  .ordersuccess-item-name {
     font-size: 16px;
     line-height: 24px;
   }
   
-  .item-category,
-  .item-price {
+  .ordersuccess-item-category,
+  .ordersuccess-item-price {
     font-size: 14px;
     line-height: 21px;
   }
   
-  .pricing-label,
-  .pricing-value {
+  .ordersuccess-pricing-label,
+  .ordersuccess-pricing-value {
     font-size: 16px;
     line-height: 24px;
   }
   
-  .total-label,
-  .total-value {
+  .ordersuccess-total-label,
+  .ordersuccess-total-value {
     font-size: 20px;
     line-height: 30px;
   }
   
-  .share-button {
+  .ordersuccess-share-button {
     width: 160px;
     height: 36px;
     font-size: 16px;
     line-height: 24px;
   }
   
-  .breadcrumb-item {
+  .ordersuccess-breadcrumb-item {
     font-size: 14px;
   }
 }

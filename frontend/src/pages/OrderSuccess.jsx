@@ -106,7 +106,7 @@ const OrderSuccess = () => {
   // Show loading state while order data is being processed
   if (!orderData) {
     return (
-      <div className="order-success-page">
+      <div className="ordersuccess-page">
         <Navbar />
         <div style={{ 
           display: 'flex', 
@@ -139,7 +139,7 @@ const OrderSuccess = () => {
   };
 
   return (
-    <div className="order-success-page">
+    <div className="ordersuccess-page">
       <Navbar />
       
       <MiniNavbar 
@@ -147,39 +147,39 @@ const OrderSuccess = () => {
         showFilters={false}
       />
       
-      <div className="progress-section">
+      <div className="ordersuccess-progress-section">
         <ProgressSteps currentStep={3} />
       </div>
 
       {/* Main Content */}
-      <div className="order-success-container">
-        <div className="order-content">
+      <div className="ordersuccess-container">
+        <div className="ordersuccess-content">
           {/* Header Section */}
-          <div className="order-header">
-            <h1 className="order-number">Order #{orderData.orderNumber}</h1>
-            <h2 className="thank-you-title">Thank You for Your Purchase !</h2>
-            <p className="thank-you-message">
+          <div className="ordersuccess-header">
+            <h1 className="ordersuccess-number">Order #{orderData.orderNumber}</h1>
+            <h2 className="ordersuccess-thank-you-title">Thank You for Your Purchase !</h2>
+            <p className="ordersuccess-thank-you-message">
               Thanks for shopping with us. We've received your order and we're already getting 
               started on it. You'll get an email soon with all the details.
             </p>
           </div>
 
           {/* Order Details Section */}
-          <div className="order-details-section">
-            <div className="order-info-grid">
-              <div className="order-info-item">
-                <h3 className="section-title">Order Numbers</h3>
-                <p className="section-content">{orderData.orderNumber}</p>
+          <div className="ordersuccess-details-section">
+            <div className="ordersuccess-info-grid">
+              <div className="ordersuccess-info-item">
+                <h3 className="ordersuccess-section-title">Order Numbers</h3>
+                <p className="ordersuccess-section-content">{orderData.orderNumber}</p>
               </div>
-              <div className="order-info-item">
-                <h3 className="section-title">Order Date</h3>
-                <p className="section-content">{orderData.orderDate}</p>
+              <div className="ordersuccess-info-item">
+                <h3 className="ordersuccess-section-title">Order Date</h3>
+                <p className="ordersuccess-section-content">{orderData.orderDate}</p>
               </div>
             </div>
 
-            <div className="shipping-address">
-              <h3 className="section-title">Shipping Address</h3>
-              <div className="address-content">
+            <div className="ordersuccess-shipping-address">
+              <h3 className="ordersuccess-section-title">Shipping Address</h3>
+              <div className="ordersuccess-address-content">
                 <p>{orderData.shippingAddress.line1}</p>
                 <p>{orderData.shippingAddress.line2}</p>
                 <p>{orderData.shippingAddress.line3}</p>
@@ -188,62 +188,62 @@ const OrderSuccess = () => {
           </div>
 
           {/* Items Section */}
-          <div className="items-section">
-            <div className="items-header">
-              <h3 className="items-title">Items</h3>
-              <span className="qty-header">Qty</span>
-              <span className="price-header">Price</span>
+          <div className="ordersuccess-items-section">
+            <div className="ordersuccess-items-header">
+              <h3 className="ordersuccess-items-title">Items</h3>
+              <span className="ordersuccess-qty-header">Qty</span>
+              <span className="ordersuccess-price-header">Price</span>
             </div>
             
-            <div className="items-divider"></div>
+            <div className="ordersuccess-items-divider"></div>
 
             {orderData.items.map((item) => (
-              <div key={item.id} className="item-row">
-                <div className="item-image-container">
-                  <img src={item.image} alt={item.name} className="item-image" />
+              <div key={item.id} className="ordersuccess-item-row">
+                <div className="ordersuccess-item-image-container">
+                  <img src={item.image} alt={item.name} className="ordersuccess-item-image" />
                 </div>
-                <div className="item-details">
-                  <h4 className="item-name">{item.name}</h4>
-                  <p className="item-category">{item.category}</p>
-                  <p className="item-price">$ {item.price}</p>
-                  <span className="mobile-qty">Qty: {item.quantity}</span>
-                  <span className="mobile-total">Total: $ {item.total}</span>
+                <div className="ordersuccess-item-details">
+                  <h4 className="ordersuccess-item-name">{item.name}</h4>
+                  <p className="ordersuccess-item-category">{item.category}</p>
+                  <p className="ordersuccess-item-price">$ {item.price}</p>
+                  <span className="ordersuccess-mobile-qty">Qty: {item.quantity}</span>
+                  <span className="ordersuccess-mobile-total">Total: $ {item.total}</span>
                 </div>
-                <div className="item-quantity">{item.quantity}</div>
-                <div className="item-total">$ {item.total}</div>
+                <div className="ordersuccess-item-quantity">{item.quantity}</div>
+                <div className="ordersuccess-item-total">$ {item.total}</div>
               </div>
             ))}
 
-            <div className="items-bottom-divider"></div>
+            <div className="ordersuccess-items-bottom-divider"></div>
 
             {/* Pricing Summary */}
-            <div className="pricing-summary">
-              <div className="pricing-row">
-                <span className="pricing-label">Items Total</span>
-                <span className="pricing-value">$ {orderData.pricing.itemsTotal}</span>
+            <div className="ordersuccess-pricing-summary">
+              <div className="ordersuccess-pricing-row">
+                <span className="ordersuccess-pricing-label">Items Total</span>
+                <span className="ordersuccess-pricing-value">$ {orderData.pricing.itemsTotal}</span>
               </div>
-              <div className="pricing-row">
-                <span className="pricing-label">Discount</span>
-                <span className="pricing-value">$ {orderData.pricing.discount}</span>
+              <div className="ordersuccess-pricing-row">
+                <span className="ordersuccess-pricing-label">Discount</span>
+                <span className="ordersuccess-pricing-value">$ {orderData.pricing.discount}</span>
               </div>
-              <div className="pricing-row">
-                <span className="pricing-label">Shipping</span>
-                <span className="pricing-value">$ {orderData.pricing.shipping}</span>
+              <div className="ordersuccess-pricing-row">
+                <span className="ordersuccess-pricing-label">Shipping</span>
+                <span className="ordersuccess-pricing-value">$ {orderData.pricing.shipping}</span>
               </div>
-              <div className="pricing-row">
-                <span className="pricing-label">Tax</span>
-                <span className="pricing-value">$ {orderData.pricing.tax}</span>
+              <div className="ordersuccess-pricing-row">
+                <span className="ordersuccess-pricing-label">Tax</span>
+                <span className="ordersuccess-pricing-value">$ {orderData.pricing.tax}</span>
               </div>
             </div>
 
-            <div className="total-divider"></div>
+            <div className="ordersuccess-total-divider"></div>
 
-            <div className="total-section">
-              <div className="total-row">
-                <span className="total-label">Total</span>
-                <span className="total-value">$ {orderData.pricing.total}</span>
+            <div className="ordersuccess-total-section">
+              <div className="ordersuccess-total-row">
+                <span className="ordersuccess-total-label">Total</span>
+                <span className="ordersuccess-total-value">$ {orderData.pricing.total}</span>
               </div>
-              <button className="share-button" onClick={handleShare}>
+              <button className="ordersuccess-share-button" onClick={handleShare}>
                 Share
               </button>
             </div>

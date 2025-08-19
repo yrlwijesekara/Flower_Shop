@@ -205,8 +205,8 @@ const Checkout = () => {
           {/* Checkout Form */}
           <div className="checkout-form">
             <form onSubmit={(e) => { e.preventDefault(); handleOrderSubmit(); }}>
-              <div className="form-row">
-                <div className="form-group half-width">
+              <div className="checkout-form-row">
+                <div className="checkout-form-group half-width">
                   <label htmlFor="firstName">First Name</label>
                   <input
                     type="text"
@@ -218,7 +218,7 @@ const Checkout = () => {
                     required
                   />
                 </div>
-                <div className="form-group half-width">
+                <div className="checkout-form-group half-width">
                   <label htmlFor="lastName">Last Name</label>
                   <input
                     type="text"
@@ -232,7 +232,7 @@ const Checkout = () => {
                 </div>
               </div>
 
-              <div className="form-group">
+              <div className="checkout-form-group">
                 <label htmlFor="streetAddress">Street address</label>
                 <input
                   type="text"
@@ -245,7 +245,7 @@ const Checkout = () => {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="checkout-form-group">
                 <input
                   type="text"
                   id="apartment"
@@ -256,7 +256,7 @@ const Checkout = () => {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="checkout-form-group">
                 <label htmlFor="townCity">Town / City</label>
                 <input
                   type="text"
@@ -269,7 +269,7 @@ const Checkout = () => {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="checkout-form-group">
                 <label htmlFor="postcode">Postcode / Zip</label>
                 <input
                   type="text"
@@ -282,7 +282,7 @@ const Checkout = () => {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="checkout-form-group">
                 <label htmlFor="phoneNumber">Phone Number</label>
                 <input
                   type="tel"
@@ -295,7 +295,7 @@ const Checkout = () => {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="checkout-form-group">
                 <label htmlFor="emailAddress">Email Address</label>
                 <input
                   type="email"
@@ -311,7 +311,7 @@ const Checkout = () => {
 
               <button 
                 type="submit" 
-                className="order-button"
+                className="checkout-order-button"
                 disabled={isLoading}
               >
                 {isLoading ? 'Processing...' : ' ORDER'}
@@ -320,14 +320,14 @@ const Checkout = () => {
           </div>
 
           {/* Order Summary */}
-          <div className="order-summary">
+          <div className="checkout-order-summary">
             <h3>Order Summary</h3>
             
-            <div className="cart-items">
+            <div className="checkout-cart-items">
               {cart.map((item) => (
-                <div key={item.id} className="cart-item">
+                <div key={item.id} className="checkout-cart-item">
                   <img src={item.image} alt={item.name} />
-                  <div className="item-details">
+                  <div className="checkout-item-details">
                     <h4>{item.name}</h4>
                     <p>Quantity: {item.quantity}</p>
                     <p className="price">$ {item.price}</p>
@@ -336,16 +336,16 @@ const Checkout = () => {
               ))}
             </div>
             
-            <div className="order-totals">
-              <div className="total-row">
+            <div className="checkout-order-totals">
+              <div className="checkout-total-row">
                 <span>Subtotal:</span>
                 <span>$ {calculateSubtotal()}</span>
               </div>
-              <div className="total-row">
+              <div className="checkout-total-row">
                 <span>Shipping:</span>
                 <span>$ {calculateShipping()}</span>
               </div>
-              <div className="total-row final-total">
+              <div className="checkout-total-row checkout-final-total">
                 <span>Total:</span>
                 <span>$ {calculateTotal()}</span>
               </div>
