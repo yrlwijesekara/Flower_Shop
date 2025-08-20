@@ -9,7 +9,7 @@ const connectDB = async () => {
       // Set timeout for socket operations
       socketTimeoutMS: 45000,
       // Buffer commands until connection is established
-      bufferCommands: false,
+      bufferCommands: true,
       // Maximum time for retry attempts
       maxPoolSize: 10,
       // Close connections after 30 seconds of inactivity

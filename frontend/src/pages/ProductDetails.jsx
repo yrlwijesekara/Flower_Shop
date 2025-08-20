@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FiShoppingCart, FiChevronLeft, FiChevronRight, FiHome, FiHeart } from 'react-icons/fi';
+import { FiShoppingCart, FiChevronLeft, FiChevronRight, FiHome } from 'react-icons/fi';
 import { productAPI } from '../services/api';
-import wishlistService from '../services/wishlistService';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
 import Footer from '../components/Footer';
@@ -19,7 +18,6 @@ const ProductDetails = () => {
   const [notification, setNotification] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [isInWishlist, setIsInWishlist] = useState(false);
 
   // Generate shop URL with preserved state
   const getShopUrl = () => {
@@ -543,9 +541,6 @@ const ProductDetails = () => {
           };
           setProduct(productWithImages);
           setSelectedImage(0);
-          
-          // Initialize wishlist status
-          await initializeWishlist(response.data._id || response.data.id);
         } else {
           throw new Error(response.message || 'Product not found');
         }
@@ -833,21 +828,6 @@ const ProductDetails = () => {
             
             {/* Action Buttons */}
             <div className="action-buttons">
-              <button 
-                className={`wishlist-btn ${isInWishlist ? 'in-wishlist' : ''}`}
-                onClick={handleToggleWishlist}
-                title={isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
-              >
-                <FiHeart 
-                  className="heart-icon" 
-                  size={20} 
-                  fill={isInWishlist ? 'currentColor' : 'none'}
-                />
-                <span className="wishlist-text">
-                  {isInWishlist ? 'IN WISHLIST' : 'ADD TO WISHLIST'}
-                </span>
-              </button>
-              
               <button className="add-to-cart-main" onClick={handleAddToCart}>
                 <span className="cart-text">ADD TO CART</span>
                 <FiShoppingCart className="cart-icon" size={20} />
