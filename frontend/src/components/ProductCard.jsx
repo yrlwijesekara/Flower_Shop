@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiShoppingCart, FiHeart } from 'react-icons/fi';
 import { HiHeart } from 'react-icons/hi';
+import wishlistService from '../services/wishlistService';
 import './ProductCard.css';
 
 // Fallback SVG Heart Icons
@@ -51,17 +52,46 @@ const ProductCard = ({
   const [isFavorite, setIsFavorite] = useState(false);
   const navigate = useNavigate();
 
-  // Load favorite status from localStorage on component mount
+  // Initialize wishlist service and load favorite status
   useEffect(() => {
-    const savedFavorites = localStorage.getItem('flowerShopFavorites');
-    if (savedFavorites) {
+    const initWishlist = async () => {
       try {
-        const favorites = JSON.parse(savedFavorites);
-        setIsFavorite(favorites.includes(id));
+        // Always initialize wishlist service to ensure it's ready
+        await wishlistService.init();
+        
+        // Set initial favorite status
+        setIsFavorite(wishlistService.isInWishlist(id));
+        
+        // Listen for wishlist changes
+        const unsubscribe = wishlistService.addListener((wishlistIds) => {
+          setIsFavorite(wishlistIds.includes(id?.toString()));
+        });
+        
+        // Cleanup listener on unmount
+        return unsubscribe;
       } catch (error) {
-        console.error('Error parsing favorites from localStorage:', error);
+        console.error('Failed to initialize wishlist:', error);
+        // Fallback to localStorage
+        const savedFavorites = localStorage.getItem('flowerShopFavorites');
+        if (savedFavorites) {
+          try {
+            const favorites = JSON.parse(savedFavorites);
+            setIsFavorite(favorites.includes(id));
+          } catch (parseError) {
+            console.error('Error parsing favorites from localStorage:', parseError);
+          }
+        }
       }
-    }
+    };
+    
+    const cleanup = initWishlist();
+    
+    // Return cleanup function
+    return () => {
+      if (typeof cleanup === 'function') {
+        cleanup();
+      }
+    };
   }, [id]);
 
   const handleAddToCart = () => {
@@ -78,40 +108,42 @@ const ProductCard = ({
     navigate(`/product/${id}`);
   };
 
-  const handleToggleFavorite = () => {
-    const newFavoriteStatus = !isFavorite;
-    setIsFavorite(newFavoriteStatus);
-
-    // Update localStorage
-    const savedFavorites = localStorage.getItem('flowerShopFavorites');
-    let favorites = [];
-    if (savedFavorites) {
-      try {
-        favorites = JSON.parse(savedFavorites);
-      } catch (error) {
-        console.error('Error parsing favorites from localStorage:', error);
+  const handleToggleFavorite = async () => {
+    try {
+      // Optimistically update UI
+      const newFavoriteStatus = !isFavorite;
+      setIsFavorite(newFavoriteStatus);
+      
+      // Update database through wishlist service
+      const success = await wishlistService.toggleWishlist(id);
+      
+      if (!success) {
+        // Revert optimistic update if failed
+        setIsFavorite(!newFavoriteStatus);
+        console.error('Failed to update wishlist');
+        return;
       }
-    }
-
-    if (newFavoriteStatus) {
-      if (!favorites.includes(id)) {
-        favorites.push(id);
+      
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new CustomEvent('wishlistChanged', {
+        detail: { productId: id, isInWishlist: success }
+      }));
+      
+      // Also dispatch the old event for backward compatibility
+      window.dispatchEvent(new CustomEvent('favoritesChanged'));
+      
+      // Call parent callback if provided
+      if (onToggleFavorite) {
+        onToggleFavorite(id, success);
       }
-    } else {
-      favorites = favorites.filter(fav => fav !== id);
+      
+      console.log(`${success ? 'Added to' : 'Removed from'} wishlist: ${name}`);
+      
+    } catch (error) {
+      console.error('Error toggling wishlist:', error);
+      // Revert optimistic update
+      setIsFavorite(!isFavorite);
     }
-
-    localStorage.setItem('flowerShopFavorites', JSON.stringify(favorites));
-
-    // Dispatch custom event to notify other components
-    window.dispatchEvent(new CustomEvent('favoritesChanged'));
-
-    // Call parent callback if provided
-    if (onToggleFavorite) {
-      onToggleFavorite(id, newFavoriteStatus);
-    }
-
-    console.log(`${newFavoriteStatus ? 'Added to' : 'Removed from'} favorites: ${name}`);
   };
 
   return (

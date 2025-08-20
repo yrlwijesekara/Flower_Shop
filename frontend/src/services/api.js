@@ -150,8 +150,61 @@ export const checkAPIConnection = async () => {
   }
 };
 
+// Wishlist API functions
+export const wishlistAPI = {
+  // Generate new session ID
+  generateSession: async () => {
+    return apiRequest('/wishlist/session', {
+      method: 'POST',
+    });
+  },
+
+  // Get user's wishlist
+  getWishlist: async (sessionId) => {
+    return apiRequest(`/wishlist/${sessionId}`);
+  },
+
+  // Add product to wishlist
+  addToWishlist: async (sessionId, productId) => {
+    return apiRequest('/wishlist/add', {
+      method: 'POST',
+      body: JSON.stringify({ sessionId, productId }),
+    });
+  },
+
+  // Remove product from wishlist
+  removeFromWishlist: async (sessionId, productId) => {
+    return apiRequest('/wishlist/remove', {
+      method: 'DELETE',
+      body: JSON.stringify({ sessionId, productId }),
+    });
+  },
+
+  // Toggle product in wishlist (add if not exists, remove if exists)
+  toggleWishlist: async (sessionId, productId) => {
+    return apiRequest('/wishlist/toggle', {
+      method: 'POST',
+      body: JSON.stringify({ sessionId, productId }),
+    });
+  },
+
+  // Clear entire wishlist
+  clearWishlist: async (sessionId) => {
+    return apiRequest('/wishlist/clear', {
+      method: 'DELETE',
+      body: JSON.stringify({ sessionId }),
+    });
+  },
+
+  // Check if product is in wishlist
+  checkWishlistStatus: async (sessionId, productId) => {
+    return apiRequest(`/wishlist/check/${sessionId}/${productId}`);
+  },
+};
+
 export default {
   productAPI,
+  wishlistAPI,
   healthCheck,
   checkAPIConnection,
 };

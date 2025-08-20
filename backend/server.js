@@ -50,6 +50,7 @@ app.get('/health', (req, res) => {
 
 // API Routes
 app.use('/api/products', require('./routes/productRoutes'));
+app.use('/api/wishlist', require('./routes/wishlistRoutes'));
 
 // Root route
 app.get('/', (req, res) => {
@@ -82,6 +83,15 @@ app.get('/api/docs', (req, res) => {
         'GET /api/products/search/:query': 'Search products',
         'PATCH /api/products/:id/stock': 'Update product stock status',
         'PATCH /api/products/bulk-update': 'Bulk update products'
+      },
+      wishlist: {
+        'POST /api/wishlist/session': 'Generate new session ID',
+        'GET /api/wishlist/:sessionId': 'Get user\'s wishlist',
+        'POST /api/wishlist/add': 'Add product to wishlist',
+        'DELETE /api/wishlist/remove': 'Remove product from wishlist',
+        'POST /api/wishlist/toggle': 'Toggle product in wishlist',
+        'DELETE /api/wishlist/clear': 'Clear entire wishlist',
+        'GET /api/wishlist/check/:sessionId/:productId': 'Check if product is in wishlist'
       }
     },
     queryParameters: {
@@ -120,7 +130,8 @@ app.all('*', (req, res) => {
     availableRoutes: {
       health: '/health',
       documentation: '/api/docs',
-      products: '/api/products'
+      products: '/api/products',
+      wishlist: '/api/wishlist'
     }
   });
 });
@@ -140,6 +151,7 @@ const server = app.listen(PORT, () => {
 📚 API Docs: http://localhost:${PORT}/api/docs
 💚 Health Check: http://localhost:${PORT}/health
 📦 Products API: http://localhost:${PORT}/api/products
+💖 Wishlist API: http://localhost:${PORT}/api/wishlist
 🌸 =============================================== 🌸
   `.green.bold);
 });

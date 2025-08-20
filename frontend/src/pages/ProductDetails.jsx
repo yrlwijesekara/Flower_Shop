@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FiShoppingCart, FiChevronLeft, FiChevronRight, FiHome } from 'react-icons/fi';
+import { FiShoppingCart, FiChevronLeft, FiChevronRight, FiHome, FiHeart } from 'react-icons/fi';
 import { productAPI } from '../services/api';
+import wishlistService from '../services/wishlistService';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
 import Footer from '../components/Footer';
@@ -18,6 +19,7 @@ const ProductDetails = () => {
   const [notification, setNotification] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isInWishlist, setIsInWishlist] = useState(false);
 
   // Generate shop URL with preserved state
   const getShopUrl = () => {
@@ -541,6 +543,9 @@ const ProductDetails = () => {
           };
           setProduct(productWithImages);
           setSelectedImage(0);
+          
+          // Initialize wishlist status
+          await initializeWishlist(response.data._id || response.data.id);
         } else {
           throw new Error(response.message || 'Product not found');
         }
@@ -555,6 +560,8 @@ const ProductDetails = () => {
           console.log('Using fallback product data');
           setProduct(fallbackProduct);
           setError('');
+          // Initialize wishlist for fallback data
+          await initializeWishlist(fallbackProduct.id);
         } else {
           setTimeout(() => {
             navigate('/shop');
@@ -569,6 +576,42 @@ const ProductDetails = () => {
       fetchProduct();
     }
   }, [id, navigate]);
+
+  // Initialize wishlist status
+  const initializeWishlist = async (productId) => {
+    try {
+      if (!wishlistService.isInitialized) {
+        await wishlistService.init();
+      }
+      setIsInWishlist(wishlistService.isInWishlist(productId));
+    } catch (error) {
+      console.error('Failed to initialize wishlist status:', error);
+    }
+  };
+
+  // Handle wishlist toggle
+  const handleToggleWishlist = async () => {
+    if (!product) return;
+    
+    try {
+      const productId = product._id || product.id;
+      const newStatus = await wishlistService.toggleWishlist(productId);
+      setIsInWishlist(newStatus);
+      
+      // Show notification
+      setNotification(`${newStatus ? 'Added to' : 'Removed from'} wishlist!`);
+      
+      // Clear notification after 3 seconds
+      setTimeout(() => {
+        setNotification('');
+      }, 3000);
+      
+    } catch (error) {
+      console.error('Failed to toggle wishlist:', error);
+      setNotification('Failed to update wishlist');
+      setTimeout(() => setNotification(''), 3000);
+    }
+  };
 
   const handleQuantityChange = (change) => {
     setQuantity(prev => Math.max(1, prev + change));
@@ -788,11 +831,28 @@ const ProductDetails = () => {
               </button>
             </div>
             
-            {/* Add to Cart Button */}
-            <button className="add-to-cart-main" onClick={handleAddToCart}>
-              <span className="cart-text">ADD TO CART</span>
-              <FiShoppingCart className="cart-icon" size={20} />
-            </button>
+            {/* Action Buttons */}
+            <div className="action-buttons">
+              <button 
+                className={`wishlist-btn ${isInWishlist ? 'in-wishlist' : ''}`}
+                onClick={handleToggleWishlist}
+                title={isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
+              >
+                <FiHeart 
+                  className="heart-icon" 
+                  size={20} 
+                  fill={isInWishlist ? 'currentColor' : 'none'}
+                />
+                <span className="wishlist-text">
+                  {isInWishlist ? 'IN WISHLIST' : 'ADD TO WISHLIST'}
+                </span>
+              </button>
+              
+              <button className="add-to-cart-main" onClick={handleAddToCart}>
+                <span className="cart-text">ADD TO CART</span>
+                <FiShoppingCart className="cart-icon" size={20} />
+              </button>
+            </div>
             
             {/* Product Features */}
             <div className="features-container">

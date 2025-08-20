@@ -62,41 +62,69 @@ wishlistSchema.statics.findBySessionId = function(sessionId) {
 
 // Static method to add product to wishlist
 wishlistSchema.statics.addToWishlist = async function(sessionId, productId, productInfo = {}) {
-  let wishlist = await this.findOne({ sessionId });
+  let retries = 3;
   
-  if (!wishlist) {
-    wishlist = new this({ sessionId, products: [] });
+  while (retries > 0) {
+    try {
+      let wishlist = await this.findOne({ sessionId });
+      
+      if (!wishlist) {
+        wishlist = new this({ sessionId, products: [] });
+      }
+      
+      // Check if product already exists
+      const existingProductIndex = wishlist.products.findIndex(
+        item => item.productId.toString() === productId.toString()
+      );
+      
+      if (existingProductIndex === -1) {
+        wishlist.products.push({
+          productId,
+          productInfo,
+          addedAt: new Date()
+        });
+        await wishlist.save();
+      }
+      
+      return wishlist;
+    } catch (error) {
+      if (error.name === 'VersionError' && retries > 1) {
+        retries--;
+        // Wait a bit before retrying
+        await new Promise(resolve => setTimeout(resolve, 100));
+        continue;
+      }
+      throw error;
+    }
   }
-  
-  // Check if product already exists
-  const existingProductIndex = wishlist.products.findIndex(
-    item => item.productId.toString() === productId.toString()
-  );
-  
-  if (existingProductIndex === -1) {
-    wishlist.products.push({
-      productId,
-      productInfo,
-      addedAt: new Date()
-    });
-    await wishlist.save();
-  }
-  
-  return wishlist;
 };
 
 // Static method to remove product from wishlist
 wishlistSchema.statics.removeFromWishlist = async function(sessionId, productId) {
-  const wishlist = await this.findOne({ sessionId });
+  let retries = 3;
   
-  if (wishlist) {
-    wishlist.products = wishlist.products.filter(
-      item => item.productId.toString() !== productId.toString()
-    );
-    await wishlist.save();
+  while (retries > 0) {
+    try {
+      const wishlist = await this.findOne({ sessionId });
+      
+      if (wishlist) {
+        wishlist.products = wishlist.products.filter(
+          item => item.productId.toString() !== productId.toString()
+        );
+        await wishlist.save();
+      }
+      
+      return wishlist;
+    } catch (error) {
+      if (error.name === 'VersionError' && retries > 1) {
+        retries--;
+        // Wait a bit before retrying
+        await new Promise(resolve => setTimeout(resolve, 100));
+        continue;
+      }
+      throw error;
+    }
   }
-  
-  return wishlist;
 };
 
 // Static method to clear entire wishlist
