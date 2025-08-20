@@ -15,9 +15,7 @@ const productSchema = new mongoose.Schema({
   },
   filterCategory: {
     type: String,
-    required: [true, 'Filter category is required'],
-    enum: ['houseplants', 'valentine', 'wedding'],
-    default: 'houseplants'
+    enum: ['houseplants', 'valentine', 'wedding']
   },
   price: {
     type: Number,
@@ -98,8 +96,7 @@ const productSchema = new mongoose.Schema({
   careInstructions: {
     difficulty: {
       type: String,
-      enum: ['Easy', 'Moderate', 'Challenging'],
-      default: 'Easy'
+      enum: ['Easy', 'Moderate', 'Challenging']
     },
     placement: {
       type: String,
@@ -147,7 +144,8 @@ const productSchema = new mongoose.Schema({
     },
     humidity: {
       type: String,
-      enum: ['Low (30-40%)', 'Medium (40-60%)', 'High (60-80%)']
+      enum: ['', 'Low (30-40%)', 'Medium (40-60%)', 'High (60-80%)'],
+      default: ''
     },
     fertilizer: {
       type: String,
@@ -155,7 +153,8 @@ const productSchema = new mongoose.Schema({
     },
     repotting: {
       type: String,
-      enum: ['Every year', 'Every 2-3 years', 'When rootbound', 'Rarely needed']
+      enum: ['', 'Every year', 'Every 2-3 years', 'When rootbound', 'Rarely needed'],
+      default: ''
     },
     toxicity: {
       type: String,
@@ -171,17 +170,14 @@ const productSchema = new mongoose.Schema({
     },
     shippingTime: {
       type: String,
-      default: '3-5 business days',
       maxlength: [100, 'Shipping time cannot exceed 100 characters']
     },
     returnPolicy: {
       type: String,
-      default: '30-day return policy',
       maxlength: [200, 'Return policy cannot exceed 200 characters']
     },
     packaging: {
       type: String,
-      default: 'Eco-friendly packaging',
       maxlength: [200, 'Packaging info cannot exceed 200 characters']
     }
   },

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FiShoppingCart, FiChevronLeft, FiChevronRight, FiHome } from 'react-icons/fi';
+import { productAPI } from '../services/api';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
 import Footer from '../components/Footer';
@@ -15,6 +16,8 @@ const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const [activeTab, setActiveTab] = useState('description');
   const [notification, setNotification] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   // Generate shop URL with preserved state
   const getShopUrl = () => {
@@ -437,12 +440,45 @@ const ProductDetails = () => {
   };
 
   useEffect(() => {
-    const foundProduct = productData[id];
-    if (foundProduct) {
-      setProduct(foundProduct);
-    } else {
-      // If product not found, redirect to shop page
-      navigate('/shop');
+    const fetchProduct = async () => {
+      setLoading(true);
+      setError('');
+      
+      try {
+        console.log('Fetching product with ID:', id);
+        const response = await productAPI.getProduct(id);
+        
+        if (response.success && response.data) {
+          console.log('Product fetched successfully:', response.data);
+          setProduct(response.data);
+          setSelectedImage(0); // Reset image selection
+        } else {
+          throw new Error(response.message || 'Product not found');
+        }
+        
+      } catch (error) {
+        console.error('Error fetching product:', error);
+        setError(error.message || 'Failed to load product');
+        
+        // Try to find product in local storage as fallback
+        const fallbackProduct = productData[id];
+        if (fallbackProduct) {
+          console.log('Using fallback product data');
+          setProduct(fallbackProduct);
+          setError(''); // Clear error if fallback works
+        } else {
+          // If no fallback found, redirect to shop page after a delay
+          setTimeout(() => {
+            navigate('/shop');
+          }, 3000);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchProduct();
     }
   }, [id, navigate]);
 
@@ -553,7 +589,41 @@ const ProductDetails = () => {
         </div>
       )}
       
-      <div className="product-details-container">
+      {/* Loading State */}
+      {loading && (
+        <div className="product-details-loading" style={{
+          textAlign: 'center',
+          padding: '3rem',
+          fontSize: '1.2rem',
+          color: '#666'
+        }}>
+          Loading product details...
+        </div>
+      )}
+      
+      {/* Error State */}
+      {error && (
+        <div className="product-details-error" style={{
+          backgroundColor: '#fee',
+          color: 'red',
+          padding: '1rem',
+          margin: '1rem 2rem',
+          borderRadius: '8px',
+          border: '1px solid red',
+          textAlign: 'center'
+        }}>
+          {error}
+          {error.includes('Failed to load') && (
+            <p style={{ marginTop: '0.5rem', fontSize: '0.9rem' }}>
+              Redirecting to shop page in 3 seconds...
+            </p>
+          )}
+        </div>
+      )}
+      
+      {/* Product Content - Only show if product is loaded and no error */}
+      {!loading && product && !error && (
+        <div className="product-details-container">
         <div className="product-content">
           {/* Photo Frame */}
           <div className="photo-frame">
@@ -805,6 +875,7 @@ const ProductDetails = () => {
           </div>
         </div>
       </div>
+      )}
       
       <TopSellingFlowers
         titleFirst='YOU MAY'

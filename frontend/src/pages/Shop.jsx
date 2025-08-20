@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { productAPI } from '../services/api';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
 import ProductGrid from '../components/ProductGrid';
@@ -22,6 +23,9 @@ const Shop = () => {
   const [isCartLoaded, setIsCartLoaded] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [notification, setNotification] = useState('');
+  const [allProducts, setAllProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   // Load cart from localStorage on component mount
   useEffect(() => {
@@ -82,209 +86,55 @@ const Shop = () => {
     }
   }, [cart, isCartLoaded]);
 
-  // Sample product data based on active tab and search query
-  const getProductsByTab = (tab) => {
-    const allProducts = [
-      {
-        id: 1,
-        name: "SNAKE PLANT",
-        category: "Cactus",
-        filterCategory: "houseplants",
-        price: 149,
-        image: "/images/snake-plant.jpg",
-        isRecent: true,
-        isPopular: true,
-        isSpecial: false
-      },
-      {
-        id: 2,
-        name: "CANDELABRA ALOE",
-        category: "Aloe Vera",
-        filterCategory: "houseplants",
-        price: 39,
-        image: "/images/candelabra-aloe.jpg",
-        isRecent: false,
-        isPopular: true,
-        isSpecial: true
-      },
-      {
-        id: 3,
-        name: "GOLDEN POTHOS",
-        category: "Pothos",
-        filterCategory: "houseplants",
-        price: 69,
-        image: "/images/golden-pothos.jpg",
-        isRecent: true,
-        isPopular: false,
-        isSpecial: true
-      },
-      {
-        id: 4,
-        name: "HOMALOMENA",
-        category: "Tropical",
-        filterCategory: "wedding",
-        price: 119,
-        image: "/images/homalomena.jpg",
-        isRecent: false,
-        isPopular: true,
-        isSpecial: false
-      },
-      {
-        id: 5,
-        name: "FIDDLE LEAF FIG",
-        category: "Indoor Tree",
-        filterCategory: "valentine",
-        price: 89,
-        image: "/images/fiddle-leaf.jpg",
-        isRecent: true,
-        isPopular: false,
-        isSpecial: true
-      },
-      {
-        id: 6,
-        name: "PEACE LILY",
-        category: "Flowering",
-        filterCategory: "valentine",
-        price: 45,
-        image: "/images/peace-lily.jpg",
-        isRecent: false,
-        isPopular: true,
-        isSpecial: true
-      },
-      {
-        id: 7,
-        name: "MONSTERA DELICIOSA",
-        category: "Tropical",
-        filterCategory: "wedding",
-        price: 79,
-        image: "/images/fiddle-leaf.jpg",
-        isRecent: true,
-        isPopular: true,
-        isSpecial: false
-      },
-      {
-        id: 8,
-        name: "RUBBER PLANT",
-        category: "Indoor Tree",
-        filterCategory: "houseplants",
-        price: 59,
-        image: "/images/fiddle-leaf.jpg",
-        isRecent: false,
-        isPopular: false,
-        isSpecial: true
-      },
-      {
-        id: 9,
-        name: "ZZ PLANT",
-        category: "Low Light",
-        filterCategory: "valentine",
-        price: 35,
-        image: "/images/fiddle-leaf.jpg",
-        isRecent: true,
-        isPopular: true,
-        isSpecial: true
-      },
-      {
-        id: 10,
-        name: "PHILODENDRON",
-        category: "Tropical",
-        filterCategory: "wedding",
-        price: 55,
-        image: "/images/fiddle-leaf.jpg",
-        isRecent: false,
-        isPopular: true,
-        isSpecial: false
-      },
-      {
-        id: 11,
-        name: "SPIDER PLANT",
-        category: "Air Purifying",
-        filterCategory: "houseplants",
-        price: 25,
-        image: "/images/fiddle-leaf.jpg",
-        isRecent: true,
-        isPopular: false,
-        isSpecial: true
-      },
-      {
-        id: 12,
-        name: "DRACAENA",
-        category: "Low Light",
-        filterCategory: "valentine",
-        price: 65,
-        image: "/images/fiddle-leaf.jpg",
-        isRecent: false,
-        isPopular: true,
-        isSpecial: true
-      },
-      {
-        id: 13,
-        name: "BRIDAL BOUQUET ROSE",
-        category: "Wedding Flowers",
-        filterCategory: "wedding",
-        price: 189,
-        image: "/images/wedding-1.jpg",
-        isRecent: true,
-        isPopular: true,
-        isSpecial: true
-      },
-      {
-        id: 14,
-        name: "WHITE LILY ARRANGEMENT",
-        category: "Wedding Flowers",
-        filterCategory: "wedding",
-        price: 145,
-        image: "/images/wedding-2.jpg",
-        isRecent: true,
-        isPopular: true,
-        isSpecial: false
-      },
-      {
-        id: 15,
-        name: "WEDDING CENTERPIECE",
-        category: "Wedding Flowers",
-        filterCategory: "wedding",
-        price: 225,
-        image: "/images/wedding-3.jpg",
-        isRecent: false,
-        isPopular: true,
-        isSpecial: true
+  // Fetch products from API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      setError('');
+      
+      try {
+        const queryParams = {};
+        
+        // Add filters to query params
+        if (categoryFilter !== 'all') {
+          queryParams.filterCategory = categoryFilter;
+        }
+        
+        if (activeTab !== 'recent') {
+          queryParams.tab = activeTab;
+        }
+        
+        if (searchQuery.trim()) {
+          queryParams.search = searchQuery.trim();
+        }
+        
+        console.log('Fetching products with params:', queryParams);
+        const response = await productAPI.getProducts(queryParams);
+        
+        if (response.success) {
+          setAllProducts(response.data);
+        } else {
+          throw new Error(response.message || 'Failed to fetch products');
+        }
+        
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        setError(error.message || 'Failed to load products');
+        
+        // Fallback to empty array on error
+        setAllProducts([]);
+      } finally {
+        setLoading(false);
       }
-    ];
+    };
 
-    let filteredProducts = allProducts;
+    fetchProducts();
+  }, [categoryFilter, activeTab, searchQuery]);
 
-    // Filter by tab
-    switch (tab) {
-      case 'recent':
-        filteredProducts = allProducts.filter(product => product.isRecent);
-        break;
-      case 'popular':
-        filteredProducts = allProducts.filter(product => product.isPopular);
-        break;
-      case 'special':
-        filteredProducts = allProducts.filter(product => product.isSpecial);
-        break;
-      default:
-        filteredProducts = allProducts;
-    }
-
-    // Filter by category
-    if (categoryFilter !== 'all') {
-      filteredProducts = filteredProducts.filter(product => 
-        product.filterCategory === categoryFilter
-      );
-    }
-
-    // Filter by search query
-    if (searchQuery.trim()) {
-      filteredProducts = filteredProducts.filter(product =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.category.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    return filteredProducts;
+  // Get products for display (now returns API data directly)
+  const getProductsByTab = (tab) => {
+    // Since filtering is now done in the API call, just return the fetched products
+    return allProducts;
   };
 
   const breadcrumbData = [
@@ -392,6 +242,33 @@ const Shop = () => {
       {notification && (
         <div className="shop-notification">
           {notification}
+        </div>
+      )}
+      
+      {/* Error Message */}
+      {error && (
+        <div className="shop-error" style={{
+          backgroundColor: '#fee',
+          color: 'red',
+          padding: '1rem',
+          margin: '1rem 2rem',
+          borderRadius: '8px',
+          border: '1px solid red',
+          textAlign: 'center'
+        }}>
+          {error}
+        </div>
+      )}
+      
+      {/* Loading Indicator */}
+      {loading && (
+        <div className="shop-loading" style={{
+          textAlign: 'center',
+          padding: '2rem',
+          fontSize: '1.2rem',
+          color: '#666'
+        }}>
+          Loading products...
         </div>
       )}
       

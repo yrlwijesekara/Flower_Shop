@@ -406,6 +406,48 @@ body:has([data-admin-panel="true"]) .admin-dashboard-container,
   fill: currentColor;
 }
 
+.admin-product-category {
+  font-weight: 500;
+  color: #4CAF50;
+  background: rgba(76, 175, 80, 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  text-align: center;
+  display: inline-block;
+  min-width: 70px;
+}
+
+.admin-product-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.admin-delete-btn {
+  background: #ff4757;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-delete-btn:hover {
+  background: #ff3838;
+  transform: scale(1.05);
+}
+
+.admin-delete-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
 /* Admin Pagination */
 .admin-pagination {
   display: flex;
