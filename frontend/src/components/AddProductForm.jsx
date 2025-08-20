@@ -176,8 +176,7 @@ const AddProductForm = ({ onClose, onProductAdded, editingProduct }) => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setError('');
     
     // Validate all required fields
@@ -646,7 +645,9 @@ const AddProductForm = ({ onClose, onProductAdded, editingProduct }) => {
     <div className="add-product-modal">
       <div className="add-product-content">
         <div className="modal-header">
-          <h2>{isEditing ? 'Edit Product' : 'Add New Product'}</h2>
+          
+            <h2>{isEditing ? 'Edit Product' : 'Add New Product'}</h2>
+          
           <button type="button" className="close-btn" onClick={onClose}>×</button>
         </div>
         
@@ -668,7 +669,10 @@ const AddProductForm = ({ onClose, onProductAdded, editingProduct }) => {
           </div>
         )}
         
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => {
+          // Prevent default form submission
+          e.preventDefault();
+        }}>
           <div className="form-content">
             {renderStepContent()}
           </div>
@@ -686,14 +690,10 @@ const AddProductForm = ({ onClose, onProductAdded, editingProduct }) => {
                   Next
                 </button>
               ) : (
-                <button type="submit" disabled={loading} className="submit-btn">
+                <button type="button" onClick={handleSubmit} disabled={loading} className="submit-btn">
                   {loading ? (isEditing ? 'Updating Product...' : 'Adding Product...') : (isEditing ? 'Update Product' : 'Add Product')}
                 </button>
               )}
-              
-              <button type="button" onClick={onClose} disabled={loading} className="cancel-btn">
-                Cancel
-              </button>
             </div>
           </div>
         </form>
