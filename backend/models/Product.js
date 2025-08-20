@@ -24,8 +24,7 @@ const productSchema = new mongoose.Schema({
   },
   quantity: {
     type: String,
-    required: [true, 'Quantity is required'],
-    enum: ['125', '1', '2', '3', '4']
+    required: [true, 'Quantity is required']
   },
   description: {
     type: String,
@@ -149,7 +148,7 @@ const productSchema = new mongoose.Schema({
     },
     fertilizer: {
       type: String,
-      maxlength: [200, 'Fertilizer information cannot exceed 200 characters']
+      maxlength: [500, 'Fertilizer information cannot exceed 500 characters']
     },
     repotting: {
       type: String,

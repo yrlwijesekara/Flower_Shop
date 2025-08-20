@@ -9,6 +9,7 @@ const sampleProducts = [
     category: "Cactus",
     filterCategory: "houseplants",
     price: 149,
+    quantity: "50",
     image: "/images/snake-plant.jpg",
     description: "A beautiful snake plant perfect for indoor decoration",
     inStock: true,
@@ -26,6 +27,7 @@ const sampleProducts = [
     category: "Aloe Vera",
     filterCategory: "houseplants",
     price: 129,
+    quantity: "25",
     image: "/images/candelabra-aloe.jpg",
     description: "A stunning candelabra aloe plant",
     inStock: true,
@@ -43,6 +45,7 @@ const sampleProducts = [
     category: "Ivy",
     filterCategory: "houseplants",
     price: 89,
+    quantity: "75",
     image: "/images/golden-pothos.jpg",
     description: "Beautiful golden pothos perfect for beginners",
     inStock: true,
@@ -245,6 +248,18 @@ const createProduct = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'Product already exists'
+      });
+    }
+    
+    // Handle MongoDB connection errors
+    if (error.name === 'MongoServerSelectionError' || 
+        error.name === 'MongoNetworkError' ||
+        error.message.includes('connection') ||
+        error.message.includes('timeout')) {
+      return res.status(503).json({
+        success: false,
+        message: 'Database temporarily unavailable. Please try again in a moment.',
+        error: 'Connection Error'
       });
     }
     

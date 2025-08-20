@@ -11,7 +11,7 @@ const AddProductForm = ({ onClose, onProductAdded, editingProduct }) => {
     name: '',
     category: '',
     price: '',
-    quantity: '',
+    quantity: '1',
     description: '',
     image: '',
     
@@ -196,7 +196,7 @@ const AddProductForm = ({ onClose, onProductAdded, editingProduct }) => {
         if (!productData.name.trim()) return 'Product name is required';
         if (!productData.category) return 'Please select a category';
         if (!productData.price || productData.price <= 0) return 'Please enter a valid price';
-        if (!productData.quantity) return 'Please select quantity';
+        if (!productData.quantity || productData.quantity <= 0) return 'Please enter a valid quantity greater than 0';
         if (!productData.description.trim()) return 'Product description is required';
         break;
       case 2:
@@ -250,6 +250,7 @@ const AddProductForm = ({ onClose, onProductAdded, editingProduct }) => {
       const productToSubmit = {
         ...productData,
         price: parseFloat(productData.price) || 0,
+        quantity: productData.quantity.toString(),
         // Set defaults for empty optional fields
         filterCategory: productData.filterCategory || 'houseplants',
         shipping: {
@@ -297,6 +298,12 @@ const AddProductForm = ({ onClose, onProductAdded, editingProduct }) => {
         setError('The product data is too large. Please try using smaller images or reduce the amount of text in descriptions.');
       } else if (error.message.includes('Network Error')) {
         setError('Network error. Please check your connection and try again.');
+      } else if (error.message.includes('Database temporarily unavailable')) {
+        setError('Database connection issue. Please wait a moment and try again.');
+      } else if (error.message.includes('Validation Error') || error.message.includes('validation failed')) {
+        // Extract validation messages from the error
+        const validationMessages = error.response?.data?.errors || [error.message];
+        setError(`Validation Error: ${validationMessages.join(', ')}`);
       } else {
         setError(error.message || `Failed to ${isEditing ? 'update' : 'add'} product. Please try again.`);
       }
@@ -392,14 +399,16 @@ const AddProductForm = ({ onClose, onProductAdded, editingProduct }) => {
             
             <div className="form-group">
               <label>Quantity *</label>
-              <select name="quantity" value={productData.quantity} onChange={handleChange} required>
-                <option value="">Select quantity</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="125">125</option>
-              </select>
+              <input
+                type="number"
+                name="quantity"
+                value={productData.quantity}
+                onChange={handleChange}
+                placeholder="Enter quantity amount"
+                min="1"
+                step="1"
+                required
+              />
             </div>
             
             <div className="form-group">
