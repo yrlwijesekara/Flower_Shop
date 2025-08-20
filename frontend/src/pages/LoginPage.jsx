@@ -19,7 +19,7 @@ export default function LoginPage() {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log('Login attempt:', formData);
     
     // Basic validation
@@ -35,34 +35,62 @@ export default function LoginPage() {
       return;
     }
     
-    // Here you would typically make an API call to authenticate
-    // For now, I'll simulate a successful login
     try {
-      // Simulate successful login
-      // In a real app, you'd validate credentials with your backend
+      console.log('Sending login request to backend...');
       
-      // Set user as logged in
-      localStorage.setItem('userLoggedIn', 'true');
+      // Make API call to authenticate with backend
+      const response = await fetch('http://localhost:8000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.username,
+          password: formData.password
+        })
+      });
       
-      // Store user data (you can customize this based on your needs)
-      const userData = {
-        username: formData.username,
-        firstName: 'User',
-        lastName: 'Name',
-        email: formData.username.includes('@') ? formData.username : 'user@example.com',
-        loginTime: new Date().toISOString()
-      };
+      const data = await response.json();
       
-      localStorage.setItem('flowerShopUser', JSON.stringify(userData));
-      
-      console.log('Login successful, redirecting to profile...');
-      
-      // Redirect to profile page
-      navigate('/profile');
+      if (data.success) {
+        console.log('Login successful:', data);
+        
+        // Set user as logged in
+        localStorage.setItem('userLoggedIn', 'true');
+        localStorage.setItem('authToken', data.data.token);
+        
+        // Store user data from backend response
+        const userData = {
+          username: data.data.user.email,
+          firstName: data.data.user.name.split(' ')[0] || 'User',
+          lastName: data.data.user.name.split(' ').slice(1).join(' ') || '',
+          name: data.data.user.name,
+          email: data.data.user.email,
+          phone: data.data.user.phone || '',
+          phoneNumber: data.data.user.phone || '', // For compatibility
+          country: data.data.user.address?.country || '',
+          isLoggedIn: true,
+          userId: data.data.user.id,
+          token: data.data.token,
+          loginTime: new Date().toISOString()
+        };
+        
+        localStorage.setItem('flowerShopUser', JSON.stringify(userData));
+        
+        console.log('Login successful, redirecting to profile...');
+        alert('Login successful! Welcome back!');
+        
+        // Redirect to profile page
+        navigate('/profile');
+        
+      } else {
+        console.error('Login failed:', data.message);
+        alert(`Login failed: ${data.message}`);
+      }
       
     } catch (error) {
       console.error('Login error:', error);
-      alert('Login failed. Please try again.');
+      alert('Login failed. Please check your connection and try again.');
     }
   };
 

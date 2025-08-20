@@ -51,6 +51,9 @@ app.get('/health', (req, res) => {
 // API Routes
 app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/wishlist', require('./routes/wishlistRoutes'));
+app.use('/api/cart', require('./routes/cartRoutes'));
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/checkout', require('./routes/checkoutRoutes'));
 
 // Root route
 app.get('/', (req, res) => {
@@ -92,6 +95,31 @@ app.get('/api/docs', (req, res) => {
         'POST /api/wishlist/toggle': 'Toggle product in wishlist',
         'DELETE /api/wishlist/clear': 'Clear entire wishlist',
         'GET /api/wishlist/check/:sessionId/:productId': 'Check if product is in wishlist'
+      },
+      cart: {
+        'POST /api/cart/session': 'Generate new session ID',
+        'GET /api/cart/:sessionId': 'Get user\'s cart',
+        'GET /api/cart/:sessionId/summary': 'Get cart summary',
+        'POST /api/cart/:sessionId/items': 'Add item to cart',
+        'PUT /api/cart/:sessionId/items/:productId': 'Update cart item quantity',
+        'DELETE /api/cart/:sessionId/items/:productId': 'Remove item from cart',
+        'DELETE /api/cart/:sessionId': 'Clear entire cart',
+        'POST /api/cart/:sessionId/merge': 'Merge guest cart with user cart'
+      },
+      auth: {
+        'POST /api/auth/register': 'Register new user',
+        'POST /api/auth/login': 'Login user',
+        'GET /api/auth/me': 'Get current user (Private)',
+        'PUT /api/auth/profile': 'Update user profile (Private)',
+        'PUT /api/auth/password': 'Update password (Private)',
+        'POST /api/auth/logout': 'Logout user (Private)'
+      },
+      checkout: {
+        'GET /api/checkout/:sessionId': 'Get checkout info (Private)',
+        'POST /api/checkout/:sessionId': 'Process checkout (Private)',
+        'GET /api/checkout/orders': 'Get order history (Private)',
+        'GET /api/checkout/orders/:orderNumber': 'Get order details (Private)',
+        'PATCH /api/checkout/orders/:orderNumber/cancel': 'Cancel order (Private)'
       }
     },
     queryParameters: {
@@ -152,6 +180,9 @@ const server = app.listen(PORT, () => {
 💚 Health Check: http://localhost:${PORT}/health
 📦 Products API: http://localhost:${PORT}/api/products
 💖 Wishlist API: http://localhost:${PORT}/api/wishlist
+🛒 Cart API: http://localhost:${PORT}/api/cart
+👤 Auth API: http://localhost:${PORT}/api/auth
+💳 Checkout API: http://localhost:${PORT}/api/checkout
 🌸 =============================================== 🌸
   `.green.bold);
 });

@@ -74,46 +74,122 @@ function Userprofile() {
       return;
     }
 
-    // Get user data from localStorage
-    try {
-      const storedUser = localStorage.getItem('flowerShopUser');
-      console.log('Retrieved from localStorage:', storedUser);
-      
-      if (storedUser) {
-        const user = JSON.parse(storedUser);
-        console.log('Parsed user data:', user);
+    // Fetch user data from backend API
+    const fetchUserData = async () => {
+      try {
+        const authToken = localStorage.getItem('authToken');
         
-        const userDataWithId = {
-          firstName: user.firstName || '',
-          lastName: user.lastName || '',
-          email: user.email || '',
-          country: user.country || '',
-          phoneNumber: user.phoneNumber || '',
-          userId: `${user.firstName?.toLowerCase() || ''}${Math.floor(Math.random() * 1000)}`
-        };
-        
-        setUserData(userDataWithId);
-        setEditableData({
-          firstName: user.firstName || '',
-          lastName: user.lastName || '',
-          email: user.email || '',
-          country: user.country || '',
-          phoneNumber: user.phoneNumber || ''
-        });
-        
-        // Load saved cards if available
-        if (user.savedCards && Array.isArray(user.savedCards)) {
-          setSavedCards(user.savedCards);
+        if (!authToken) {
+          console.log('No auth token found, redirecting to login');
+          navigate('/login');
+          return;
         }
-      } else {
-        console.log('No user data found, redirecting to login');
-        // Redirect to login if no user data is found
-        navigate('/login');
+
+        console.log('Fetching user data from backend API...');
+        
+        // Fetch fresh user data from backend
+        const response = await fetch('http://localhost:8000/api/auth/me', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
+        if (data.success) {
+          console.log('User data fetched from backend:', data.data.user);
+          
+          const backendUser = data.data.user;
+          
+          // Split name into firstName and lastName
+          const nameParts = backendUser.name.split(' ');
+          const firstName = nameParts[0] || '';
+          const lastName = nameParts.slice(1).join(' ') || '';
+          
+          const userDataWithId = {
+            firstName,
+            lastName,
+            email: backendUser.email || '',
+            country: backendUser.address?.country || '',
+            phoneNumber: backendUser.phone || '',
+            userId: backendUser.id || ''
+          };
+          
+          setUserData(userDataWithId);
+          setEditableData({
+            firstName,
+            lastName,
+            email: backendUser.email || '',
+            country: backendUser.address?.country || '',
+            phoneNumber: backendUser.phone || ''
+          });
+          
+          // Load saved cards from localStorage if available
+          try {
+            const storedUser = localStorage.getItem('flowerShopUser');
+            if (storedUser) {
+              const localUser = JSON.parse(storedUser);
+              if (localUser.savedCards && Array.isArray(localUser.savedCards)) {
+                setSavedCards(localUser.savedCards);
+              }
+            }
+          } catch (localStorageError) {
+            console.warn('Could not load saved cards from localStorage:', localStorageError);
+          }
+          
+        } else {
+          throw new Error(data.message || 'Failed to fetch user data');
+        }
+        
+      } catch (error) {
+        console.error('Error fetching user data from backend:', error);
+        
+        // Fallback to localStorage data
+        console.log('Falling back to localStorage data...');
+        try {
+          const storedUser = localStorage.getItem('flowerShopUser');
+          if (storedUser) {
+            const user = JSON.parse(storedUser);
+            
+            const userDataWithId = {
+              firstName: user.firstName || '',
+              lastName: user.lastName || '',
+              email: user.email || '',
+              country: user.country || '',
+              phoneNumber: user.phoneNumber || user.phone || '',
+              userId: user.userId || `${user.firstName?.toLowerCase() || ''}${Math.floor(Math.random() * 1000)}`
+            };
+            
+            setUserData(userDataWithId);
+            setEditableData({
+              firstName: user.firstName || '',
+              lastName: user.lastName || '',
+              email: user.email || '',
+              country: user.country || '',
+              phoneNumber: user.phoneNumber || user.phone || ''
+            });
+            
+            if (user.savedCards && Array.isArray(user.savedCards)) {
+              setSavedCards(user.savedCards);
+            }
+          } else {
+            console.log('No fallback data available, redirecting to login');
+            navigate('/login');
+          }
+        } catch (fallbackError) {
+          console.error('Error with fallback data:', fallbackError);
+          navigate('/login');
+        }
       }
-    } catch (error) {
-      console.error('Error retrieving user data:', error);
-      navigate('/login');
-    }
+    };
+
+    fetchUserData();
   }, [navigate]);
 
   const handleEditToggle = () => {
@@ -146,7 +222,7 @@ function Userprofile() {
     }
   };
 
-  const handleSaveChanges = () => {
+  const handleSaveChanges = async () => {
     // Validate fields
     const newErrors = {};
     
@@ -176,30 +252,77 @@ function Userprofile() {
     // Start saving state
     setIsSaving(true);
     
-    // Create updated user data object
-    const updatedUser = {
-      ...editableData,
-      isLoggedIn: true
-    };
-
-    // Simulate a network delay
-    setTimeout(() => {
-      // Save to localStorage
-      localStorage.setItem('flowerShopUser', JSON.stringify(updatedUser));
-
-      // Update state with new data
-      setUserData({
-        ...editableData,
-        userId: userData.userId // Keep the same userId
-      });
-
-      // Exit edit mode and clear saving state
-      setIsEditing(false);
-      setIsSaving(false);
+    try {
+      // Get auth token from localStorage
+      const authToken = localStorage.getItem('authToken');
       
-      // Show success message
-      alert('Profile updated successfully!');
-    }, 1000);
+      if (!authToken) {
+        throw new Error('Authentication token not found. Please login again.');
+      }
+      
+      // Prepare data for backend API
+      const updateData = {
+        name: `${editableData.firstName} ${editableData.lastName}`,
+        phone: editableData.phoneNumber,
+        address: {
+          country: editableData.country || 'United States'
+        }
+      };
+      
+      console.log('Updating profile with backend API...');
+      
+      // Make API call to update profile
+      const response = await fetch('http://localhost:8000/api/auth/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify(updateData)
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        console.log('Profile updated successfully:', data);
+        
+        // Create updated user data object for localStorage
+        const updatedUser = {
+          ...editableData,
+          name: `${editableData.firstName} ${editableData.lastName}`,
+          phone: editableData.phoneNumber,
+          isLoggedIn: true,
+          userId: userData.userId,
+          token: authToken
+        };
+
+        // Save to localStorage
+        localStorage.setItem('flowerShopUser', JSON.stringify(updatedUser));
+
+        // Update state with new data
+        setUserData({
+          ...editableData,
+          userId: userData.userId // Keep the same userId
+        });
+
+        // Exit edit mode and clear saving state
+        setIsEditing(false);
+        setIsSaving(false);
+        
+        // Show success message
+        alert('Profile updated successfully in database!');
+        
+      } else {
+        console.error('Profile update failed:', data.message);
+        alert(`Profile update failed: ${data.message}`);
+        setIsSaving(false);
+      }
+      
+    } catch (error) {
+      console.error('Profile update error:', error);
+      alert(`Profile update failed: ${error.message}`);
+      setIsSaving(false);
+    }
   };
 
   const handleCancelEdit = () => {

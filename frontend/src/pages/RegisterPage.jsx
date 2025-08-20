@@ -27,7 +27,7 @@ export default function RegisterPage() {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log('Registration attempt:', formData);
     
     // Basic validation
@@ -41,20 +41,63 @@ export default function RegisterPage() {
       return;
     }
     
-    // Store user data in localStorage
-    const userData = {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      email: formData.email,
-      country: formData.country,
-      phoneNumber: formData.phoneNumber,
-      isLoggedIn: true
-    };
-    
-    localStorage.setItem('flowerShopUser', JSON.stringify(userData));
-    
-    // Redirect to the user profile page
-    navigate('/profile');
+    try {
+      // Prepare data for backend API
+      const registrationData = {
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        password: formData.password,
+        phone: formData.phoneNumber,
+        address: {
+          country: formData.country || 'Sri Lanka'
+        }
+      };
+      
+      console.log('Sending registration request to backend...');
+      
+      const response = await fetch('http://localhost:8000/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(registrationData)
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        console.log('Registration successful:', data);
+        
+        // Store user data and token in localStorage
+        const userData = {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          name: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email,
+          country: formData.country,
+          phoneNumber: formData.phoneNumber,
+          phone: formData.phoneNumber, // Also store as 'phone' to match backend
+          isLoggedIn: true,
+          token: data.data.token,
+          userId: data.data.user.id
+        };
+        
+        localStorage.setItem('flowerShopUser', JSON.stringify(userData));
+        localStorage.setItem('authToken', data.data.token);
+        
+        alert('Registration successful! Welcome to Flower Shop!');
+        
+        // Redirect to the user profile page
+        navigate('/profile');
+      } else {
+        console.error('Registration failed:', data.message);
+        alert(`Registration failed: ${data.message}`);
+      }
+      
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert('Registration failed. Please check your connection and try again.');
+    }
   };
 
   const handleSignIn = () => {
