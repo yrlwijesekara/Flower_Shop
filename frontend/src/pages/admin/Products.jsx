@@ -47,6 +47,8 @@ const Products = () => {
       setLoading(true);
       const response = await productAPI.getProducts();
       if (response.success) {
+        // Debug: Log the first product to check data structure
+        console.log('First product data:', response.data[0]);
         setProducts(response.data);
       } else {
         setError('Failed to fetch products');
@@ -90,92 +92,109 @@ const Products = () => {
             <thead>
               <tr>
                 <th>Product ID</th>
-                <th>Plant Name</th>
-                <th>Category</th>
-                <th>Stock</th>
+                <th>Name</th>
                 <th>Price</th>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Product Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="6" style={{ textAlign: 'center', padding: '20px' }}>
+                  <td colSpan="7" style={{ textAlign: 'center', padding: '20px' }}>
                     Loading products...
                   </td>
                 </tr>
               ) : error ? (
                 <tr>
-                  <td colSpan="6" style={{ textAlign: 'center', padding: '20px', color: 'red' }}>
+                  <td colSpan="7" style={{ textAlign: 'center', padding: '20px', color: 'red' }}>
                     {error}
                   </td>
                 </tr>
               ) : filteredProducts.length === 0 ? (
                 <tr>
-                  <td colSpan="6" style={{ textAlign: 'center', padding: '20px' }}>
+                  <td colSpan="7" style={{ textAlign: 'center', padding: '20px' }}>
                     No products found
                   </td>
                 </tr>
               ) : (
                 filteredProducts.map((product) => (
                   <tr key={product._id}>
-                    <td className="admin-product-id">{product._id.slice(-8).toUpperCase()}</td>
-                    <td className="admin-name-with-image">
-                      <div className="admin-product-image">
+                    <td>{product._id?.slice(-8).toUpperCase() || 'N/A'}</td>
+                    <td>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <img 
                           src={product.image || '/images/placeholder.jpg'} 
-                          alt={product.name}
+                          alt={product.name || 'Product'}
+                          style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px' }}
                           onError={(e) => {
                             e.target.src = '/images/placeholder.jpg';
                           }}
                         />
+                        <span>{product.name || 'N/A'}</span>
                       </div>
-                      <span>{product.name}</span>
                     </td>
-                    <td className="admin-product-category">{product.category}</td>
+                    <td>${product.price?.toFixed(2) || '0.00'}</td>
+                    <td>{product.category || 'N/A'}</td>
+                    <td>{product.quantity || 'N/A'}</td>
                     <td>
-                      <span className={`admin-stock-badge ${product.inStock ? 'available' : 'not-available'}`}>
-                        {product.inStock ? 'Available' : 'Not Available'}
+                      <span 
+                        style={{
+                          padding: '4px 8px',
+                          borderRadius: '12px',
+                          fontSize: '12px',
+                          fontWeight: '600',
+                          textTransform: 'uppercase',
+                          backgroundColor: product.inStock ? '#e8f5e8' : '#ffebee',
+                          color: product.inStock ? '#2e7d32' : '#c62828'
+                        }}
+                      >
+                        {product.inStock ? 'Available' : 'Out of Stock'}
                       </span>
                     </td>
-                    <td className="admin-product-price">${product.price.toFixed(2)}</td>
-                    <td className="admin-product-actions">
-                      <button 
-                        className="admin-edit-btn"
-                        onClick={() => handleEditProduct(product)}
-                        title="Edit Product"
-                      >
-                        <svg viewBox="0 0 24 24">
-                          <path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-                        </svg>
-                      </button>
-                      <button 
-                        className="admin-delete-btn"
-                        onClick={() => handleDeleteProduct(product._id)}
-                        title="Delete Product"
-                        style={{ marginLeft: '8px', background: '#ff4757', border: 'none', padding: '8px', borderRadius: '4px', cursor: 'pointer' }}
-                      >
-                        <svg viewBox="0 0 24 24" style={{ width: '16px', height: '16px', fill: 'white' }}>
-                          <path d="M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z"/>
-                        </svg>
-                      </button>
+                    <td>
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <button 
+                          onClick={() => handleEditProduct(product)}
+                          title="Edit Product"
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            padding: '6px',
+                            borderRadius: '4px',
+                            color: '#666'
+                          }}
+                        >
+                          <svg viewBox="0 0 24 24" style={{ width: '16px', height: '16px', fill: 'currentColor' }}>
+                            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                          </svg>
+                        </button>
+                        <button 
+                          onClick={() => handleDeleteProduct(product._id)}
+                          title="Delete Product"
+                          style={{
+                            background: '#ff4757',
+                            border: 'none',
+                            cursor: 'pointer',
+                            padding: '6px',
+                            borderRadius: '4px',
+                            color: 'white'
+                          }}
+                        >
+                          <svg viewBox="0 0 24 24" style={{ width: '16px', height: '16px', fill: 'white' }}>
+                            <path d="M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z"/>
+                          </svg>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
               )}
             </tbody>
           </table>
-        </div>
-        <div className="admin-pagination">
-          <button className="admin-pagination-btn">Prev</button>
-          <div className="admin-pagination-numbers">
-            <span className="admin-page-number active">1</span>
-            <span className="admin-page-number">2</span>
-            <span className="admin-page-number">3</span>
-            <span className="admin-page-dots">...</span>
-            <span className="admin-page-number">10</span>
-          </div>
-          <button className="admin-pagination-btn">Next</button>
         </div>
       {showAddProduct && (
         <AddProductForm 
