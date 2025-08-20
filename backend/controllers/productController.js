@@ -1,11 +1,75 @@
 const Product = require('../models/Product');
 const mongoose = require('mongoose');
 
+// Sample fallback data for development
+const sampleProducts = [
+  {
+    _id: "1",
+    name: "SNAKE PLANT",
+    category: "Cactus",
+    filterCategory: "houseplants",
+    price: 149,
+    image: "/images/snake-plant.jpg",
+    description: "A beautiful snake plant perfect for indoor decoration",
+    inStock: true,
+    featured: true,
+    bestseller: false,
+    isRecent: true,
+    isPopular: true,
+    isSpecial: false,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    _id: "2",
+    name: "CANDELABRA ALOE",
+    category: "Aloe Vera",
+    filterCategory: "houseplants",
+    price: 129,
+    image: "/images/candelabra-aloe.jpg",
+    description: "A stunning candelabra aloe plant",
+    inStock: true,
+    featured: false,
+    bestseller: true,
+    isRecent: false,
+    isPopular: true,
+    isSpecial: true,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    _id: "3",
+    name: "GOLDEN POTHOS",
+    category: "Ivy",
+    filterCategory: "houseplants",
+    price: 89,
+    image: "/images/golden-pothos.jpg",
+    description: "Beautiful golden pothos perfect for beginners",
+    inStock: true,
+    featured: true,
+    bestseller: true,
+    isRecent: true,
+    isPopular: false,
+    isSpecial: false,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  }
+];
+
 // @desc    Get all products with filtering, sorting, and pagination
 // @route   GET /api/products
 // @access  Public
 const getProducts = async (req, res) => {
   try {
+    // Check if database is connected
+    if (mongoose.connection.readyState !== 1) {
+      console.log('Database not connected, using sample data');
+      return res.status(200).json({
+        success: true,
+        count: sampleProducts.length,
+        data: sampleProducts
+      });
+    }
     // Build query object
     let query = {};
     

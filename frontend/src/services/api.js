@@ -1,5 +1,5 @@
 // API base URL configuration
-const API_BASE_URL = 'http://localhost:5002/api';
+const API_BASE_URL = 'http://localhost:8000/api';
 
 // Generic API request function with error handling
 const apiRequest = async (endpoint, options = {}) => {

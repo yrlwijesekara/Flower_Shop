@@ -50,7 +50,9 @@ const connectDB = async () => {
 
   } catch (error) {
     console.error(`❌ Database connection failed: ${error.message}`.red.underline.bold);
-    process.exit(1);
+    console.log(`⚠️  Server will continue with sample data for development`.yellow.bold);
+    // Don't exit the process, let the server run with sample data
+    // process.exit(1);
   }
 };
 
