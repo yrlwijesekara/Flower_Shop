@@ -887,3 +887,127 @@
     height: 28px;
   }
 }
+
+/* New Care Guide and Specifications Styles */
+.care-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.care-item {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #5BC559;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.care-item strong {
+  color: #2c3e50;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.plant-details-grid,
+.specifications-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.detail-item,
+.spec-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 15px;
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.detail-item:hover,
+.spec-item:hover {
+  background: #f8f9fa;
+}
+
+.detail-label,
+.spec-label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 14px;
+}
+
+.detail-value,
+.spec-value {
+  color: #6c757d;
+  font-size: 14px;
+  text-align: right;
+}
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.tag {
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid #bbdefb;
+}
+
+.short-desc {
+  margin-top: 10px;
+  font-style: italic;
+  color: #6c757d;
+}
+
+/* Responsive adjustments for new sections */
+@media (max-width: 768px) {
+  .care-overview-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .plant-details-grid,
+  .specifications-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .detail-item,
+  .spec-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  
+  .detail-value,
+  .spec-value {
+    text-align: left;
+  }
+  
+  .care-item {
+    padding: 12px;
+  }
+  
+  .tags-container {
+    gap: 6px;
+  }
+  
+  .tag {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+}

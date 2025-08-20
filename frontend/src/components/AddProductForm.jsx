@@ -122,13 +122,64 @@ const AddProductForm = ({ onClose, onProductAdded, editingProduct }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Check file size (limit to 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setError('Image file is too large. Please choose an image smaller than 5MB.');
+        return;
+      }
+      
+      // Check file type
+      if (!file.type.startsWith('image/')) {
+        setError('Please select a valid image file.');
+        return;
+      }
+      
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result);
-        setProductData(prev => ({ ...prev, image: reader.result }));
+        // Compress the image
+        compressImage(reader.result, (compressedImage) => {
+          setImagePreview(compressedImage);
+          setProductData(prev => ({ ...prev, image: compressedImage }));
+        });
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const compressImage = (imageSrc, callback) => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    
+    img.onload = () => {
+      // Calculate new dimensions (max 800px width/height)
+      const maxSize = 800;
+      let { width, height } = img;
+      
+      if (width > height) {
+        if (width > maxSize) {
+          height = (height * maxSize) / width;
+          width = maxSize;
+        }
+      } else {
+        if (height > maxSize) {
+          width = (width * maxSize) / height;
+          height = maxSize;
+        }
+      }
+      
+      canvas.width = width;
+      canvas.height = height;
+      
+      // Draw and compress
+      ctx.drawImage(img, 0, 0, width, height);
+      
+      // Convert to compressed base64 (0.7 quality)
+      const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+      callback(compressedDataUrl);
+    };
+    
+    img.src = imageSrc;
   };
 
   const removeImage = () => {
@@ -238,7 +289,17 @@ const AddProductForm = ({ onClose, onProductAdded, editingProduct }) => {
       
     } catch (error) {
       console.error(`Error ${isEditing ? 'updating' : 'creating'} product:`, error);
-      setError(error.message || `Failed to ${isEditing ? 'update' : 'add'} product. Please try again.`);
+      
+      // Handle specific error types
+      if (error.message.includes('Request Entity Too Large') || 
+          error.message.includes('413') ||
+          error.response?.status === 413) {
+        setError('The product data is too large. Please try using smaller images or reduce the amount of text in descriptions.');
+      } else if (error.message.includes('Network Error')) {
+        setError('Network error. Please check your connection and try again.');
+      } else {
+        setError(error.message || `Failed to ${isEditing ? 'update' : 'add'} product. Please try again.`);
+      }
     } finally {
       setLoading(false);
     }
@@ -266,6 +327,7 @@ const AddProductForm = ({ onClose, onProductAdded, editingProduct }) => {
                     <label htmlFor="image-upload" className="upload-label">
                       <div className="upload-icon">+</div>
                       <span>Click to add image</span>
+                      <small>Max 5MB, will be automatically compressed</small>
                     </label>
                     <input
                       id="image-upload"
@@ -286,6 +348,7 @@ const AddProductForm = ({ onClose, onProductAdded, editingProduct }) => {
                   onChange={handleChange}
                   placeholder="https://example.com/image.jpg"
                 />
+                <small>Using URLs is recommended for better performance</small>
               </div>
             </div>
             

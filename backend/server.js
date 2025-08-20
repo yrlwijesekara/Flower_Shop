@@ -31,8 +31,8 @@ const corsOptions = {
 
 // Middleware
 app.use(cors(corsOptions));
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: false, limit: '10mb' }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: false, limit: '50mb' }));
 
 // Custom middleware
 app.use(logger);

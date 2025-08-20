@@ -564,3 +564,18 @@
     font-size: 1rem;
   }
 }
+
+/* Helper text styles */
+.form-group small {
+  display: block;
+  margin-top: 0.25rem;
+  color: #666;
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
+.upload-label small {
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 0.5rem;
+}
