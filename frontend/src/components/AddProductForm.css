@@ -518,3 +518,49 @@
     transform: translateY(0);
   }
 }
+
+/* Admin Settings Section */
+.admin-settings {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #164C0D;
+}
+
+.admin-settings h4 {
+  margin: 0 0 1rem 0;
+  color: #164C0D;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Rating and Review Section */
+.rating-review-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #fff5f5;
+  border-radius: 8px;
+  border-left: 4px solid #e53e3e;
+}
+
+.rating-review-section .form-group {
+  margin-bottom: 1rem;
+}
+
+.rating-review-section .form-group:last-child {
+  margin-bottom: 0;
+}
+
+/* Additional responsive adjustments */
+@media (max-width: 768px) {
+  .admin-settings,
+  .rating-review-section {
+    padding: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .admin-settings h4 {
+    font-size: 1rem;
+  }
+}

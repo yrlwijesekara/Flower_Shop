@@ -70,7 +70,13 @@ const AddProductForm = ({ onClose, onProductAdded, editingProduct }) => {
     reviewCount: 0,
     inStock: true,
     featured: false,
-    bestseller: false
+    bestseller: false,
+    
+    // Admin/System Fields
+    isRecent: true,
+    isPopular: false,
+    isSpecial: false,
+    isUserAdded: true
   });
   
   const [imagePreview, setImagePreview] = useState(null);
@@ -399,6 +405,20 @@ const AddProductForm = ({ onClose, onProductAdded, editingProduct }) => {
               />
             </div>
 
+            <div className="form-group">
+              <label>Gallery Images (comma-separated URLs)</label>
+              <textarea
+                name="gallery"
+                value={productData.gallery.join(', ')}
+                onChange={(e) => {
+                  const galleryUrls = e.target.value.split(',').map(url => url.trim()).filter(url => url);
+                  setProductData(prev => ({ ...prev, gallery: galleryUrls }));
+                }}
+                placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
+                rows="3"
+              />
+            </div>
+
             <div className="specifications-grid">
               <div className="form-group">
                 <label>Plant Size</label>
@@ -408,6 +428,17 @@ const AddProductForm = ({ onClose, onProductAdded, editingProduct }) => {
                   value={productData.specifications.size}
                   onChange={handleChange}
                   placeholder="e.g., Small (6-12 inches)"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Weight</label>
+                <input
+                  type="text"
+                  name="specifications.weight"
+                  value={productData.specifications.weight}
+                  onChange={handleChange}
+                  placeholder="e.g., 2-3 lbs"
                 />
               </div>
               
@@ -430,6 +461,39 @@ const AddProductForm = ({ onClose, onProductAdded, editingProduct }) => {
                   value={productData.specifications.height}
                   onChange={handleChange}
                   placeholder="e.g., 12-18 inches"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Spread</label>
+                <input
+                  type="text"
+                  name="specifications.spread"
+                  value={productData.specifications.spread}
+                  onChange={handleChange}
+                  placeholder="e.g., 8-12 inches"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Bloom Time</label>
+                <input
+                  type="text"
+                  name="specifications.bloomTime"
+                  value={productData.specifications.bloomTime}
+                  onChange={handleChange}
+                  placeholder="e.g., Spring to Summer"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Hardiness</label>
+                <input
+                  type="text"
+                  name="specifications.hardiness"
+                  value={productData.specifications.hardiness}
+                  onChange={handleChange}
+                  placeholder="e.g., USDA zones 9-11"
                 />
               </div>
               
@@ -526,6 +590,49 @@ const AddProductForm = ({ onClose, onProductAdded, editingProduct }) => {
                   <option value="Mildly toxic">Mildly toxic</option>
                 </select>
               </div>
+              
+              <div className="form-group">
+                <label>Temperature Range</label>
+                <input
+                  type="text"
+                  name="plantDetails.temperature"
+                  value={productData.plantDetails.temperature}
+                  onChange={handleChange}
+                  placeholder="e.g., 65-75°F (18-24°C)"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Humidity Level</label>
+                <select name="plantDetails.humidity" value={productData.plantDetails.humidity} onChange={handleChange}>
+                  <option value="">Select humidity level</option>
+                  <option value="Low (30-40%)">Low (30-40%)</option>
+                  <option value="Medium (40-60%)">Medium (40-60%)</option>
+                  <option value="High (60-80%)">High (60-80%)</option>
+                </select>
+              </div>
+              
+              <div className="form-group">
+                <label>Repotting Frequency</label>
+                <select name="plantDetails.repotting" value={productData.plantDetails.repotting} onChange={handleChange}>
+                  <option value="">Select repotting frequency</option>
+                  <option value="Every year">Every year</option>
+                  <option value="Every 2-3 years">Every 2-3 years</option>
+                  <option value="When rootbound">When rootbound</option>
+                  <option value="Rarely needed">Rarely needed</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="form-group">
+              <label>Fertilizer Information</label>
+              <input
+                type="text"
+                name="plantDetails.fertilizer"
+                value={productData.plantDetails.fertilizer}
+                onChange={handleChange}
+                placeholder="e.g., Monthly during growing season with balanced fertilizer"
+              />
             </div>
             
             <div className="form-group">
@@ -547,6 +654,39 @@ const AddProductForm = ({ onClose, onProductAdded, editingProduct }) => {
                 onChange={handleChange}
                 placeholder="Fertilizer and feeding schedule..."
                 rows="3"
+              />
+            </div>
+            
+            <div className="form-group">
+              <label>Pruning Instructions</label>
+              <textarea
+                name="careInstructions.pruning"
+                value={productData.careInstructions.pruning}
+                onChange={handleChange}
+                placeholder="Pruning and maintenance instructions..."
+                rows="3"
+              />
+            </div>
+            
+            <div className="form-group">
+              <label>Repotting Instructions</label>
+              <textarea
+                name="careInstructions.repotting"
+                value={productData.careInstructions.repotting}
+                onChange={handleChange}
+                placeholder="Repotting guidelines and timing..."
+                rows="3"
+              />
+            </div>
+            
+            <div className="form-group">
+              <label>Common Issues</label>
+              <textarea
+                name="careInstructions.commonIssues"
+                value={productData.careInstructions.commonIssues}
+                onChange={handleChange}
+                placeholder="Common problems and solutions..."
+                rows="4"
               />
             </div>
           </>
@@ -632,6 +772,79 @@ const AddProductForm = ({ onClose, onProductAdded, editingProduct }) => {
                 />
                 <span>In Stock</span>
               </label>
+            </div>
+            
+            <div className="admin-settings">
+              <h4>Admin Settings</h4>
+              <div className="checkbox-group">
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    name="isRecent"
+                    checked={productData.isRecent}
+                    onChange={handleChange}
+                  />
+                  <span>Mark as Recent</span>
+                </label>
+                
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    name="isPopular"
+                    checked={productData.isPopular}
+                    onChange={handleChange}
+                  />
+                  <span>Mark as Popular</span>
+                </label>
+                
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    name="isSpecial"
+                    checked={productData.isSpecial}
+                    onChange={handleChange}
+                  />
+                  <span>Mark as Special</span>
+                </label>
+                
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    name="isUserAdded"
+                    checked={productData.isUserAdded}
+                    onChange={handleChange}
+                  />
+                  <span>User Added Product</span>
+                </label>
+              </div>
+            </div>
+            
+            <div className="rating-review-section">
+              <div className="form-group">
+                <label>Initial Rating (0-5)</label>
+                <input
+                  type="number"
+                  name="rating"
+                  value={productData.rating}
+                  onChange={handleChange}
+                  min="0"
+                  max="5"
+                  step="0.1"
+                  placeholder="0.0"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Review Count</label>
+                <input
+                  type="number"
+                  name="reviewCount"
+                  value={productData.reviewCount}
+                  onChange={handleChange}
+                  min="0"
+                  placeholder="0"
+                />
+              </div>
             </div>
           </>
         );
