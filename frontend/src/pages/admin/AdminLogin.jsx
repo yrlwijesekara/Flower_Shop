@@ -58,40 +58,38 @@ export default function AdminLogin() {
     }
 
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // Check admin credentials
-      if (formData.email === ADMIN_CREDENTIALS.email && 
-          formData.password === ADMIN_CREDENTIALS.password) {
-        
-        // Set admin as logged in
-        localStorage.setItem('adminLoggedIn', 'true');
-        
-        // Store admin data
-        const adminData = {
+      // Call real backend API
+      const response = await fetch('http://localhost:8000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           email: formData.email,
-          role: 'admin',
-          firstName: 'Admin',
-          lastName: 'User',
-          loginTime: new Date().toISOString(),
-          permissions: ['all']
-        };
-        
-        localStorage.setItem('adminUser', JSON.stringify(adminData));
-        
-        console.log('Admin login successful, redirecting to dashboard...');
+          password: formData.password
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success && data.data.user.role === 'admin') {
+        // Store admin token and data
+        localStorage.setItem('authToken', data.data.token);
+        localStorage.setItem('adminLoggedIn', 'true');
+        localStorage.setItem('adminUser', JSON.stringify(data.data.user));
         
         // Redirect to admin dashboard
         navigate('/admin');
         
+      } else if (data.success && data.data.user.role !== 'admin') {
+        setError('Access denied. Admin privileges required.');
       } else {
-        setError('Invalid admin credentials. Please try again.');
+        setError(data.message || 'Invalid credentials. Please try again.');
       }
       
     } catch (error) {
       console.error('Admin login error:', error);
-      setError('Login failed. Please try again.');
+      setError('Login failed. Please check your connection and try again.');
     } finally {
       setIsLoading(false);
     }

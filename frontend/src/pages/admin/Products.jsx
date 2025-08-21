@@ -47,8 +47,6 @@ const Products = () => {
       setLoading(true);
       const response = await productAPI.getProducts();
       if (response.success) {
-        // Debug: Log the first product to check data structure
-        console.log('First product data:', response.data[0]);
         setProducts(response.data);
       } else {
         setError('Failed to fetch products');
