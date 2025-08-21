@@ -11,9 +11,13 @@ function Userprofile() {
     // Clear authentication data
     localStorage.removeItem('userLoggedIn');
     localStorage.removeItem('flowerShopUser');
+    localStorage.removeItem('authToken');
     
     // Clear any other user-related data if needed
     localStorage.removeItem('flowerShopCart'); // Optional: clear cart on logout
+    
+    // Dispatch custom auth change event
+    window.dispatchEvent(new CustomEvent('authChange'));
     
     console.log('User logged out successfully');
     

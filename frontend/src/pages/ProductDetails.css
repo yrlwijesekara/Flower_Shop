@@ -217,6 +217,112 @@
   color: #495057;
 }
 
+/* Review System Styles */
+.write-review-section {
+  display: flex;
+  justify-content: flex-end;
+  margin: 25px 15px 30px 15px;
+}
+
+.write-review-button,
+.write-first-review-button {
+  background: linear-gradient(135deg, #164C0D 0%, #5BC559 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(22, 76, 13, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.write-review-button:hover,
+.write-first-review-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(22, 76, 13, 0.4);
+}
+
+.write-first-review-button {
+  margin-top: 20px;
+}
+
+.reviews-loading {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6c757d;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+}
+
+.review-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  color: #164C0D;
+  margin: 15px 0 10px 0;
+  line-height: 1.4;
+}
+
+/* Enhanced review item styling */
+.review-item {
+  padding: 30px;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.review-item:hover {
+  box-shadow: 0 8px 25px rgba(22, 76, 13, 0.1);
+  transform: translateY(-2px);
+  border-color: #5BC559;
+}
+
+.reviewer-name {
+  font-weight: 700;
+  color: #164C0D;
+  font-size: 18px;
+}
+
+.verified-badge {
+  background: linear-gradient(135deg, #28a745 0%, #5BC559 100%);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(40, 167, 69, 0.3);
+}
+
+.review-rating .star {
+  font-size: 18px;
+  color: #ffc107;
+  margin: 0 2px;
+  text-shadow: 0 1px 3px rgba(255, 193, 7, 0.3);
+}
+
+.review-date {
+  color: #6c757d;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.review-comment {
+  line-height: 1.8;
+  color: #495057;
+  font-size: 15px;
+  margin: 0;
+  text-align: justify;
+}
+
 .features-list {
   list-style: none;
   padding: 0;

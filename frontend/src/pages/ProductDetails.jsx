@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FiShoppingCart, FiChevronLeft, FiChevronRight, FiHome } from 'react-icons/fi';
-import { productAPI } from '../services/api';
+import { productAPI, reviewAPI } from '../services/api';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
 import Footer from '../components/Footer';
 import TopSellingFlowers from '../components/TopSelling';
+import ReviewForm from '../components/ReviewForm';
 import './ProductDetails.css';
 
 const ProductDetails = () => {
@@ -18,6 +19,11 @@ const ProductDetails = () => {
   const [notification, setNotification] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [reviews, setReviews] = useState([]);
+  const [reviewStats, setReviewStats] = useState(null);
+  const [reviewsLoading, setReviewsLoading] = useState(false);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Generate shop URL with preserved state
   const getShopUrl = () => {
@@ -521,6 +527,54 @@ const ProductDetails = () => {
     }
   };
 
+  // Check if user is logged in and listen for auth changes
+  useEffect(() => {
+    const checkAuthStatus = () => {
+      const token = localStorage.getItem('authToken');
+      const userLoggedIn = localStorage.getItem('userLoggedIn');
+      console.log('Auth check - Token:', token, 'UserLoggedIn:', userLoggedIn);
+      setIsLoggedIn(!!token);
+    };
+
+    // Initial check
+    checkAuthStatus();
+
+    // Listen for storage changes (when user logs in/out in another tab)
+    window.addEventListener('storage', checkAuthStatus);
+
+    // Listen for custom auth events (when user logs in/out in same tab)
+    window.addEventListener('authChange', checkAuthStatus);
+
+    return () => {
+      window.removeEventListener('storage', checkAuthStatus);
+      window.removeEventListener('authChange', checkAuthStatus);
+    };
+  }, []);
+
+  // Fetch reviews from database
+  const fetchReviews = async (productId) => {
+    if (!productId) return;
+    
+    setReviewsLoading(true);
+    try {
+      const response = await reviewAPI.getProductReviews(productId, {
+        limit: 10,
+        page: 1
+      });
+      
+      if (response.success && response.data) {
+        setReviews(response.data.reviews || []);
+        setReviewStats(response.data.stats || null);
+        console.log('Reviews fetched successfully:', response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+      // Keep fallback reviews if API fails
+    } finally {
+      setReviewsLoading(false);
+    }
+  };
+
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
@@ -541,6 +595,9 @@ const ProductDetails = () => {
           };
           setProduct(productWithImages);
           setSelectedImage(0);
+          
+          // Fetch reviews for this product
+          await fetchReviews(response.data._id || id);
         } else {
           throw new Error(response.message || 'Product not found');
         }
@@ -557,6 +614,8 @@ const ProductDetails = () => {
           setError('');
           // Initialize wishlist for fallback data
           await initializeWishlist(fallbackProduct.id);
+          // Try to fetch reviews with fallback ID
+          await fetchReviews(id);
         } else {
           setTimeout(() => {
             navigate('/shop');
@@ -668,6 +727,34 @@ const ProductDetails = () => {
         ★
       </span>
     ));
+  };
+
+  // Handle review form submission
+  const handleReviewSubmitted = async () => {
+    // Refresh reviews after successful submission
+    const productId = product?._id || product?.id || id;
+    await fetchReviews(productId);
+    
+    // Show success notification
+    setNotification('Review submitted successfully!');
+    setTimeout(() => {
+      setNotification('');
+    }, 3000);
+  };
+
+  // Handle write review button click
+  const handleWriteReviewClick = () => {
+    const token = localStorage.getItem('authToken');
+    console.log('Write review clicked. Token:', token, 'IsLoggedIn:', isLoggedIn);
+    
+    if (!isLoggedIn || !token) {
+      setNotification('Please log in to write a review');
+      setTimeout(() => {
+        setNotification('');
+      }, 3000);
+      return;
+    }
+    setShowReviewForm(true);
   };
 
   const calculateReviewStats = (reviews) => {
@@ -867,7 +954,7 @@ const ProductDetails = () => {
               className={`tab-btn ${activeTab === 'reviews' ? 'active' : ''}`}
               onClick={() => setActiveTab('reviews')}
             >
-              Reviews ({product.reviews ? product.reviews.length : 0})
+              Reviews ({reviewStats ? reviewStats.totalReviews : (reviews.length || (product.reviews ? product.reviews.length : 0))})
             </button>
             <button 
               className={`tab-btn ${activeTab === 'care' ? 'active' : ''}`}
@@ -947,77 +1034,108 @@ const ProductDetails = () => {
 
             {activeTab === 'reviews' && (
               <div className="reviews-section">
-                {product.reviews && product.reviews.length > 0 ? (
+                {reviewsLoading ? (
+                  <div className="reviews-loading">
+                    <p>Loading reviews...</p>
+                  </div>
+                ) : (
                   <>
-                    <div className="reviews-summary">
-                      <div className="rating-overview">
-                        <div className="average-rating">
-                          <span className="rating-number">{calculateReviewStats(product.reviews)?.averageRating || 0}</span>
-                          <div className="rating-stars">
-                            {renderStars(Math.round(calculateReviewStats(product.reviews)?.averageRating || 0))}
-                          </div>
-                          <span className="review-count">
-                            {calculateReviewStats(product.reviews)?.totalReviews || 0} reviews
-                          </span>
-                        </div>
-                        
-                        <div className="rating-breakdown">
-                          {[5, 4, 3, 2, 1].map(rating => {
-                            const stats = calculateReviewStats(product.reviews);
-                            const count = stats?.ratingCounts[rating] || 0;
-                            const percentage = stats ? (count / stats.totalReviews) * 100 : 0;
-                            
-                            return (
-                              <div key={rating} className="rating-bar">
-                                <span className="rating-label">{rating} ★</span>
-                                <div className="bar-container">
-                                  <div 
-                                    className="bar-fill" 
-                                    style={{ width: `${percentage}%` }}
-                                  ></div>
-                                </div>
-                                <span className="rating-count">({count})</span>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
+                    {/* Write Review Button */}
+                    <div className="write-review-section">
+                      <button 
+                        className="write-review-button"
+                        onClick={handleWriteReviewClick}
+                      >
+                        ✍️ Write a Review
+                      </button>
                     </div>
 
-                    <div className="reviews-list">
-                      <h3 className="section-title">⭐ Customer Reviews</h3>
-                      {product.reviews.map((review, index) => (
-                        <div key={review.id} className="review-item">
-                          <div className="review-header">
-                            <div className="reviewer-info">
-                              <span className="reviewer-name">{review.name}</span>
-                              {review.verified && (
-                                <span className="verified-badge">✓ Verified Purchase</span>
-                              )}
-                            </div>
-                            <div className="review-meta">
-                              <div className="review-rating">
-                                {renderStars(review.rating)}
+                    {/* Check if we have database reviews or fallback reviews */}
+                    {(reviews.length > 0 || (product.reviews && product.reviews.length > 0)) ? (
+                      <>
+                        <div className="reviews-summary">
+                          <div className="rating-overview">
+                            <div className="average-rating">
+                              <span className="rating-number">
+                                {reviewStats ? reviewStats.averageRating : (calculateReviewStats(product.reviews)?.averageRating || 0)}
+                              </span>
+                              <div className="rating-stars">
+                                {renderStars(Math.round(reviewStats ? reviewStats.averageRating : (calculateReviewStats(product.reviews)?.averageRating || 0)))}
                               </div>
-                              <span className="review-date">
-                                {new Date(review.date).toLocaleDateString('en-US', { 
-                                  year: 'numeric', 
-                                  month: 'long', 
-                                  day: 'numeric' 
-                                })}
+                              <span className="review-count">
+                                {reviewStats ? reviewStats.totalReviews : (calculateReviewStats(product.reviews)?.totalReviews || 0)} reviews
                               </span>
                             </div>
+                            
+                            <div className="rating-breakdown">
+                              {[5, 4, 3, 2, 1].map(rating => {
+                                const stats = reviewStats || calculateReviewStats(product.reviews);
+                                const count = stats?.ratingCounts[rating] || 0;
+                                const percentage = stats ? (count / stats.totalReviews) * 100 : 0;
+                                
+                                return (
+                                  <div key={rating} className="rating-bar">
+                                    <span className="rating-label">{rating} ★</span>
+                                    <div className="bar-container">
+                                      <div 
+                                        className="bar-fill" 
+                                        style={{ width: `${percentage}%` }}
+                                      ></div>
+                                    </div>
+                                    <span className="rating-count">({count})</span>
+                                  </div>
+                                );
+                              })}
+                            </div>
                           </div>
-                          <p className="review-comment">{review.comment}</p>
                         </div>
-                      ))}
-                    </div>
+
+                        <div className="reviews-list">
+                          <h3 className="section-title">⭐ Customer Reviews</h3>
+                          {/* Display database reviews if available, otherwise fallback reviews */}
+                          {(reviews.length > 0 ? reviews : product.reviews).map((review, index) => (
+                            <div key={review.id || index} className="review-item">
+                              <div className="review-header">
+                                <div className="reviewer-info">
+                                  <span className="reviewer-name">{review.userName || review.name}</span>
+                                  {review.verified && (
+                                    <span className="verified-badge">✓ Verified Purchase</span>
+                                  )}
+                                </div>
+                                <div className="review-meta">
+                                  <div className="review-rating">
+                                    {renderStars(review.rating)}
+                                  </div>
+                                  <span className="review-date">
+                                    {review.formattedDate || new Date(review.date).toLocaleDateString('en-US', { 
+                                      year: 'numeric', 
+                                      month: 'long', 
+                                      day: 'numeric' 
+                                    })}
+                                  </span>
+                                </div>
+                              </div>
+                              {review.title && (
+                                <h4 className="review-title">{review.title}</h4>
+                              )}
+                              <p className="review-comment">{review.comment}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    ) : (
+                      <div className="no-reviews">
+                        <h3>No reviews yet</h3>
+                        <p>Be the first to review this product!</p>
+                        <button 
+                          className="write-first-review-button"
+                          onClick={handleWriteReviewClick}
+                        >
+                          Write the First Review
+                        </button>
+                      </div>
+                    )}
                   </>
-                ) : (
-                  <div className="no-reviews">
-                    <h3>No reviews yet</h3>
-                    <p>Be the first to review this product!</p>
-                  </div>
                 )}
               </div>
             )}
@@ -1227,6 +1345,15 @@ const ProductDetails = () => {
       />
       
       <Footer />
+      
+      {/* Review Form Modal */}
+      {showReviewForm && (
+        <ReviewForm
+          productId={product?._id || product?.id || id}
+          onReviewSubmitted={handleReviewSubmitted}
+          onCancel={() => setShowReviewForm(false)}
+        />
+      )}
     </div>
   );
 };

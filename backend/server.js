@@ -57,6 +57,7 @@ app.use('/api/orders', require('./routes/orderRoutes'));
 app.use('/api/checkout', require('./routes/checkoutRoutes'));
 app.use('/api/admin/orders', require('./routes/adminOrderRoutes'));
 app.use('/api/admin/customers', require('./routes/adminCustomerRoutes'));
+app.use('/api/reviews', require('./routes/reviewRoutes'));
 
 // Root route
 app.get('/', (req, res) => {

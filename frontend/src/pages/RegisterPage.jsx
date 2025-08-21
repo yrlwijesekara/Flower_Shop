@@ -85,6 +85,9 @@ export default function RegisterPage() {
         localStorage.setItem('flowerShopUser', JSON.stringify(userData));
         localStorage.setItem('authToken', data.data.token);
         
+        // Dispatch custom auth change event
+        window.dispatchEvent(new CustomEvent('authChange'));
+        
         alert('Registration successful! Welcome to Flower Shop!');
         
         // Redirect to the user profile page

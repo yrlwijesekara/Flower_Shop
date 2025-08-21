@@ -59,6 +59,9 @@ export default function LoginPage() {
         localStorage.setItem('userLoggedIn', 'true');
         localStorage.setItem('authToken', data.data.token);
         
+        // Dispatch custom auth change event
+        window.dispatchEvent(new CustomEvent('authChange'));
+        
         // Store user data from backend response
         const userData = {
           username: data.data.user.email,

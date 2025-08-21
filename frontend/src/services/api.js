@@ -202,9 +202,55 @@ export const wishlistAPI = {
   },
 };
 
+// Review API functions
+export const reviewAPI = {
+  // Get reviews for a product
+  getProductReviews: async (productId, queryParams = {}) => {
+    const searchParams = new URLSearchParams();
+    
+    Object.entries(queryParams).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        searchParams.append(key, value);
+      }
+    });
+
+    const endpoint = `/reviews/${productId}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
+    return apiRequest(endpoint);
+  },
+
+  // Create a new review
+  createReview: async (reviewData, token) => {
+    return apiRequest('/reviews', {
+      method: 'POST',
+      body: JSON.stringify(reviewData),
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+  },
+
+  // Update review helpful count
+  updateReviewHelpful: async (reviewId) => {
+    return apiRequest(`/reviews/${reviewId}/helpful`, {
+      method: 'PUT',
+    });
+  },
+
+  // Delete a review
+  deleteReview: async (reviewId, token) => {
+    return apiRequest(`/reviews/${reviewId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+  },
+};
+
 export default {
   productAPI,
   wishlistAPI,
+  reviewAPI,
   healthCheck,
   checkAPIConnection,
 };
