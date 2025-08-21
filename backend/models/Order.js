@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 
 const orderItemSchema = new mongoose.Schema({
   productId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product',
+    type: mongoose.Schema.Types.Mixed, // Allow both ObjectId and string/number
     required: true
   },
   quantity: {
@@ -61,7 +60,7 @@ const orderSchema = new mongoose.Schema({
   orderNumber: {
     type: String,
     unique: true,
-    required: true
+    required: false // Let pre-save hook generate it
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -83,7 +82,7 @@ const orderSchema = new mongoose.Schema({
   },
   paymentMethod: {
     type: String,
-    enum: ['credit_card', 'debit_card', 'paypal', 'apple_pay', 'google_pay'],
+    enum: ['credit_card', 'debit_card', 'paypal', 'apple_pay', 'google_pay', 'cod'],
     required: [true, 'Payment method is required']
   },
   paymentStatus: {

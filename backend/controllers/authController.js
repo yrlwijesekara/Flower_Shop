@@ -346,11 +346,44 @@ const logout = async (req, res) => {
   }
 };
 
+// @desc    Get user's orders (simple version for frontend)
+// @route   GET /api/auth/orders
+// @access  Private
+const getUserOrders = async (req, res) => {
+  try {
+    const Order = require('../models/Order');
+    const orders = await Order.find({ userId: req.user._id })
+      .sort({ createdAt: -1 })
+      .limit(10);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        orders: orders.map(order => ({
+          orderNumber: order.orderNumber,
+          totalAmount: order.totalAmount,
+          status: order.orderStatus,
+          createdAt: order.createdAt,
+          itemCount: order.items.length
+        }))
+      }
+    });
+  } catch (error) {
+    console.error('Error in getUserOrders:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server Error',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   register,
   login,
   getMe,
   updateProfile,
   updatePassword,
-  logout
+  logout,
+  getUserOrders
 };

@@ -3,6 +3,7 @@ const router = express.Router();
 const {
   getCheckoutInfo,
   processCheckout,
+  processSimpleCheckout,
   getOrderHistory,
   getOrderDetails,
   cancelOrder
@@ -11,6 +12,11 @@ const { protect, verifySession } = require('../middleware/auth');
 
 // All checkout routes require authentication
 router.use(protect);
+
+// @desc    Process simple checkout (for frontend localStorage cart)
+// @route   POST /api/checkout/simple
+// @access  Private
+router.post('/simple', processSimpleCheckout);
 
 // @desc    Get checkout information (cart + user details)
 // @route   GET /api/checkout/:sessionId

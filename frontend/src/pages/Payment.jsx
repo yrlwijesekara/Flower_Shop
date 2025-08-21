@@ -91,97 +91,87 @@ const Payment = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Get form data from checkout if available
-    const storedFormData = localStorage.getItem('checkoutFormData');
-    const checkoutFormData = storedFormData ? JSON.parse(storedFormData) : {};
-    
-    // Generate and save order data with current cart items
-    const generateOrderNumber = () => {
-      return Math.floor(Math.random() * 90000) + 10000;
-    };
-
-    const getCurrentDate = () => {
-      const now = new Date();
-      return now.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-      });
-    };
-
-    const subtotal = calculateSubtotal();
-    const shipping = calculateShipping();
-    const tax = Math.round(subtotal * 0.1);
-    const total = subtotal + shipping + tax;
-
-    const orderData = {
-      orderNumber: generateOrderNumber().toString(),
-      orderDate: getCurrentDate(),
-      shippingAddress: {
-        line1: checkoutFormData.streetAddress ? `${checkoutFormData.streetAddress},` : "Address not provided,",
-        line2: checkoutFormData.apartment ? `${checkoutFormData.apartment},` : "",
-        line3: checkoutFormData.townCity ? `${checkoutFormData.townCity}.` : "City not provided."
-      },
-      items: cart.map(item => ({
-        id: item.id,
-        name: item.name,
-        category: item.category || "Plant",
-        price: item.price,
-        quantity: item.quantity,
-        total: item.price * item.quantity,
-        image: item.image
-      })),
-      pricing: {
-        itemsTotal: subtotal,
-        discount: 0,
-        shipping: shipping,
-        tax: tax,
-        total: total
-      },
-      paymentMethod: 'online'
-    };
-
-    // Save order data before clearing cart
-    localStorage.setItem('orderData', JSON.stringify(orderData));
-    
-    // Simulate payment processing
-    setTimeout(() => {
-      setIsLoading(false);
-      
-      // Remove purchased items from full cart if it exists
-      const savedFullCart = localStorage.getItem('flowerShopFullCart');
-      if (savedFullCart) {
-        try {
-          const fullCart = JSON.parse(savedFullCart);
-          const purchasedItemIds = cart.map(item => item.id);
-          const remainingItems = fullCart.filter(item => !purchasedItemIds.includes(item.id));
-          
-          if (remainingItems.length > 0) {
-            localStorage.setItem('flowerShopCart', JSON.stringify(remainingItems));
-          } else {
-            localStorage.setItem('flowerShopCart', JSON.stringify([]));
-          }
-          // Always clear the full cart after successful purchase
-          localStorage.removeItem('flowerShopFullCart');
-          
-          // Trigger cart update event for navbar
-          window.dispatchEvent(new CustomEvent('cartUpdated'));
-        } catch (error) {
-          console.error('Error updating full cart:', error);
-        }
-      } else {
-        // If no full cart, clear the regular cart since items were purchased
-        localStorage.setItem('flowerShopCart', JSON.stringify([]));
-        // Trigger cart update event for navbar
-        window.dispatchEvent(new CustomEvent('cartUpdated'));
+    try {
+      // Validate payment form
+      if (!formData.cardNumber.trim() || !formData.expirationMonth || 
+          !formData.expirationDate || !formData.cvv.trim()) {
+        alert('Please fill in all payment details');
+        setIsLoading(false);
+        return;
       }
       
-      navigate('/order-success');
-    }, 2000);
+      // Get auth token
+      const authToken = localStorage.getItem('authToken');
+      if (!authToken) {
+        alert('Authentication required. Please login again.');
+        navigate('/login');
+        return;
+      }
+      
+      // Get existing order data from checkout
+      const storedOrderData = localStorage.getItem('orderData');
+      if (!storedOrderData) {
+        alert('Order data not found. Please try checking out again.');
+        navigate('/checkout');
+        return;
+      }
+      
+      const orderData = JSON.parse(storedOrderData);
+      console.log('Processing payment for order:', orderData.orderNumber);
+      
+      // Simulate payment processing (in real app, integrate with payment gateway)
+      // For now, we'll just simulate a successful payment
+      const paymentSuccess = await simulatePaymentProcessing();
+      
+      if (paymentSuccess) {
+        console.log('Payment processed successfully');
+        
+        // Update order data with payment status
+        const updatedOrderData = {
+          ...orderData,
+          paymentStatus: 'paid',
+          paymentMethod: 'online',
+          cardLastFour: formData.cardNumber.slice(-4).replace(/\s/g, '')
+        };
+        
+        localStorage.setItem('orderData', JSON.stringify(updatedOrderData));
+        
+        // Clear cart after successful payment
+        localStorage.removeItem('flowerShopCart');
+        localStorage.removeItem('flowerShopFullCart');
+        localStorage.removeItem('checkoutFormData');
+        
+        // Trigger cart update event for navbar
+        window.dispatchEvent(new CustomEvent('cartUpdated'));
+        
+        setIsLoading(false);
+        navigate('/order-success');
+        
+      } else {
+        throw new Error('Payment processing failed');
+      }
+      
+    } catch (error) {
+      console.error('Payment error:', error);
+      alert(`Payment failed: ${error.message}`);
+      setIsLoading(false);
+    }
+  };
+  
+  // Simulate payment processing
+  const simulatePaymentProcessing = () => {
+    return new Promise((resolve) => {
+      // Simulate network delay
+      setTimeout(() => {
+        // In a real app, this would integrate with Stripe, PayPal, etc.
+        // For demo purposes, always succeed
+        resolve(true);
+      }, 2000);
+    });
   };
 
   const calculateSubtotal = () => {
