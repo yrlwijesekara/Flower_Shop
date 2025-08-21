@@ -4,9 +4,12 @@ const {
   getProductReviews,
   createReview,
   updateReviewHelpful,
-  deleteReview
+  deleteReview,
+  getAllReviews,
+  updateReviewApproval,
+  deleteReviewAdmin
 } = require('../controllers/reviewController');
-const { protect } = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 
 // @route   GET /api/reviews/:productId
 // @desc    Get reviews for a product
@@ -27,5 +30,21 @@ router.put('/:reviewId/helpful', updateReviewHelpful);
 // @desc    Delete a review
 // @access  Private
 router.delete('/:reviewId', protect, deleteReview);
+
+// Admin routes
+// @route   GET /api/reviews/admin/all
+// @desc    Get all reviews for admin management
+// @access  Private (Admin only)
+router.get('/admin/all', protect, authorize('admin'), getAllReviews);
+
+// @route   PUT /api/reviews/admin/:reviewId/approval
+// @desc    Update review approval status
+// @access  Private (Admin only)
+router.put('/admin/:reviewId/approval', protect, authorize('admin'), updateReviewApproval);
+
+// @route   DELETE /api/reviews/admin/:reviewId
+// @desc    Delete review (admin)
+// @access  Private (Admin only)
+router.delete('/admin/:reviewId', protect, authorize('admin'), deleteReviewAdmin);
 
 module.exports = router;

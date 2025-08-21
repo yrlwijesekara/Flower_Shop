@@ -1,5 +1,456 @@
 /* Admin Panel Specific Styles - All classes prefixed with 'admin-' and wrapped in admin route */
 
+/* Admin Review Management Styles - Unique Classes */
+.admin-review-management-header {
+  margin-bottom: 24px;
+}
+
+.admin-review-stats-grid {
+  display: flex;
+  gap: 24px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.admin-review-stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 120px;
+}
+
+.admin-review-stat-number {
+  font-size: 24px;
+  font-weight: bold;
+  color: #4CAF50;
+}
+
+.admin-review-stat-label {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.admin-review-filter-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.admin-review-filter-tab {
+  padding: 12px 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.admin-review-filter-tab.active {
+  color: #4CAF50;
+  border-bottom-color: #4CAF50;
+}
+
+.admin-review-filter-tab:hover {
+  color: #4CAF50;
+}
+
+.admin-reviews-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-review-card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #e0e0e0;
+}
+
+.admin-review-card.approved {
+  border-left-color: #4CAF50;
+}
+
+.admin-review-card.pending {
+  border-left-color: #ff9800;
+}
+
+.admin-review-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-review-user-details {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.admin-review-user-email {
+  color: #666;
+  font-size: 14px;
+}
+
+.admin-review-created-date {
+  color: #999;
+  font-size: 12px;
+}
+
+.admin-review-product-info {
+  text-align: right;
+}
+
+.admin-review-product-name {
+  font-weight: 500;
+  color: #4CAF50;
+  font-size: 14px;
+}
+
+.admin-review-content-section {
+  margin-bottom: 16px;
+}
+
+.admin-review-rating-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.admin-review-star {
+  color: #ddd;
+  font-size: 16px;
+}
+
+.admin-review-star.filled {
+  color: #ffc107;
+}
+
+.admin-review-rating-text {
+  font-size: 14px;
+  color: #666;
+}
+
+.admin-review-title-text {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 8px 0;
+  color: #333;
+}
+
+.admin-review-comment-text {
+  color: #666;
+  line-height: 1.5;
+  margin: 8px 0;
+}
+
+.admin-review-read-more {
+  background: none;
+  border: none;
+  color: #4CAF50;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.admin-review-actions-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-review-status-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-review-status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.admin-review-status-badge.approved {
+  background: #e8f5e8;
+  color: #4CAF50;
+}
+
+.admin-review-status-badge.pending {
+  background: #fff3e0;
+  color: #ff9800;
+}
+
+.admin-review-helpful-count {
+  font-size: 12px;
+  color: #666;
+}
+
+.admin-review-action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.admin-review-approve-btn, .admin-review-reject-btn, .admin-review-delete-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-review-approve-btn {
+  background: #4CAF50;
+  color: white;
+}
+
+.admin-review-approve-btn:hover {
+  background: #45a049;
+}
+
+.admin-review-reject-btn {
+  background: #ff9800;
+  color: white;
+}
+
+.admin-review-reject-btn:hover {
+  background: #e68900;
+}
+
+.admin-review-delete-btn {
+  background: #f44336;
+  color: white;
+}
+
+.admin-review-delete-btn:hover {
+  background: #da190b;
+}
+
+.admin-review-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+  padding: 20px;
+}
+
+.admin-review-pagination-btn {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.admin-review-pagination-btn:hover:not(:disabled) {
+  background: #4CAF50;
+  color: white;
+  border-color: #4CAF50;
+}
+
+.admin-review-pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.admin-review-pagination-info {
+  font-size: 14px;
+  color: #666;
+}
+
+.admin-review-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.admin-review-modal-content {
+  background: white;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.admin-review-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.admin-review-modal-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.admin-review-modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-review-modal-close:hover {
+  color: #333;
+}
+
+.admin-review-modal-body {
+  padding: 20px;
+}
+
+.admin-review-modal-info {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.admin-review-modal-info p {
+  margin: 8px 0;
+  color: #666;
+}
+
+.admin-review-modal-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.admin-review-modal-content-section h4 {
+  color: #333;
+  margin: 16px 0 8px 0;
+}
+
+.admin-review-modal-content-section p {
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.admin-review-modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+  flex-wrap: wrap;
+}
+
+.admin-review-no-results {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-style: italic;
+}
+
+.admin-review-error-message {
+  background: #ffebee;
+  color: #c62828;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  border-left: 4px solid #c62828;
+}
+
+.admin-review-loading-message {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+/* Responsive Design for Admin Review Management */
+@media (max-width: 768px) {
+  .admin-review-stats-grid {
+    gap: 12px;
+  }
+  
+  .admin-review-stat-card {
+    min-width: 100px;
+    padding: 12px;
+  }
+  
+  .admin-review-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .admin-review-product-info {
+    text-align: left;
+  }
+  
+  .admin-review-actions-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .admin-review-action-buttons {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .admin-review-pagination {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .admin-review-modal-content {
+    width: 95%;
+    margin: 10px;
+  }
+  
+  .admin-review-modal-actions {
+    justify-content: stretch;
+  }
+  
+  .admin-review-modal-actions button {
+    flex: 1;
+  }
+}
+
 /* Admin Panel Container */
 body:has([data-admin-panel="true"]) .admin-dashboard-container,
 .admin-dashboard-container {
@@ -11,7 +462,7 @@ body:has([data-admin-panel="true"]) .admin-dashboard-container,
   width: 100vw;
   min-height: 100vh;
   gap: 20px;
-  overflow: hidden;
+  overflow: visible;
   box-sizing: border-box;
 }
 
@@ -190,7 +641,8 @@ body:has([data-admin-panel="true"]) .admin-dashboard-container,
   background: #ffffff;
   margin: 0;
   height: 100vh;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Admin Responsive Styles */
