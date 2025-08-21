@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FiHome } from 'react-icons/fi';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
@@ -9,6 +10,7 @@ import wishlistService from '../services/wishlistService';
 import { productAPI } from '../services/api';
 
 const WishList = () => {
+  const navigate = useNavigate();
   const [wishlistItems, setWishlistItems] = useState([]);
   const [cart, setCart] = useState([]);
   const [isCartLoaded, setIsCartLoaded] = useState(false);
@@ -124,6 +126,18 @@ const WishList = () => {
       image: '/images/wedding-3.jpg'
     }
   };
+
+  // Check authentication before loading data
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem('userLoggedIn');
+    const authToken = localStorage.getItem('authToken');
+    
+    if (isLoggedIn !== 'true' || !authToken) {
+      console.log('User not logged in, redirecting to login page');
+      navigate('/login');
+      return;
+    }
+  }, [navigate]);
 
   // Load cart from localStorage on component mount
   useEffect(() => {

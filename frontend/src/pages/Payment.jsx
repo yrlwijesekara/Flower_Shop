@@ -20,6 +20,17 @@ const Payment = () => {
 
   // Load cart from localStorage on component mount
   useEffect(() => {
+    // Check if user is logged in first
+    const isLoggedIn = localStorage.getItem('userLoggedIn');
+    const authToken = localStorage.getItem('authToken');
+    
+    if (isLoggedIn !== 'true' || !authToken) {
+      console.log('User not logged in, redirecting to login page');
+      navigate('/login');
+      return;
+    }
+    
+    // Then check cart
     const savedCart = localStorage.getItem('flowerShopCart');
     if (savedCart) {
       const parsedCart = JSON.parse(savedCart);

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './OrderSuccess.css';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
@@ -7,6 +8,7 @@ import ProgressSteps from '../components/ProgressSteps';
 import { FiHome } from 'react-icons/fi';
 
 const OrderSuccess = () => {
+  const navigate = useNavigate();
   const [orderData, setOrderData] = useState(null);
 
   const breadcrumbData = [
@@ -27,6 +29,16 @@ const OrderSuccess = () => {
 
   // Load order data from localStorage on component mount
   useEffect(() => {
+    // Check if user is logged in first
+    const isLoggedIn = localStorage.getItem('userLoggedIn');
+    const authToken = localStorage.getItem('authToken');
+    
+    if (isLoggedIn !== 'true' || !authToken) {
+      console.log('User not logged in, redirecting to login page');
+      navigate('/login');
+      return;
+    }
+    
     const loadOrderData = () => {
       // Get order data from localStorage
       const storedOrderData = localStorage.getItem('orderData');
@@ -101,7 +113,7 @@ const OrderSuccess = () => {
     };
 
     loadOrderData();
-  }, []);
+  }, [navigate]);
 
   // Show loading state while order data is being processed
   if (!orderData) {
