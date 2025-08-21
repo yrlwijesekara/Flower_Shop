@@ -893,7 +893,7 @@ const ProductDetails = () => {
             {activeTab === 'description' && (
               <>
                 <div className="tab-section">
-                  <h3 className="section-title">Product Description</h3>
+                  <h3 className="section-title">📝 Product Description</h3>
                   <p className="section-description">
                     {product.description}
                   </p>
@@ -906,7 +906,7 @@ const ProductDetails = () => {
                 
                 {product.plantDetails && (
                   <div className="tab-section">
-                    <h3 className="section-title">Quick Care Overview</h3>
+                    <h3 className="section-title">🌱 Quick Care Overview</h3>
                     <div className="care-overview-grid">
                       {product.plantDetails.sunlight && (
                         <div className="care-item">
@@ -934,7 +934,7 @@ const ProductDetails = () => {
                 
                 {product.features && product.features.length > 0 && (
                   <div className="tab-section">
-                    <h3 className="section-title">What's Included</h3>
+                    <h3 className="section-title">📦 What's Included</h3>
                     <ul className="features-list">
                       {product.features.map((feature, index) => (
                         <li key={index}>{feature}</li>
@@ -985,7 +985,7 @@ const ProductDetails = () => {
                     </div>
 
                     <div className="reviews-list">
-                      <h3 className="section-title">Customer Reviews</h3>
+                      <h3 className="section-title">⭐ Customer Reviews</h3>
                       {product.reviews.map((review, index) => (
                         <div key={review.id} className="review-item">
                           <div className="review-header">
@@ -1190,7 +1190,7 @@ const ProductDetails = () => {
             {activeTab === 'shipping' && (
               <>
                 <div className="tab-section">
-                  <h3 className="section-title">Shipping Information</h3>
+                  <h3 className="section-title">🚚 Shipping Information</h3>
                   <ul className="shipping-list">
                     {product.shipping?.freeShipping ? (
                       <li>✓ Free shipping included</li>
@@ -1205,7 +1205,7 @@ const ProductDetails = () => {
                 </div>
                 
                 <div className="tab-section">
-                  <h3 className="section-title">Returns & Refunds</h3>
+                  <h3 className="section-title">↩️ Returns & Refunds</h3>
                   <ul className="shipping-list">
                     <li>{product.shipping?.returnPolicy || '14-day return policy for live plants'}</li>
                     <li>Plants must be in original condition</li>
