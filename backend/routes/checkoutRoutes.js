@@ -18,16 +18,6 @@ router.use(protect);
 // @access  Private
 router.post('/simple', processSimpleCheckout);
 
-// @desc    Get checkout information (cart + user details)
-// @route   GET /api/checkout/:sessionId
-// @access  Private
-router.get('/:sessionId', verifySession, getCheckoutInfo);
-
-// @desc    Process checkout and create order
-// @route   POST /api/checkout/:sessionId
-// @access  Private
-router.post('/:sessionId', verifySession, processCheckout);
-
 // @desc    Get user's order history
 // @route   GET /api/checkout/orders
 // @access  Private
@@ -42,5 +32,15 @@ router.get('/orders/:orderNumber', getOrderDetails);
 // @route   PATCH /api/checkout/orders/:orderNumber/cancel
 // @access  Private
 router.patch('/orders/:orderNumber/cancel', cancelOrder);
+
+// @desc    Get checkout information (cart + user details)
+// @route   GET /api/checkout/:sessionId
+// @access  Private
+router.get('/:sessionId', verifySession, getCheckoutInfo);
+
+// @desc    Process checkout and create order
+// @route   POST /api/checkout/:sessionId
+// @access  Private
+router.post('/:sessionId', verifySession, processCheckout);
 
 module.exports = router;

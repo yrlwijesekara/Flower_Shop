@@ -33,6 +33,9 @@ function Userprofile() {
   const [isSaving, setIsSaving] = useState(false);
   const [showOrdersPopup, setShowOrdersPopup] = useState(false);
   const [showCouponsPopup, setShowCouponsPopup] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
+  const [ordersError, setOrdersError] = useState(null);
   const [showPaymentsPopup, setShowPaymentsPopup] = useState(false);
   const [activePaymentTab, setActivePaymentTab] = useState('history');
   const [showAddCardForm, setShowAddCardForm] = useState(false);
@@ -350,8 +353,69 @@ function Userprofile() {
     setIsEditing(false);
   };
   
-  const handleOrdersClick = () => {
+  const handleOrdersClick = async () => {
     setShowOrdersPopup(true);
+    await fetchUserOrders();
+  };
+  
+  const fetchUserOrders = async () => {
+    setOrdersLoading(true);
+    setOrdersError(null);
+    
+    try {
+      const authToken = localStorage.getItem('authToken');
+      
+      if (!authToken) {
+        throw new Error('Authentication token not found');
+      }
+      
+      const response = await fetch('http://localhost:8000/api/orders', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${authToken}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setOrders(data.data.orders);
+      } else {
+        throw new Error(data.message || 'Failed to fetch orders');
+      }
+      
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      setOrdersError(error.message);
+    } finally {
+      setOrdersLoading(false);
+    }
+  };
+  
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+  
+  const getStatusColor = (status) => {
+    switch(status.toLowerCase()) {
+      case 'pending': return '#FFA500';
+      case 'confirmed': return '#4CAF50';
+      case 'processing': return '#2196F3';
+      case 'shipped': return '#9C27B0';
+      case 'delivered': return '#4CAF50';
+      case 'cancelled': return '#F44336';
+      case 'returned': return '#FF5722';
+      default: return '#757575';
+    }
   };
   
   const closeOrdersPopup = () => {
@@ -552,6 +616,45 @@ function Userprofile() {
     }
   };
   
+  const handleCancelOrder = async (orderNumber) => {
+    if (!window.confirm('Are you sure you want to cancel this order?')) {
+      return;
+    }
+    
+    try {
+      const authToken = localStorage.getItem('authToken');
+      
+      if (!authToken) {
+        throw new Error('Authentication token not found');
+      }
+      
+      const response = await fetch(`http://localhost:8000/api/orders/${orderNumber}/cancel`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${authToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          reason: 'Cancelled by customer'
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        alert('Order cancelled successfully');
+        // Refresh the orders list
+        await fetchUserOrders();
+      } else {
+        throw new Error(data.message || 'Failed to cancel order');
+      }
+      
+    } catch (error) {
+      console.error('Error cancelling order:', error);
+      alert(`Failed to cancel order: ${error.message}`);
+    }
+  };
+  
   const handleRemoveCard = (cardId) => {
     if (window.confirm('Are you sure you want to remove this card?')) {
       const updatedCards = savedCards.filter(card => card.id !== cardId);
@@ -714,37 +817,67 @@ function Userprofile() {
               <button className="close-btn" onClick={closeOrdersPopup}>&times;</button>
             </div>
             <div className="popup-body">
-              {/* If no orders, show empty state */}
-              <div className="empty-orders">
-                <img src="/About/empty-orders.png" alt="No Orders" className="empty-orders-img" />
-                <h3>No Orders Yet</h3>
-                <p>You haven't placed any orders yet. Start shopping to see your orders here.</p>
-                <button className="shop-now-btn" onClick={() => navigate('/products')}>SHOP NOW</button>
-              </div>
-              
-              {/* Order list would go here when there are orders */}
-              {/* This is just a placeholder */}
-              {/* 
-              <div className="order-list">
-                <div className="order-item">
-                  <div className="order-header">
-                    <span>Order #1234</span>
-                    <span>Placed on: August 10, 2025</span>
-                    <span className="order-status">Delivered</span>
-                  </div>
-                  <div className="order-details">
-                    <div className="order-product">
-                      <img src="/products/flower1.jpg" alt="Product" />
-                      <div>
-                        <h4>Rose Bouquet</h4>
-                        <p>Quantity: 1</p>
-                        <p>Price: $50</p>
+              {ordersLoading ? (
+                <div className="orders-loading">
+                  <div className="loading-spinner"></div>
+                  <p>Loading your orders...</p>
+                </div>
+              ) : ordersError ? (
+                <div className="orders-error">
+                  <p>Error: {ordersError}</p>
+                  <button className="retry-btn" onClick={fetchUserOrders}>Try Again</button>
+                </div>
+              ) : orders.length === 0 ? (
+                <div className="empty-orders">
+                  <h3>No Orders Yet</h3>
+                  <p>You haven't placed any orders yet.</p>
+                  <button className="shop-now-btn" onClick={() => navigate('/products')}>SHOP NOW</button>
+                </div>
+              ) : (
+                <div className="order-list">
+                  {orders.map(order => (
+                    <div className="order-item" key={order._id}>
+                      <div className="order-header">
+                        <div>
+                          <h4>Order #{order.orderNumber}</h4>
+                          <p>{formatDate(order.createdAt)}</p>
+                        </div>
+                        <div>
+                          <span className="order-status" style={{ backgroundColor: getStatusColor(order.orderStatus) }}>
+                            {order.orderStatus.toUpperCase()}
+                          </span>
+                          <p className="order-total">${order.totalAmount.toFixed(2)}</p>
+                        </div>
+                      </div>
+                      <div className="order-details">
+                        <h5>Items:</h5>
+                        {order.items.map((item, index) => (
+                          <div className="order-product" key={index}>
+                            <img 
+                              src={item.productSnapshot.image || '/products/default.jpg'} 
+                              alt={item.productSnapshot.name}
+                              onError={(e) => { e.target.src = '/products/default.jpg'; }}
+                            />
+                            <div>
+                              <h6>{item.productSnapshot.name}</h6>
+                              <p>Qty: {item.quantity} × ${item.price.toFixed(2)}</p>
+                            </div>
+                          </div>
+                        ))}
+                        <div className="order-summary">
+                          <p><strong>Total: ${order.totalAmount.toFixed(2)}</strong></p>
+                          <p>Status: {order.orderStatus}</p>
+                          {(['pending', 'confirmed'].includes(order.orderStatus.toLowerCase())) && (
+                            <button className="cancel-order-btn" onClick={() => handleCancelOrder(order.orderNumber)}>
+                              Cancel Order
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              </div>
-              */}
+              )}
             </div>
           </div>
         </div>
