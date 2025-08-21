@@ -263,6 +263,7 @@ function Userprofile() {
       // Prepare data for backend API
       const updateData = {
         name: `${editableData.firstName} ${editableData.lastName}`,
+        email: editableData.email,
         phone: editableData.phoneNumber,
         address: {
           country: editableData.country || 'United States'
@@ -314,7 +315,12 @@ function Userprofile() {
         
       } else {
         console.error('Profile update failed:', data.message);
-        alert(`Profile update failed: ${data.message}`);
+        // Show specific error message from backend
+        if (data.message.includes('Email already exists')) {
+          alert('This email is already used by another user. Please choose a different email.');
+        } else {
+          alert(`Profile update failed: ${data.message}`);
+        }
         setIsSaving(false);
       }
       

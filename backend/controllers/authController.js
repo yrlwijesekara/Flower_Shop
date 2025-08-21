@@ -192,11 +192,29 @@ const getMe = async (req, res) => {
 // @access  Private
 const updateProfile = async (req, res) => {
   try {
-    const { name, phone, address } = req.body;
+    const { name, email, phone, address } = req.body;
 
     const user = await User.findById(req.user._id);
 
     if (name) user.name = name;
+    
+    if (email && email.toLowerCase().trim() !== user.email) {
+      // Check if the new email already exists for another user
+      const existingUser = await User.findOne({ 
+        email: email.toLowerCase().trim(),
+        _id: { $ne: req.user._id } // Exclude current user
+      });
+      
+      if (existingUser) {
+        return res.status(400).json({
+          success: false,
+          message: 'Email already exists for another user'
+        });
+      }
+      
+      user.email = email.toLowerCase().trim();
+    }
+    
     if (phone) user.phone = phone;
     if (address) user.address = address;
 
@@ -228,6 +246,14 @@ const updateProfile = async (req, res) => {
         success: false,
         message: 'Validation Error',
         errors: messages
+      });
+    }
+
+    // Handle duplicate key error (email already exists)
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email already exists for another user'
       });
     }
 
