@@ -24,6 +24,7 @@ import Customers from './pages/admin/Customers';
 import Contacts from './pages/admin/Contacts';
 import Comments from './pages/admin/Comments';
 import ResetPassword from './pages/admin/ResetPassword';
+import OtherProducts from './pages/admin/OtherProducts';
 
 import './App.css';
 
@@ -53,6 +54,7 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path="orders" element={<Orders />} />
             <Route path="products" element={<Products />} />
+            <Route path="other-products" element={<OtherProducts />} />
             <Route path="customers" element={<Customers />} />
             <Route path="contacts" element={<Contacts />} />
             <Route path="comments" element={<Comments />} />

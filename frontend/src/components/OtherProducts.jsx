@@ -4,7 +4,12 @@ import './OtherProducts.css';
 
 const OtherProducts = ({ className = "", onAddToCart }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const otherProducts = [
+  const [otherProducts, setOtherProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  // Fallback hardcoded products
+  const fallbackProducts = [
     {
       id: 101,
       name: "CANDELABRA ALOE",
@@ -55,6 +60,43 @@ const OtherProducts = ({ className = "", onAddToCart }) => {
       image: "/images/wedding-2.jpg"
     }
   ];
+
+  // Fetch other products from API
+  useEffect(() => {
+    const fetchOtherProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('http://localhost:8000/api/other-products');
+        const data = await response.json();
+        
+        if (data.success && data.data && data.data.length > 0) {
+          // Map API data to match expected format
+          const mappedProducts = data.data.map(product => ({
+            id: product._id,
+            name: product.name.toUpperCase(),
+            price: product.price,
+            rating: product.rating || 5,
+            image: product.image,
+            description: product.description
+          }));
+          setOtherProducts(mappedProducts);
+        } else {
+          // Use fallback data if no products from API
+          setOtherProducts(fallbackProducts);
+        }
+        setError('');
+      } catch (error) {
+        console.error('Error fetching other products:', error);
+        // Use fallback data on error
+        setOtherProducts(fallbackProducts);
+        setError('');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOtherProducts();
+  }, []);
 
   const renderStars = (rating) => {
     const stars = [];
@@ -156,7 +198,7 @@ const OtherProducts = ({ className = "", onAddToCart }) => {
             </div>
             
             <div className="modal-description">
-              <p>Premium quality plant perfect for your home or office. Easy to care for and adds natural beauty to any space.</p>
+              <p>{product.description || 'Premium quality plant perfect for your home or office. Easy to care for and adds natural beauty to any space.'}</p>
             </div>
             
             <div className="modal-actions">
@@ -186,7 +228,16 @@ const OtherProducts = ({ className = "", onAddToCart }) => {
 
       {/* Products List */}
       <div className="other-products-list">
-        {otherProducts.map((product, index) => (
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
+            Loading other products...
+          </div>
+        ) : otherProducts.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
+            No other products available
+          </div>
+        ) : (
+          otherProducts.map((product, index) => (
           <div key={product.id} className="other-products-item">
             <div className="other-products-card-frame">
               <div 
@@ -227,7 +278,8 @@ const OtherProducts = ({ className = "", onAddToCart }) => {
               </div>
             </div>
           </div>
-        ))}
+        ))
+        )}
       </div>
 
       {/* Product Detail Modal using Portal */}
