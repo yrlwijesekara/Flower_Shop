@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FiSearch, FiShoppingCart, FiUser } from 'react-icons/fi';
+import { FiShoppingCart, FiUser } from 'react-icons/fi';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -144,9 +144,6 @@ const Navbar = () => {
 
             {/* User Actions - Mobile */}
             <div className="navbar-actions mobile-actions">
-              <button className="action-btn search-btn" aria-label="Search">
-                <FiSearch size={32} color="#164C0D" />
-              </button>
               <button className="action-btn cart-btn" aria-label="Shopping Cart" onClick={handleCartClick}>
                 <FiShoppingCart size={32} color="#164C0D" />
                 {cartItemCount > 0 && (
@@ -161,9 +158,6 @@ const Navbar = () => {
 
           {/* User Actions - Desktop (Right Corner) */}
           <div className="navbar-actions desktop-actions">
-            <button className="action-btn search-btn" aria-label="Search">
-              <FiSearch size={32} color="#164C0D" />
-            </button>
             <button className="action-btn cart-btn" aria-label="Shopping Cart" onClick={handleCartClick}>
               <FiShoppingCart size={32} color="#164C0D" />
               {cartItemCount > 0 && (
