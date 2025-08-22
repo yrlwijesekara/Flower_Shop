@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
 
 const wishlistSchema = new mongoose.Schema({
-  // User identification - for now we'll use session/device ID
-  // Later can be linked to user account when authentication is added
-  sessionId: {
-    type: String,
-    required: [true, 'Session ID is required'],
-    trim: true
+  // User identification using authenticated user ID
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: [true, 'User ID is required']
   },
   
   // Array of product IDs in wishlist
@@ -44,9 +43,9 @@ const wishlistSchema = new mongoose.Schema({
 });
 
 // Index for better query performance
-wishlistSchema.index({ sessionId: 1 });
+wishlistSchema.index({ userId: 1 });
 wishlistSchema.index({ 'products.productId': 1 });
-wishlistSchema.index({ sessionId: 1, 'products.productId': 1 });
+wishlistSchema.index({ userId: 1, 'products.productId': 1 });
 
 // Update totalItems and lastModified before saving
 wishlistSchema.pre('save', function(next) {
@@ -55,21 +54,21 @@ wishlistSchema.pre('save', function(next) {
   next();
 });
 
-// Static method to find wishlist by session ID
-wishlistSchema.statics.findBySessionId = function(sessionId) {
-  return this.findOne({ sessionId }).populate('products.productId');
+// Static method to find wishlist by user ID
+wishlistSchema.statics.findByUserId = function(userId) {
+  return this.findOne({ userId }).populate('products.productId');
 };
 
 // Static method to add product to wishlist
-wishlistSchema.statics.addToWishlist = async function(sessionId, productId, productInfo = {}) {
+wishlistSchema.statics.addToWishlist = async function(userId, productId, productInfo = {}) {
   let retries = 3;
   
   while (retries > 0) {
     try {
-      let wishlist = await this.findOne({ sessionId });
+      let wishlist = await this.findOne({ userId });
       
       if (!wishlist) {
-        wishlist = new this({ sessionId, products: [] });
+        wishlist = new this({ userId, products: [] });
       }
       
       // Check if product already exists
@@ -100,12 +99,12 @@ wishlistSchema.statics.addToWishlist = async function(sessionId, productId, prod
 };
 
 // Static method to remove product from wishlist
-wishlistSchema.statics.removeFromWishlist = async function(sessionId, productId) {
+wishlistSchema.statics.removeFromWishlist = async function(userId, productId) {
   let retries = 3;
   
   while (retries > 0) {
     try {
-      const wishlist = await this.findOne({ sessionId });
+      const wishlist = await this.findOne({ userId });
       
       if (wishlist) {
         wishlist.products = wishlist.products.filter(
@@ -128,8 +127,8 @@ wishlistSchema.statics.removeFromWishlist = async function(sessionId, productId)
 };
 
 // Static method to clear entire wishlist
-wishlistSchema.statics.clearWishlist = async function(sessionId) {
-  const wishlist = await this.findOne({ sessionId });
+wishlistSchema.statics.clearWishlist = async function(userId) {
+  const wishlist = await this.findOne({ userId });
   
   if (wishlist) {
     wishlist.products = [];

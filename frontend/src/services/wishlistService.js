@@ -1,16 +1,14 @@
 import { wishlistAPI } from './api.js';
 
-// Session management
+// Storage management for authenticated users
 const STORAGE_KEYS = {
-  SESSION_ID: 'flowerShopWishlistSession',
-  LOCAL_FAVORITES: 'flowerShopFavorites', // Keep for migration
-  WISHLIST_CACHE: 'flowerShopWishlistCache'
+  WISHLIST_CACHE: 'flowerShopWishlistCache',
+  LOCAL_FAVORITES: 'flowerShopFavorites' // Keep for cleanup
 };
 
 class WishlistService {
   constructor() {
-    this.sessionId = null;
-    this.isInitialized = false;
+    this.isAuthenticated = false;
     this.cache = new Map();
     this.listeners = new Set();
     this.loadingPromise = null; // Prevent multiple simultaneous loads
@@ -18,46 +16,51 @@ class WishlistService {
     this.LOAD_DEBOUNCE_MS = 1000; // Minimum time between loads
   }
 
-  // Initialize the service
+  // Initialize the service for authenticated user
   async init() {
-    if (this.isInitialized) return;
-    
     try {
-      // Try to get existing session ID
-      this.sessionId = localStorage.getItem(STORAGE_KEYS.SESSION_ID);
-      console.log('Initializing wishlist service, session ID:', this.sessionId);
+      const authToken = this.getAuthToken();
       
-      if (!this.sessionId) {
-        // Generate new session ID
-        const response = await wishlistAPI.generateSession();
-        if (response.success) {
-          this.sessionId = response.data.sessionId;
-          localStorage.setItem(STORAGE_KEYS.SESSION_ID, this.sessionId);
-          console.log('Generated new session ID:', this.sessionId);
-          
-          // Migrate existing localStorage favorites to database
-          await this.migrateFavoritesToDatabase();
-        } else {
-          throw new Error('Failed to generate session ID');
-        }
+      if (!authToken) {
+        console.log('No auth token found, wishlist disabled');
+        this.isAuthenticated = false;
+        this.cache.clear();
+        this.clearLocalData();
+        this.notifyListeners();
+        return;
       }
 
+      console.log('Initializing wishlist service for authenticated user');
+      this.isAuthenticated = true;
+      
       // Load wishlist from database
       await this.loadWishlist();
-      this.isInitialized = true;
       console.log('Wishlist service initialized successfully');
       
     } catch (error) {
       console.error('Failed to initialize wishlist service:', error);
-      // Fallback to localStorage mode
-      this.sessionId = null;
-      this.isInitialized = false;
+      this.isAuthenticated = false;
+      this.cache.clear();
+      this.notifyListeners();
     }
+  }
+
+  // Get authentication token from localStorage
+  getAuthToken() {
+    return localStorage.getItem('authToken');
+  }
+
+  // Check if user is authenticated
+  isUserAuthenticated() {
+    return this.isAuthenticated && !!this.getAuthToken();
   }
 
   // Load wishlist from database
   async loadWishlist() {
-    if (!this.sessionId) return;
+    if (!this.isUserAuthenticated()) {
+      console.log('User not authenticated, skipping wishlist load');
+      return;
+    }
     
     // Debounce loading to prevent excessive requests
     const now = Date.now();
@@ -81,7 +84,9 @@ class WishlistService {
   
   async _doLoadWishlist() {
     try {
-      const response = await wishlistAPI.getWishlist(this.sessionId);
+      const authToken = this.getAuthToken();
+      const response = await wishlistAPI.getWishlist(authToken);
+      
       if (response.success && response.data) {
         this.cache.clear();
         const productIds = response.data.products?.map(p => {
@@ -96,7 +101,7 @@ class WishlistService {
         productIds.forEach(id => this.cache.set(id.toString(), true));
         
         // Cache in localStorage for offline access
-        localStorage.setItem(STORAGE_KEYS.WISHLIST_CACHE, JSON.stringify(productIds));
+        this.updateCache();
         this.notifyListeners();
       }
     } catch (error) {
@@ -121,33 +126,13 @@ class WishlistService {
     }
   }
 
-  // Migrate existing localStorage favorites to database
-  async migrateFavoritesToDatabase() {
-    try {
-      const oldFavorites = localStorage.getItem(STORAGE_KEYS.LOCAL_FAVORITES);
-      if (oldFavorites) {
-        const favoriteIds = JSON.parse(oldFavorites);
-        
-        // Add each favorite to database
-        for (const productId of favoriteIds) {
-          try {
-            await wishlistAPI.addToWishlist(this.sessionId, productId);
-          } catch (error) {
-            console.error(`Failed to migrate product ${productId}:`, error);
-          }
-        }
-        
-        // Remove old localStorage data after successful migration
-        localStorage.removeItem(STORAGE_KEYS.LOCAL_FAVORITES);
-        console.log(`Migrated ${favoriteIds.length} favorites to database`);
-      }
-    } catch (error) {
-      console.error('Migration failed:', error);
-    }
-  }
-
   // Check if product is in wishlist
   isInWishlist(productId) {
+    if (!this.isUserAuthenticated()) {
+      console.log('User not authenticated, wishlist check disabled');
+      return false;
+    }
+    
     const result = this.cache.has(productId?.toString());
     console.log(`Checking if product ${productId} is in wishlist:`, result);
     return result;
@@ -158,24 +143,23 @@ class WishlistService {
     const productIdStr = productId?.toString();
     if (!productIdStr) return false;
 
+    if (!this.isUserAuthenticated()) {
+      console.log('User not authenticated, cannot add to wishlist');
+      return false;
+    }
+
     try {
-      if (this.sessionId) {
-        // Add to database
-        const response = await wishlistAPI.addToWishlist(this.sessionId, productIdStr);
-        if (response.success) {
-          this.cache.set(productIdStr, true);
-          this.updateCache();
-          this.notifyListeners();
-          return true;
-        }
-      } else {
-        // Fallback to localStorage
-        return this.addToLocalStorage(productIdStr);
+      const authToken = this.getAuthToken();
+      const response = await wishlistAPI.addToWishlist(productIdStr, authToken);
+      
+      if (response.success) {
+        this.cache.set(productIdStr, true);
+        this.updateCache();
+        this.notifyListeners();
+        return true;
       }
     } catch (error) {
       console.error('Failed to add to wishlist:', error);
-      // Fallback to localStorage
-      return this.addToLocalStorage(productIdStr);
     }
     
     return false;
@@ -186,24 +170,23 @@ class WishlistService {
     const productIdStr = productId?.toString();
     if (!productIdStr) return false;
 
+    if (!this.isUserAuthenticated()) {
+      console.log('User not authenticated, cannot remove from wishlist');
+      return false;
+    }
+
     try {
-      if (this.sessionId) {
-        // Remove from database
-        const response = await wishlistAPI.removeFromWishlist(this.sessionId, productIdStr);
-        if (response.success) {
-          this.cache.delete(productIdStr);
-          this.updateCache();
-          this.notifyListeners();
-          return true;
-        }
-      } else {
-        // Fallback to localStorage
-        return this.removeFromLocalStorage(productIdStr);
+      const authToken = this.getAuthToken();
+      const response = await wishlistAPI.removeFromWishlist(productIdStr, authToken);
+      
+      if (response.success) {
+        this.cache.delete(productIdStr);
+        this.updateCache();
+        this.notifyListeners();
+        return true;
       }
     } catch (error) {
       console.error('Failed to remove from wishlist:', error);
-      // Fallback to localStorage
-      return this.removeFromLocalStorage(productIdStr);
     }
     
     return false;
@@ -214,28 +197,27 @@ class WishlistService {
     const productIdStr = productId?.toString();
     if (!productIdStr) return false;
 
+    if (!this.isUserAuthenticated()) {
+      console.log('User not authenticated, cannot toggle wishlist');
+      return false;
+    }
+
     try {
-      if (this.sessionId) {
-        // Toggle in database
-        const response = await wishlistAPI.toggleWishlist(this.sessionId, productIdStr);
-        if (response.success) {
-          if (response.data.isInWishlist) {
-            this.cache.set(productIdStr, true);
-          } else {
-            this.cache.delete(productIdStr);
-          }
-          this.updateCache();
-          this.notifyListeners();
-          return response.data.isInWishlist;
+      const authToken = this.getAuthToken();
+      const response = await wishlistAPI.toggleWishlist(productIdStr, authToken);
+      
+      if (response.success) {
+        if (response.data.isInWishlist) {
+          this.cache.set(productIdStr, true);
+        } else {
+          this.cache.delete(productIdStr);
         }
-      } else {
-        // Fallback to localStorage
-        return this.toggleLocalStorage(productIdStr);
+        this.updateCache();
+        this.notifyListeners();
+        return response.data.isInWishlist;
       }
     } catch (error) {
       console.error('Failed to toggle wishlist:', error);
-      // Fallback to localStorage
-      return this.toggleLocalStorage(productIdStr);
     }
     
     return false;
@@ -243,29 +225,34 @@ class WishlistService {
 
   // Get all wishlist product IDs
   getWishlistIds() {
+    if (!this.isUserAuthenticated()) {
+      return [];
+    }
     return Array.from(this.cache.keys());
   }
 
   // Get wishlist count
   getCount() {
+    if (!this.isUserAuthenticated()) {
+      return 0;
+    }
     return this.cache.size;
   }
 
   // Clear entire wishlist
   async clearWishlist() {
+    if (!this.isUserAuthenticated()) {
+      console.log('User not authenticated, cannot clear wishlist');
+      return false;
+    }
+
     try {
-      if (this.sessionId) {
-        const response = await wishlistAPI.clearWishlist(this.sessionId);
-        if (response.success) {
-          this.cache.clear();
-          this.updateCache();
-          this.notifyListeners();
-          return true;
-        }
-      } else {
-        // Clear localStorage
-        localStorage.removeItem(STORAGE_KEYS.LOCAL_FAVORITES);
+      const authToken = this.getAuthToken();
+      const response = await wishlistAPI.clearWishlist(authToken);
+      
+      if (response.success) {
         this.cache.clear();
+        this.updateCache();
         this.notifyListeners();
         return true;
       }
@@ -276,55 +263,12 @@ class WishlistService {
     return false;
   }
 
-  // LocalStorage fallback methods
-  addToLocalStorage(productId) {
-    try {
-      const favorites = this.getLocalFavorites();
-      if (!favorites.includes(productId)) {
-        favorites.push(productId);
-        localStorage.setItem(STORAGE_KEYS.LOCAL_FAVORITES, JSON.stringify(favorites));
-        this.cache.set(productId, true);
-        this.notifyListeners();
-        return true;
-      }
-    } catch (error) {
-      console.error('Local storage add failed:', error);
-    }
-    return false;
-  }
-
-  removeFromLocalStorage(productId) {
-    try {
-      const favorites = this.getLocalFavorites();
-      const filtered = favorites.filter(id => id !== productId);
-      localStorage.setItem(STORAGE_KEYS.LOCAL_FAVORITES, JSON.stringify(filtered));
-      this.cache.delete(productId);
-      this.notifyListeners();
-      return true;
-    } catch (error) {
-      console.error('Local storage remove failed:', error);
-    }
-    return false;
-  }
-
-  toggleLocalStorage(productId) {
-    const isInWishlist = this.cache.has(productId);
-    if (isInWishlist) {
-      this.removeFromLocalStorage(productId);
-      return false;
-    } else {
-      this.addToLocalStorage(productId);
-      return true;
-    }
-  }
-
-  getLocalFavorites() {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEYS.LOCAL_FAVORITES);
-      return saved ? JSON.parse(saved) : [];
-    } catch (error) {
-      return [];
-    }
+  // Clear local data when user logs out
+  clearLocalData() {
+    this.cache.clear();
+    localStorage.removeItem(STORAGE_KEYS.WISHLIST_CACHE);
+    localStorage.removeItem(STORAGE_KEYS.LOCAL_FAVORITES); // Cleanup old data
+    this.notifyListeners();
   }
 
   // Update cache in localStorage
@@ -335,6 +279,19 @@ class WishlistService {
     } catch (error) {
       console.error('Failed to update cache:', error);
     }
+  }
+
+  // Handle user logout
+  handleLogout() {
+    console.log('User logged out, clearing wishlist data');
+    this.isAuthenticated = false;
+    this.clearLocalData();
+  }
+
+  // Handle user login
+  async handleLogin() {
+    console.log('User logged in, initializing wishlist');
+    await this.init();
   }
 
   // Event listener management
@@ -353,18 +310,38 @@ class WishlistService {
     });
   }
 
-  // Get session info
-  getSessionInfo() {
+  // Get service info
+  getServiceInfo() {
     return {
-      sessionId: this.sessionId,
-      isInitialized: this.isInitialized,
-      count: this.getCount()
+      isAuthenticated: this.isAuthenticated,
+      count: this.getCount(),
+      hasAuthToken: !!this.getAuthToken()
     };
   }
 }
 
 // Create singleton instance
 const wishlistService = new WishlistService();
+
+// Listen for auth changes to reinitialize
+const handleAuthChange = () => {
+  const authToken = localStorage.getItem('authToken');
+  if (authToken) {
+    wishlistService.handleLogin();
+  } else {
+    wishlistService.handleLogout();
+  }
+};
+
+// Listen for storage changes (for auth token changes)
+window.addEventListener('storage', (e) => {
+  if (e.key === 'authToken') {
+    handleAuthChange();
+  }
+});
+
+// Listen for custom auth change events
+window.addEventListener('authChange', handleAuthChange);
 
 // Auto-initialize on import to ensure service is ready
 let initPromise = null;

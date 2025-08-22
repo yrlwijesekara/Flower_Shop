@@ -5,18 +5,18 @@ const {
   removeFromWishlist,
   toggleWishlist,
   clearWishlist,
-  checkWishlistStatus,
-  generateSession
+  checkWishlistStatus
 } = require('../controllers/wishlistController');
+const { protect } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Public routes
-router.route('/session')
-  .post(generateSession); // POST /api/wishlist/session - Generate new session ID
+// All routes require authentication
+router.use(protect);
 
-router.route('/:sessionId')
-  .get(getWishlist); // GET /api/wishlist/:sessionId - Get user's wishlist
+// Private routes (require user authentication)
+router.route('/')
+  .get(getWishlist); // GET /api/wishlist - Get user's wishlist
 
 router.route('/add')
   .post(addToWishlist); // POST /api/wishlist/add - Add product to wishlist
@@ -30,7 +30,7 @@ router.route('/toggle')
 router.route('/clear')
   .delete(clearWishlist); // DELETE /api/wishlist/clear - Clear entire wishlist
 
-router.route('/check/:sessionId/:productId')
-  .get(checkWishlistStatus); // GET /api/wishlist/check/:sessionId/:productId - Check if product is in wishlist
+router.route('/check/:productId')
+  .get(checkWishlistStatus); // GET /api/wishlist/check/:productId - Check if product is in wishlist
 
 module.exports = router;
