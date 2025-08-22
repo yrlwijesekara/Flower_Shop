@@ -272,9 +272,53 @@ const getCustomerStats = async (req, res) => {
   }
 };
 
+// @desc    Delete customer (Admin only)
+// @route   DELETE /api/admin/customers/:id
+// @access  Private (Admin only)
+const deleteCustomer = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the customer first to check if it exists and is a user (not admin)
+    const customer = await User.findById(id);
+
+    if (!customer) {
+      return res.status(404).json({
+        success: false,
+        message: 'Customer not found'
+      });
+    }
+
+    // Prevent deletion of admin users
+    if (customer.role === 'admin') {
+      return res.status(400).json({
+        success: false,
+        message: 'Cannot delete admin users'
+      });
+    }
+
+    // Delete the customer
+    await User.findByIdAndDelete(id);
+
+    res.status(200).json({
+      success: true,
+      message: 'Customer deleted successfully'
+    });
+
+  } catch (error) {
+    console.error('Delete customer error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server Error',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   getAllCustomers,
   getCustomerById,
   updateCustomerStatus,
-  getCustomerStats
+  getCustomerStats,
+  deleteCustomer
 };

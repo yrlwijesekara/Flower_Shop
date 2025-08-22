@@ -4,7 +4,8 @@ const {
   getAllCustomers,
   getCustomerById,
   updateCustomerStatus,
-  getCustomerStats
+  getCustomerStats,
+  deleteCustomer
 } = require('../controllers/adminCustomerController');
 const { protect, authorize } = require('../middleware/auth');
 
@@ -30,5 +31,10 @@ router.get('/:id', authorize('admin'), getCustomerById);
 // @route   PUT /api/admin/customers/:id/status
 // @access  Private (Admin only)
 router.put('/:id/status', authorize('admin'), updateCustomerStatus);
+
+// @desc    Delete customer
+// @route   DELETE /api/admin/customers/:id
+// @access  Private (Admin only)
+router.delete('/:id', authorize('admin'), deleteCustomer);
 
 module.exports = router;

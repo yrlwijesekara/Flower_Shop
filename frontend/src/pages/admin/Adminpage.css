@@ -2932,3 +2932,134 @@ body:has([data-admin-panel="true"]) .admin-dashboard-container,
     font-size: 14px;
   }
 }
+
+/* Customer Detail Modal Styles */
+.admin-customer-detail-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.admin-customer-detail-section {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.admin-customer-detail-section-title {
+  background: #f8f9fa;
+  padding: 12px 16px;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-customer-detail-info {
+  padding: 16px;
+}
+
+.admin-customer-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.admin-customer-detail-row:last-child {
+  border-bottom: none;
+}
+
+.admin-customer-detail-label {
+  font-weight: 500;
+  color: #666;
+  min-width: 120px;
+}
+
+.admin-customer-detail-value {
+  color: #333;
+  text-align: right;
+  flex: 1;
+}
+
+.admin-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.admin-modal-icon {
+  color: #4CAF50;
+}
+
+.admin-modal-footer {
+  border-top: 1px solid #e0e0e0;
+  padding: 16px 20px;
+  background: #f8f9fa;
+}
+
+.admin-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.admin-modal-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 100px;
+  justify-content: center;
+}
+
+.admin-btn-success {
+  background: #28a745;
+  color: white;
+}
+
+.admin-btn-success:hover {
+  background: #218838;
+}
+
+.admin-btn-warning {
+  background: #ffc107;
+  color: #212529;
+}
+
+.admin-btn-warning:hover {
+  background: #e0a800;
+}
+
+.admin-btn-danger {
+  background: #dc3545;
+  color: white;
+}
+
+.admin-btn-danger:hover {
+  background: #c82333;
+}
+
+.admin-btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.admin-btn-secondary:hover {
+  background: #5a6268;
+}
