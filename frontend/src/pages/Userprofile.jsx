@@ -40,17 +40,6 @@ function Userprofile() {
   const [orders, setOrders] = useState([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
   const [ordersError, setOrdersError] = useState(null);
-  const [showPaymentsPopup, setShowPaymentsPopup] = useState(false);
-  const [activePaymentTab, setActivePaymentTab] = useState('history');
-  const [showAddCardForm, setShowAddCardForm] = useState(false);
-  const [cardDetails, setCardDetails] = useState({
-    cardNumber: '',
-    cardName: '',
-    expiryMonth: '',
-    expiryYear: '',
-    cvv: ''
-  });
-  const [savedCards, setSavedCards] = useState([]);
   const [editableData, setEditableData] = useState({
     firstName: '',
     lastName: '',
@@ -63,13 +52,6 @@ function Userprofile() {
     lastName: '',
     email: '',
     phoneNumber: ''
-  });
-  const [cardErrors, setCardErrors] = useState({
-    cardNumber: '',
-    cardName: '',
-    expiryMonth: '',
-    expiryYear: '',
-    cvv: ''
   });
 
   useEffect(() => {
@@ -137,18 +119,6 @@ function Userprofile() {
             phoneNumber: backendUser.phone || ''
           });
           
-          // Load saved cards from localStorage if available
-          try {
-            const storedUser = localStorage.getItem('flowerShopUser');
-            if (storedUser) {
-              const localUser = JSON.parse(storedUser);
-              if (localUser.savedCards && Array.isArray(localUser.savedCards)) {
-                setSavedCards(localUser.savedCards);
-              }
-            }
-          } catch (localStorageError) {
-            console.warn('Could not load saved cards from localStorage:', localStorageError);
-          }
           
         } else {
           throw new Error(data.message || 'Failed to fetch user data');
@@ -181,10 +151,6 @@ function Userprofile() {
               country: user.country || '',
               phoneNumber: user.phoneNumber || user.phone || ''
             });
-            
-            if (user.savedCards && Array.isArray(user.savedCards)) {
-              setSavedCards(user.savedCards);
-            }
           } else {
             console.log('No fallback data available, redirecting to login');
             navigate('/login');
@@ -434,191 +400,6 @@ function Userprofile() {
     setShowCouponsPopup(false);
   };
   
-  const handlePaymentsClick = () => {
-    setShowPaymentsPopup(true);
-  };
-  
-  const closePaymentsPopup = () => {
-    setShowPaymentsPopup(false);
-    // Reset states when closing popup
-    setActivePaymentTab('history');
-    setShowAddCardForm(false);
-  };
-  
-  const handlePaymentTabChange = (tab) => {
-    setActivePaymentTab(tab);
-    setShowAddCardForm(false);
-  };
-  
-  const handleShowAddCardForm = () => {
-    setShowAddCardForm(true);
-  };
-  
-  const handleCancelAddCard = () => {
-    setShowAddCardForm(false);
-    setCardDetails({
-      cardNumber: '',
-      cardName: '',
-      expiryMonth: '',
-      expiryYear: '',
-      cvv: ''
-    });
-    setCardErrors({
-      cardNumber: '',
-      cardName: '',
-      expiryMonth: '',
-      expiryYear: '',
-      cvv: ''
-    });
-  };
-  
-  const handleCardInputChange = (e) => {
-    const { name, value } = e.target;
-    
-    // Clear error when user types
-    if (cardErrors[name]) {
-      setCardErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
-    }
-    
-    // Format card number with spaces
-    if (name === 'cardNumber') {
-      // Remove any non-digit characters
-      const cleaned = value.replace(/\D/g, '');
-      // Add a space after every 4 digits
-      const formatted = cleaned.replace(/(\d{4})(?=\d)/g, '$1 ');
-      // Limit to 19 characters (16 digits + 3 spaces)
-      const limited = formatted.slice(0, 19);
-      
-      setCardDetails(prev => ({
-        ...prev,
-        [name]: limited
-      }));
-    } else {
-      setCardDetails(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    }
-  };
-  
-  const handleSaveCard = () => {
-    // Validate card details
-    const newErrors = {};
-    
-    if (!cardDetails.cardNumber.trim()) {
-      newErrors.cardNumber = 'Card number is required';
-    } else if (cardDetails.cardNumber.replace(/\s/g, '').length !== 16) {
-      newErrors.cardNumber = 'Card number must be 16 digits';
-    }
-    
-    if (!cardDetails.cardName.trim()) {
-      newErrors.cardName = 'Name on card is required';
-    }
-    
-    if (!cardDetails.expiryMonth) {
-      newErrors.expiryMonth = 'Month is required';
-    }
-    
-    if (!cardDetails.expiryYear) {
-      newErrors.expiryYear = 'Year is required';
-    }
-    
-    if (!cardDetails.cvv.trim()) {
-      newErrors.cvv = 'CVV is required';
-    } else if (!/^\d{3,4}$/.test(cardDetails.cvv)) {
-      newErrors.cvv = 'CVV must be 3-4 digits';
-    }
-    
-    if (Object.keys(newErrors).length > 0) {
-      setCardErrors(newErrors);
-      return;
-    }
-    
-    // Determine card type based on first digit
-    let cardType = 'unknown';
-    const firstDigit = cardDetails.cardNumber.charAt(0);
-    
-    if (firstDigit === '4') {
-      cardType = 'visa';
-    } else if (firstDigit === '5') {
-      cardType = 'mastercard';
-    } else if (firstDigit === '3') {
-      cardType = 'amex';
-    } else if (firstDigit === '6') {
-      cardType = 'discover';
-    }
-    
-    // Create new card object
-    const newCard = {
-      id: Date.now(),
-      cardNumber: cardDetails.cardNumber,
-      cardName: cardDetails.cardName,
-      expiry: `${cardDetails.expiryMonth}/${cardDetails.expiryYear.slice(-2)}`,
-      type: cardType,
-      isDefault: savedCards.length === 0 // Make it default if it's the first card
-    };
-    
-    // Add to saved cards
-    const updatedCards = [...savedCards, newCard];
-    setSavedCards(updatedCards);
-    
-    // Save to localStorage
-    try {
-      const storedUser = localStorage.getItem('flowerShopUser');
-      if (storedUser) {
-        const user = JSON.parse(storedUser);
-        const updatedUser = {
-          ...user,
-          savedCards: updatedCards
-        };
-        localStorage.setItem('flowerShopUser', JSON.stringify(updatedUser));
-      }
-    } catch (error) {
-      console.error('Error saving cards to localStorage:', error);
-    }
-    
-    // Reset form
-    setCardDetails({
-      cardNumber: '',
-      cardName: '',
-      expiryMonth: '',
-      expiryYear: '',
-      cvv: ''
-    });
-    
-    // Hide form
-    setShowAddCardForm(false);
-    
-    // Show success message
-    alert('Card added successfully!');
-  };
-  
-  const handleSetDefaultCard = (cardId) => {
-    const updatedCards = savedCards.map(card => ({
-      ...card,
-      isDefault: card.id === cardId
-    }));
-    
-    setSavedCards(updatedCards);
-    
-    // Save to localStorage
-    try {
-      const storedUser = localStorage.getItem('flowerShopUser');
-      if (storedUser) {
-        const user = JSON.parse(storedUser);
-        const updatedUser = {
-          ...user,
-          savedCards: updatedCards
-        };
-        localStorage.setItem('flowerShopUser', JSON.stringify(updatedUser));
-      }
-    } catch (error) {
-      console.error('Error saving cards to localStorage:', error);
-    }
-  };
   
   const handleCancelOrder = async (orderNumber) => {
     if (!window.confirm('Are you sure you want to cancel this order?')) {
@@ -656,34 +437,6 @@ function Userprofile() {
     } catch (error) {
       console.error('Error cancelling order:', error);
       alert(`Failed to cancel order: ${error.message}`);
-    }
-  };
-  
-  const handleRemoveCard = (cardId) => {
-    if (window.confirm('Are you sure you want to remove this card?')) {
-      const updatedCards = savedCards.filter(card => card.id !== cardId);
-      
-      // If we removed the default card and there are other cards, make the first one default
-      if (updatedCards.length > 0 && !updatedCards.some(card => card.isDefault)) {
-        updatedCards[0].isDefault = true;
-      }
-      
-      setSavedCards(updatedCards);
-      
-      // Save to localStorage
-      try {
-        const storedUser = localStorage.getItem('flowerShopUser');
-        if (storedUser) {
-          const user = JSON.parse(storedUser);
-          const updatedUser = {
-            ...user,
-            savedCards: updatedCards
-          };
-          localStorage.setItem('flowerShopUser', JSON.stringify(updatedUser));
-        }
-      } catch (error) {
-        console.error('Error saving cards to localStorage:', error);
-      }
     }
   };
 
@@ -805,7 +558,6 @@ function Userprofile() {
 
                 <div className='action-buttons'>
                     <button onClick={handleOrdersClick}>MY ORDERS</button>
-                    <button onClick={handlePaymentsClick}>MY PAYMENTS</button>
                 </div>
 
             </div>
@@ -942,214 +694,6 @@ function Userprofile() {
                 <h3>Want More Discounts?</h3>
                 <p>Subscribe to our newsletter to receive exclusive coupons and special offers!</p>
                 <button className="subscribe-btn" onClick={() => navigate('/contact')}>SUBSCRIBE NOW</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      
-      {/* Payments Popup */}
-      {showPaymentsPopup && (
-        <div className="popup-overlay" onClick={closePaymentsPopup}>
-          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-            <div className="popup-header">
-              <h2>My Payments</h2>
-              <button className="close-btn" onClick={closePaymentsPopup}>&times;</button>
-            </div>
-            <div className="popup-body">
-              <div className="payment-tabs">
-                <button 
-                  className={`payment-tab ${activePaymentTab === 'history' ? 'active' : ''}`}
-                  onClick={() => handlePaymentTabChange('history')}
-                >
-                  Payment History
-                </button>
-                <button 
-                  className={`payment-tab ${activePaymentTab === 'cards' ? 'active' : ''}`}
-                  onClick={() => handlePaymentTabChange('cards')}
-                >
-                  Saved Cards
-                </button>
-              </div>
-              
-              <div className="payment-content">
-                {/* Payment History Tab Content */}
-                <div className="payment-history-container" style={{display: activePaymentTab === 'history' ? 'block' : 'none'}}>
-                  <div className="empty-payments">
-                    <img src="/About/empty-payment.png" alt="No Payments" className="empty-payments-img" />
-                    <h3>No Payment History</h3>
-                    <p>You haven't made any payments yet. Your payment history will appear here once you place an order.</p>
-                  </div>
-                </div>
-                
-                {/* Saved Cards Tab Content */}
-                <div className="saved-cards-container" style={{display: activePaymentTab === 'cards' ? 'block' : 'none'}}>
-                  {!showAddCardForm && (
-                    <>
-                      {savedCards.length === 0 ? (
-                        <div className="empty-cards">
-                          <img src="/About/empty-card.png" alt="No Saved Cards" className="empty-cards-img" />
-                          <h3>No Saved Cards</h3>
-                          <p>You haven't saved any payment methods yet. Your saved cards will appear here for easy checkout.</p>
-                          <button className="add-card-btn" onClick={handleShowAddCardForm}>ADD A PAYMENT METHOD</button>
-                        </div>
-                      ) : (
-                        <div className="cards-list">
-                          {savedCards.map(card => (
-                            <div className="card-item" key={card.id}>
-                              <div className="card-left">
-                                <img 
-                                  src={`/icons/${card.type}.png`} 
-                                  alt={card.type.toUpperCase()} 
-                                  className="card-logo"
-                                  onError={(e) => { e.target.src = "/icons/card-generic.png"; }}
-                                />
-                              </div>
-                              <div className="card-middle">
-                                <div className="card-number">
-                                  •••• •••• •••• {card.cardNumber.slice(-4)}
-                                </div>
-                                <div className="card-name">{card.cardName}</div>
-                                <div className="card-expiry">Expires: {card.expiry}</div>
-                              </div>
-                              <div className="card-right">
-                                {card.isDefault ? (
-                                  <button className="card-default-btn active">Default</button>
-                                ) : (
-                                  <button 
-                                    className="card-default-btn" 
-                                    onClick={() => handleSetDefaultCard(card.id)}
-                                  >
-                                    Set as Default
-                                  </button>
-                                )}
-                                <button 
-                                  className="card-remove-btn"
-                                  onClick={() => handleRemoveCard(card.id)}
-                                >
-                                  Remove
-                                </button>
-                              </div>
-                            </div>
-                          ))}
-                          <button className="add-another-card-btn" onClick={handleShowAddCardForm}>
-                            <span>+</span> Add Another Card
-                          </button>
-                        </div>
-                      )}
-                    </>
-                  )}
-                  
-                  {/* Add Card Form */}
-                  {showAddCardForm && (
-                    <div className="add-card-form">
-                      <h3>Add New Card</h3>
-                      <div className="card-form-group">
-                        <label>Card Number</label>
-                        <input 
-                          type="text"
-                          name="cardNumber"
-                          placeholder="1234 5678 9012 3456"
-                          value={cardDetails.cardNumber}
-                          onChange={handleCardInputChange}
-                          className={cardErrors.cardNumber ? 'input-error' : ''}
-                          maxLength="19"
-                        />
-                        {cardErrors.cardNumber && <span className="error-message">{cardErrors.cardNumber}</span>}
-                      </div>
-                      
-                      <div className="card-form-group">
-                        <label>Name on Card</label>
-                        <input 
-                          type="text"
-                          name="cardName"
-                          placeholder="John Doe"
-                          value={cardDetails.cardName}
-                          onChange={handleCardInputChange}
-                          className={cardErrors.cardName ? 'input-error' : ''}
-                        />
-                        {cardErrors.cardName && <span className="error-message">{cardErrors.cardName}</span>}
-                      </div>
-                      
-                      <div className="card-form-row">
-                        <div className="card-form-group expiry-group">
-                          <label>Expiration Date</label>
-                          <div className="expiry-inputs">
-                            <select 
-                              name="expiryMonth"
-                              value={cardDetails.expiryMonth}
-                              onChange={handleCardInputChange}
-                              className={cardErrors.expiryMonth ? 'input-error' : ''}
-                            >
-                              <option value="">Month</option>
-                              {Array.from({ length: 12 }, (_, i) => {
-                                const month = i + 1;
-                                return (
-                                  <option key={month} value={month < 10 ? `0${month}` : month.toString()}>
-                                    {month < 10 ? `0${month}` : month}
-                                  </option>
-                                );
-                              })}
-                            </select>
-                            <select 
-                              name="expiryYear"
-                              value={cardDetails.expiryYear}
-                              onChange={handleCardInputChange}
-                              className={cardErrors.expiryYear ? 'input-error' : ''}
-                            >
-                              <option value="">Year</option>
-                              {Array.from({ length: 10 }, (_, i) => {
-                                const year = new Date().getFullYear() + i;
-                                return (
-                                  <option key={year} value={year.toString()}>
-                                    {year}
-                                  </option>
-                                );
-                              })}
-                            </select>
-                          </div>
-                          {(cardErrors.expiryMonth || cardErrors.expiryYear) && (
-                            <span className="error-message">
-                              {cardErrors.expiryMonth || cardErrors.expiryYear}
-                            </span>
-                          )}
-                        </div>
-                        
-                        <div className="card-form-group cvv-group">
-                          <label>CVV</label>
-                          <input 
-                            type="password"
-                            name="cvv"
-                            placeholder="123"
-                            value={cardDetails.cvv}
-                            onChange={handleCardInputChange}
-                            className={cardErrors.cvv ? 'input-error' : ''}
-                            maxLength="4"
-                          />
-                          {cardErrors.cvv && <span className="error-message">{cardErrors.cvv}</span>}
-                        </div>
-                      </div>
-                      
-                      <div className="card-form-actions">
-                        <button className="save-card-btn" onClick={handleSaveCard}>Save Card</button>
-                        <button className="cancel-card-btn" onClick={handleCancelAddCard}>Cancel</button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-              
-              <div className="secure-payment-info">
-                <div className="secure-payment-header">
-                  <i className="secure-icon">🔒</i>
-                  <h3>Secure Payments</h3>
-                </div>
-                <p>We use industry-standard encryption to protect your personal information and payment details. Your transactions are secure with us.</p>
-                <div className="payment-methods-icons">
-                  <span className="payment-icon">💳</span>
-                  <span className="payment-icon">💰</span>
-                  <span className="payment-icon">🏦</span>
-                </div>
               </div>
             </div>
           </div>

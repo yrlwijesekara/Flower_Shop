@@ -164,32 +164,36 @@ export default function RegisterPage() {
           <div className="form-row">
             <div className="input-group">
               <label className="input-label">Country</label>
-              <div className="country-input">
-                <div className="flag-container">
-                  <span className="flag">🇱🇰</span>
-                </div>
-                <input
-                  type="text"
-                  name="country"
-                  value={formData.country}
-                  onChange={handleInputChange}
-                  className="register-form-input register-country-field"
-                />
-              </div>
+              <select
+                name="country"
+                value={formData.country}
+                onChange={handleInputChange}
+                className="register-form-input"
+              >
+                <option value="">Select Country</option>
+                <option value="Sri Lanka">🇱🇰 Sri Lanka</option>
+                <option value="India">🇮🇳 India</option>
+                <option value="United States">🇺🇸 United States</option>
+                <option value="United Kingdom">🇬🇧 United Kingdom</option>
+                <option value="Canada">🇨🇦 Canada</option>
+                <option value="Australia">🇦🇺 Australia</option>
+                <option value="Germany">🇩🇪 Germany</option>
+                <option value="France">🇫🇷 France</option>
+                <option value="Japan">🇯🇵 Japan</option>
+                <option value="China">🇨🇳 China</option>
+              </select>
             </div>
             
             <div className="input-group">
               <label className="input-label">Phone Number</label>
-              <div className="phone-input">
-                <span className="country-code">+94</span>
-                <input
-                  type="tel"
-                  name="phoneNumber"
-                  value={formData.phoneNumber}
-                  onChange={handleInputChange}
-                  className="register-form-input register-phone-field"
-                />
-              </div>
+              <input
+                type="tel"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleInputChange}
+                className="register-form-input"
+                placeholder="Enter phone number"
+              />
             </div>
           </div>
 
