@@ -5,7 +5,8 @@ const {
   getOrderById,
   updateOrderStatus,
   updatePaymentStatus,
-  getOrderStats
+  getOrderStats,
+  deleteOrder
 } = require('../controllers/adminOrderController');
 const { protect, authorize } = require('../middleware/auth');
 
@@ -36,5 +37,20 @@ router.put('/:id/status', authorize('admin'), updateOrderStatus);
 // @route   PUT /api/admin/orders/:id/payment
 // @access  Private (Admin with manage_orders permission)
 router.put('/:id/payment', authorize('admin'), updatePaymentStatus);
+
+// @desc    Delete order
+// @route   DELETE /api/admin/orders/:id
+// @access  Private (Admin with manage_orders permission)
+router.delete('/:id', authorize('admin'), deleteOrder);
+
+// Test route to verify delete functionality
+router.get('/test-delete/:id', authorize('admin'), (req, res) => {
+  res.json({ 
+    success: true, 
+    message: 'Delete route is accessible',
+    id: req.params.id,
+    method: 'GET (test)'
+  });
+});
 
 module.exports = router;

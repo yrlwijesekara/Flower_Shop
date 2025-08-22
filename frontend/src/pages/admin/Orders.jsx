@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FiTrash2, FiEye, FiUser, FiMail, FiPhone, FiCalendar, FiMapPin, FiDollarSign, FiPackage } from 'react-icons/fi';
 import './Adminpage.css';
 
 const Orders = () => {
@@ -10,6 +11,8 @@ const Orders = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState({});
   const [summary, setSummary] = useState({});
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   // Fetch orders from API
   const fetchOrders = async (page = 1, search = '', status = '') => {
@@ -138,6 +141,45 @@ const Orders = () => {
     }
   };
 
+  // View order details
+  const handleViewOrder = async (order) => {
+    setSelectedOrder(order);
+    setShowModal(true);
+  };
+
+  // Delete order
+  const deleteOrder = async (orderId, orderNumber) => {
+    if (!window.confirm(`Are you sure you want to delete order #${orderNumber}? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      const adminToken = localStorage.getItem('authToken');
+      const response = await fetch(`http://localhost:8000/api/admin/orders/${orderId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${adminToken}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        fetchOrders(currentPage, searchTerm, statusFilter);
+        // If we're on a page with no orders after deletion, go to previous page
+        if (orders.length === 1 && currentPage > 1) {
+          setCurrentPage(currentPage - 1);
+          fetchOrders(currentPage - 1, searchTerm, statusFilter);
+        }
+      } else {
+        setError(data.message || 'Failed to delete order');
+      }
+    } catch (error) {
+      console.error('Error deleting order:', error);
+      setError('Network error. Please try again.');
+    }
+  };
+
   return (
     <div className="admin-orders-section">
       <div className="admin-orders-header">
@@ -253,19 +295,37 @@ const Orders = () => {
                       </td>
                       <td className="admin-order-total">${order.totalAmount.toFixed(2)}</td>
                       <td>
-                        <select 
-                          className="admin-status-dropdown"
-                          value={order.orderStatus}
-                          onChange={(e) => updateOrderStatus(order._id, e.target.value)}
-                        >
-                          <option value="pending">Pending</option>
-                          <option value="confirmed">Confirmed</option>
-                          <option value="processing">Processing</option>
-                          <option value="shipped">Shipped</option>
-                          <option value="delivered">Delivered</option>
-                          <option value="cancelled">Cancelled</option>
-                          <option value="returned">Returned</option>
-                        </select>
+                        <div className="admin-order-actions">
+                          <select 
+                            className="admin-status-dropdown"
+                            value={order.orderStatus}
+                            onChange={(e) => updateOrderStatus(order._id, e.target.value)}
+                          >
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="processing">Processing</option>
+                            <option value="shipped">Shipped</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                            <option value="returned">Returned</option>
+                          </select>
+                          <div className="admin-order-action-buttons">
+                            <button 
+                              className="admin-btn-view"
+                              onClick={() => handleViewOrder(order)}
+                              title="View order details"
+                            >
+                              <FiEye size={14} />
+                            </button>
+                            <button 
+                              className="admin-btn-delete"
+                              onClick={() => deleteOrder(order._id, order.orderNumber)}
+                              title="Delete order"
+                            >
+                              <FiTrash2 size={14} />
+                            </button>
+                          </div>
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -304,6 +364,136 @@ const Orders = () => {
             </div>
           )}
         </>
+      )}
+
+      {/* Order Detail Modal */}
+      {showModal && selectedOrder && (
+        <div className="admin-modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="admin-modal-content admin-order-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <h3>Order Details - #{selectedOrder.orderNumber}</h3>
+              <button className="admin-modal-close" onClick={() => setShowModal(false)}>×</button>
+            </div>
+            
+            <div className="admin-modal-body">
+              {/* Customer Information */}
+              <div className="admin-order-section">
+                <h4><FiUser size={16} /> Customer Information</h4>
+                <div className="admin-order-details">
+                  <div className="admin-detail-row">
+                    <FiUser size={14} />
+                    <strong>Name:</strong> {selectedOrder.userId?.name || selectedOrder.shippingAddress.fullName}
+                  </div>
+                  <div className="admin-detail-row">
+                    <FiMail size={14} />
+                    <strong>Email:</strong> {selectedOrder.userId?.email || 'N/A'}
+                  </div>
+                  <div className="admin-detail-row">
+                    <FiPhone size={14} />
+                    <strong>Phone:</strong> {selectedOrder.shippingAddress.phone}
+                  </div>
+                </div>
+              </div>
+
+              {/* Order Information */}
+              <div className="admin-order-section">
+                <h4><FiPackage size={16} /> Order Information</h4>
+                <div className="admin-order-details">
+                  <div className="admin-detail-row">
+                    <FiCalendar size={14} />
+                    <strong>Date:</strong> {formatDate(selectedOrder.createdAt)}
+                  </div>
+                  <div className="admin-detail-row">
+                    <span className={`admin-order-status ${getOrderStatusClass(selectedOrder.orderStatus)}`}>
+                      Status: {selectedOrder.orderStatus.toUpperCase()}
+                    </span>
+                  </div>
+                  <div className="admin-detail-row">
+                    <span className={`admin-payment-status ${getStatusClass(selectedOrder.paymentStatus)}`}>
+                      Payment: {selectedOrder.paymentStatus.toUpperCase()}
+                    </span>
+                  </div>
+                  <div className="admin-detail-row">
+                    <strong>Payment Method:</strong> {selectedOrder.paymentMethod?.toUpperCase() || 'N/A'}
+                  </div>
+                </div>
+              </div>
+
+              {/* Shipping Address */}
+              <div className="admin-order-section">
+                <h4><FiMapPin size={16} /> Shipping Address</h4>
+                <div className="admin-order-details">
+                  <div className="admin-address-content">
+                    {selectedOrder.shippingAddress.fullName}<br />
+                    {selectedOrder.shippingAddress.street}<br />
+                    {selectedOrder.shippingAddress.city}, {selectedOrder.shippingAddress.state} {selectedOrder.shippingAddress.zipCode}<br />
+                    {selectedOrder.shippingAddress.country}
+                  </div>
+                </div>
+              </div>
+
+              {/* Order Items */}
+              <div className="admin-order-section">
+                <h4><FiPackage size={16} /> Order Items</h4>
+                <div className="admin-order-items-list">
+                  {selectedOrder.items.map((item, index) => (
+                    <div key={index} className="admin-order-item">
+                      <div className="admin-item-info">
+                        <strong>{item.productSnapshot.name}</strong>
+                        <p>Quantity: {item.quantity}</p>
+                      </div>
+                      <div className="admin-item-price">
+                        ${(item.price * item.quantity).toFixed(2)}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Order Total */}
+              <div className="admin-order-section">
+                <h4><FiDollarSign size={16} /> Order Summary</h4>
+                <div className="admin-order-summary">
+                  <div className="admin-summary-row">
+                    <span>Subtotal:</span>
+                    <span>${selectedOrder.subtotal?.toFixed(2)}</span>
+                  </div>
+                  <div className="admin-summary-row">
+                    <span>Shipping:</span>
+                    <span>${selectedOrder.shippingCost?.toFixed(2)}</span>
+                  </div>
+                  <div className="admin-summary-row">
+                    <span>Tax:</span>
+                    <span>${selectedOrder.tax?.toFixed(2)}</span>
+                  </div>
+                  {selectedOrder.discount > 0 && (
+                    <div className="admin-summary-row">
+                      <span>Discount:</span>
+                      <span>-${selectedOrder.discount?.toFixed(2)}</span>
+                    </div>
+                  )}
+                  <div className="admin-summary-row admin-summary-total">
+                    <strong>Total: ${selectedOrder.totalAmount?.toFixed(2)}</strong>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="admin-order-modal-actions">
+                <button 
+                  className="admin-btn-status admin-btn-delete-modal"
+                  onClick={() => {
+                    deleteOrder(selectedOrder._id, selectedOrder.orderNumber);
+                    setShowModal(false);
+                  }}
+                >
+                  <FiTrash2 size={16} />
+                  Delete Order
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

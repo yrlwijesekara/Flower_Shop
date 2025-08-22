@@ -327,10 +327,43 @@ const getOrderStats = async (req, res) => {
   }
 };
 
+// @desc    Delete order (Admin only)
+// @route   DELETE /api/admin/orders/:id
+// @access  Private (Admin only)
+const deleteOrder = async (req, res) => {
+  try {
+    console.log('Delete order called with ID:', req.params.id);
+    const { id } = req.params;
+
+    const order = await Order.findByIdAndDelete(id);
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: 'Order not found'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Order deleted successfully'
+    });
+
+  } catch (error) {
+    console.error('Error deleting order:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server Error',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   getAllOrders,
   getOrderById,
   updateOrderStatus,
   updatePaymentStatus,
-  getOrderStats
+  getOrderStats,
+  deleteOrder
 };

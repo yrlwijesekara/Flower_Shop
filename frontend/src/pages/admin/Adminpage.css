@@ -343,6 +343,116 @@
   background: white;
 }
 
+/* Order Action Buttons */
+.admin-order-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.admin-order-action-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+/* Order Modal Styles */
+.admin-order-modal {
+  max-width: 800px;
+  width: 95%;
+  max-height: 90vh;
+}
+
+.admin-order-section {
+  margin-bottom: 24px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 16px;
+}
+
+.admin-order-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.admin-order-section h4 {
+  margin: 0 0 12px 0;
+  color: #333;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-order-details {
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+.admin-address-content {
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 6px;
+  line-height: 1.5;
+}
+
+.admin-order-items-list {
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+.admin-order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.admin-order-item:last-child {
+  border-bottom: none;
+}
+
+.admin-item-info p {
+  margin: 4px 0 0 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.admin-item-price {
+  font-weight: bold;
+  color: #28a745;
+}
+
+.admin-order-summary {
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+.admin-summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.admin-summary-row:last-child {
+  margin-bottom: 0;
+}
+
+.admin-summary-total {
+  border-top: 1px solid #dee2e6;
+  padding-top: 8px;
+  font-size: 16px;
+}
+
+.admin-order-modal-actions {
+  border-top: 1px solid #eee;
+  padding-top: 16px;
+  text-align: center;
+}
+
 /* Admin Review Management Styles - Unique Classes */
 .admin-review-management-header {
   margin-bottom: 24px;
