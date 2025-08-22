@@ -172,22 +172,25 @@
 }
 
 .filter-dropdown {
-  background: rgba(255, 255, 255, 0.98);
+
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.98) 100%);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   width: 100%;
-  max-width: 600px;
-  max-height: 80vh;
-  border-radius: 24px;
+  max-width: 650px;
+  max-height: 85vh;
+  border-radius: 20px;
   box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.15),
-    0 0 0 1px rgba(255, 255, 255, 0.2);
+    0 25px 50px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(42, 201, 14, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
   overflow: hidden;
   transform: scale(0.9) translateY(20px);
   opacity: 0;
   animation: slideInDropdown 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   cursor: default;
   touch-action: pan-y;
+  border: 1px solid rgba(42, 201, 14, 0.08);
 }
 
 @keyframes fadeInOverlay {
@@ -211,10 +214,21 @@
   justify-content: space-between;
   align-items: center;
   padding: 24px 28px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-  background: linear-gradient(135deg, rgba(42, 201, 14, 0.05) 0%, rgba(255, 255, 255, 0.9) 100%);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(42, 201, 14, 0.12);
+  background: linear-gradient(135deg, rgba(42, 201, 14, 0.08) 0%, rgba(255, 255, 255, 0.95) 100%);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  position: relative;
+}
+
+.filter-dropdown-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(42, 201, 14, 0.3) 50%, transparent 100%);
 }
 
 .filter-header-content {
@@ -241,8 +255,8 @@
 }
 
 .filter-close-btn {
-  background: rgba(0, 0, 0, 0.05);
-  border: none;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(242, 245, 248, 0.9) 100%);
+  border: 1px solid rgba(42, 201, 14, 0.15);
   color: #666;
   cursor: pointer;
   padding: 10px;
@@ -253,12 +267,15 @@
   justify-content: center;
   min-width: 36px;
   min-height: 36px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .filter-close-btn:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, rgba(42, 201, 14, 0.08) 0%, rgba(255, 255, 255, 0.95) 100%);
+  border-color: rgba(42, 201, 14, 0.25);
   color: #333;
-  transform: scale(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(42, 201, 14, 0.15);
 }
 
 .filter-options-grid {
@@ -276,18 +293,21 @@
   align-items: center;
   text-align: center;
   padding: 24px 20px;
-  border: 2px solid rgba(0, 0, 0, 0.08);
-  border-radius: 20px;
+  border: 1px solid rgba(42, 201, 14, 0.12);
+  border-radius: 16px;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   opacity: 0;
   transform: translateY(20px) scale(0.95);
   animation: slideInOption 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   position: relative;
   overflow: hidden;
+  box-shadow: 
+    0 2px 12px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 @keyframes slideInOption {
