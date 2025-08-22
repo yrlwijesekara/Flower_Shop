@@ -1,5 +1,27 @@
 /* Admin Panel Specific Styles - All classes prefixed with 'admin-' and wrapped in admin route */
 
+/* Admin Order Status Dropdown */
+.admin-status-dropdown {
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  font-size: 12px;
+  min-width: 100px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.admin-status-dropdown:hover {
+  border-color: #4CAF50;
+}
+
+.admin-status-dropdown:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
 /* Admin Review Management Styles - Unique Classes */
 .admin-review-management-header {
   margin-bottom: 24px;

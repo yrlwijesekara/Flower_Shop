@@ -7,7 +7,7 @@ const connectDB = async () => {
       // Set timeout for initial connection
       serverSelectionTimeoutMS: 5000,
       // Set timeout for socket operations
-      socketTimeoutMS: 45000,
+      socketTimeoutMS: 120000,
       // Buffer commands until connection is established
       bufferCommands: true,
       // Maximum time for retry attempts

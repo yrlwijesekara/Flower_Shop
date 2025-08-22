@@ -166,6 +166,14 @@ const processCheckout = async (req, res) => {
     const tax = Math.round((subtotal + shippingCost) * 0.08 * 100) / 100;
     const totalAmount = subtotal + shippingCost + tax;
 
+    // Determine payment status based on payment method
+    const paymentStatus = ['credit_card', 'debit_card', 'paypal', 'apple_pay', 'google_pay'].includes(paymentMethod) 
+      ? 'paid' 
+      : 'pending';
+
+    // Determine order status based on payment status
+    const orderStatus = paymentStatus === 'paid' ? 'confirmed' : 'pending';
+
     // Create order
     const order = new Order({
       userId,
@@ -174,15 +182,17 @@ const processCheckout = async (req, res) => {
       shippingAddress,
       billingAddress: sameAsBilling ? shippingAddress : billingAddress,
       paymentMethod,
+      paymentStatus,
+      orderStatus,
       subtotal,
       shippingCost,
       tax,
       totalAmount,
       notes,
       statusHistory: [{
-        status: 'pending',
+        status: orderStatus,
         timestamp: new Date(),
-        note: 'Order created'
+        note: paymentStatus === 'paid' ? 'Order confirmed - Payment received' : 'Order created'
       }]
     });
 
@@ -438,6 +448,11 @@ const processSimpleCheckout = async (req, res) => {
 
     console.log('Created shipping address:', shippingAddress);
 
+    // Determine payment method and status
+    const finalPaymentMethod = paymentMethod === 'online' ? 'credit_card' : 'cod';
+    const finalPaymentStatus = finalPaymentMethod === 'credit_card' ? 'paid' : 'pending';
+    const finalOrderStatus = finalPaymentStatus === 'paid' ? 'confirmed' : 'pending';
+
     // Create order
     const orderData = {
       userId,
@@ -445,15 +460,17 @@ const processSimpleCheckout = async (req, res) => {
       items: orderItems,
       shippingAddress,
       billingAddress: shippingAddress,
-      paymentMethod: paymentMethod === 'online' ? 'credit_card' : 'cod',
+      paymentMethod: finalPaymentMethod,
+      paymentStatus: finalPaymentStatus,
+      orderStatus: finalOrderStatus,
       subtotal,
       shippingCost,
       tax,
       totalAmount,
       statusHistory: [{
-        status: 'pending',
+        status: finalOrderStatus,
         timestamp: new Date(),
-        note: 'Order created from frontend checkout'
+        note: finalPaymentStatus === 'paid' ? 'Order confirmed - Payment received' : 'Order created from frontend checkout'
       }]
     };
 
@@ -469,8 +486,6 @@ const processSimpleCheckout = async (req, res) => {
     }
     
     await order.save();
-    
-    console.log('Order saved successfully:', order.orderNumber);
 
     res.status(201).json({
       success: true,

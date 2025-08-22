@@ -228,6 +228,19 @@ orderSchema.index({ paymentStatus: 1 });
 orderSchema.index({ createdAt: -1 });
 orderSchema.index({ sessionId: 1 });
 
+// Compound indexes for analytics queries and performance
+orderSchema.index({ createdAt: -1, paymentStatus: 1 });
+orderSchema.index({ paymentStatus: 1, createdAt: -1 });
+orderSchema.index({ orderStatus: 1, createdAt: -1 });
+orderSchema.index({ userId: 1, createdAt: -1 });
+
+// Text index for search functionality
+orderSchema.index({ 
+  orderNumber: 'text', 
+  'shippingAddress.fullName': 'text',
+  'shippingAddress.phone': 'text'
+});
+
 const Order = mongoose.model('Order', orderSchema);
 
 module.exports = Order;

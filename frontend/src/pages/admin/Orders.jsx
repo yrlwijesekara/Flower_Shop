@@ -109,6 +109,35 @@ const Orders = () => {
     }
   };
 
+  // Update order status
+  const updateOrderStatus = async (orderId, newStatus) => {
+    try {
+      const adminToken = localStorage.getItem('authToken');
+      const response = await fetch(`http://localhost:8000/api/admin/orders/${orderId}/status`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${adminToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          orderStatus: newStatus,
+          note: `Status updated by admin via quick edit`
+        })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        // Refresh orders list
+        fetchOrders(currentPage, searchTerm, statusFilter);
+      } else {
+        setError(data.message || 'Failed to update order status');
+      }
+    } catch (error) {
+      console.error('Error updating order status:', error);
+      setError('Network error. Please try again.');
+    }
+  };
+
   return (
     <div className="admin-orders-section">
       <div className="admin-orders-header">
@@ -173,12 +202,13 @@ const Orders = () => {
                   <th>Status</th>
                   <th>Payment</th>
                   <th>Total</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {orders.length === 0 ? (
                   <tr>
-                    <td colSpan="8" className="admin-no-data">No orders found</td>
+                    <td colSpan="9" className="admin-no-data">No orders found</td>
                   </tr>
                 ) : (
                   orders.map((order) => (
@@ -222,6 +252,21 @@ const Orders = () => {
                         </span>
                       </td>
                       <td className="admin-order-total">${order.totalAmount.toFixed(2)}</td>
+                      <td>
+                        <select 
+                          className="admin-status-dropdown"
+                          value={order.orderStatus}
+                          onChange={(e) => updateOrderStatus(order._id, e.target.value)}
+                        >
+                          <option value="pending">Pending</option>
+                          <option value="confirmed">Confirmed</option>
+                          <option value="processing">Processing</option>
+                          <option value="shipped">Shipped</option>
+                          <option value="delivered">Delivered</option>
+                          <option value="cancelled">Cancelled</option>
+                          <option value="returned">Returned</option>
+                        </select>
+                      </td>
                     </tr>
                   ))
                 )}
