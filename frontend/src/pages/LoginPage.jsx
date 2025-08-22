@@ -97,9 +97,6 @@ export default function LoginPage() {
     }
   };
 
-  const handleForgotPassword = () => {
-    console.log('Forgot password clicked');
-  };
 
   const handleSignUp = () => {
     navigate('/register');
@@ -141,14 +138,6 @@ export default function LoginPage() {
                 className="login-form-input"
               />
             </div>
-            
-            <button 
-              type="button" 
-              className="login-forgot-password-link"
-              onClick={handleForgotPassword}
-            >
-              Forgot Password
-            </button>
             
             <button 
               type="button" 

@@ -16,7 +16,7 @@ const connectDB = async () => {
       maxIdleTimeMS: 30000
     };
 
-    const conn = await mongoose.connect(process.env.MONGO_URI, options);
+    const conn = await mongoose.connect(process.env.MONGODB_URI, options);
 
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`.cyan.underline.bold);
     
