@@ -222,7 +222,7 @@ orderSchema.statics.findByStatus = function(status) {
 
 // Create indexes for better performance
 orderSchema.index({ userId: 1 });
-orderSchema.index({ orderNumber: 1 });
+// Note: orderNumber already has unique index from schema definition
 orderSchema.index({ orderStatus: 1 });
 orderSchema.index({ paymentStatus: 1 });
 orderSchema.index({ createdAt: -1 });

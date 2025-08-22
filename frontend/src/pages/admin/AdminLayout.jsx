@@ -6,6 +6,7 @@ const navLinks = [
   { to: '/admin/orders', label: 'Orders' },
   { to: '/admin/products', label: 'Products' },
   { to: '/admin/customers', label: 'Customers' },
+  { to: '/admin/contacts', label: 'Contacts' },
   { to: '/admin/comments', label: 'Comments' },
   { to: '/admin/reset-password', label: 'Reset Password' }
 ];

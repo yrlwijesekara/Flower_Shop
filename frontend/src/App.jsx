@@ -21,6 +21,7 @@ import Dashboard from './pages/admin/Dashboard';
 import Orders from './pages/admin/Orders';
 import Products from './pages/admin/Products';
 import Customers from './pages/admin/Customers';
+import Contacts from './pages/admin/Contacts';
 import Comments from './pages/admin/Comments';
 import ResetPassword from './pages/admin/ResetPassword';
 
@@ -53,6 +54,7 @@ function App() {
             <Route path="orders" element={<Orders />} />
             <Route path="products" element={<Products />} />
             <Route path="customers" element={<Customers />} />
+            <Route path="contacts" element={<Contacts />} />
             <Route path="comments" element={<Comments />} />
             <Route path="reset-password" element={<ResetPassword />} />
           </Route>

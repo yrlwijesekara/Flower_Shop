@@ -22,6 +22,275 @@
   box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
 }
 
+/* Contact Management Styles */
+.admin-contacts-section {
+  padding: 24px;
+}
+
+.admin-contacts-header {
+  margin-bottom: 24px;
+}
+
+.admin-contacts-stats {
+  display: flex;
+  gap: 24px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.admin-contacts-controls {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.admin-filters {
+  display: flex;
+  gap: 12px;
+}
+
+.admin-contacts-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.admin-contacts-table th,
+.admin-contacts-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.admin-contacts-table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #333;
+}
+
+.admin-contact-name {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.admin-contact-subject {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Contact Status Styles */
+.admin-contact-status {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.admin-status-new {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.admin-status-read {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.admin-status-replied {
+  background: #e8f5e8;
+  color: #388e3c;
+}
+
+.admin-status-resolved {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+/* Contact Priority Styles */
+.admin-contact-priority {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.admin-priority-high {
+  background: #ffebee;
+  color: #d32f2f;
+}
+
+.admin-priority-medium {
+  background: #fff8e1;
+  color: #f57c00;
+}
+
+.admin-priority-low {
+  background: #e8f5e8;
+  color: #388e3c;
+}
+
+/* Action Buttons */
+.admin-btn-view {
+  padding: 6px 12px;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.2s;
+}
+
+.admin-btn-view:hover {
+  background: #1976d2;
+}
+
+/* Modal Styles */
+.admin-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.admin-modal-content {
+  background: white;
+  border-radius: 8px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.admin-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.admin-modal-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.admin-modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-modal-body {
+  padding: 20px;
+}
+
+.admin-contact-details {
+  margin-bottom: 24px;
+}
+
+.admin-detail-row {
+  margin-bottom: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.admin-detail-row strong {
+  min-width: 80px;
+  color: #333;
+}
+
+.admin-message-content,
+.admin-notes-content {
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 4px;
+  margin-top: 8px;
+  border-left: 4px solid #4CAF50;
+  white-space: pre-wrap;
+}
+
+.admin-contact-actions {
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.admin-action-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.admin-btn-status {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.admin-btn-replied {
+  background: #4CAF50;
+  color: white;
+}
+
+.admin-btn-replied:hover {
+  background: #45a049;
+}
+
+.admin-btn-resolved {
+  background: #9c27b0;
+  color: white;
+}
+
+.admin-btn-resolved:hover {
+  background: #7b1fa2;
+}
+
+.admin-priority-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-priority-actions label {
+  font-weight: 500;
+  color: #333;
+}
+
+.admin-priority-actions select {
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+}
+
 /* Admin Review Management Styles - Unique Classes */
 .admin-review-management-header {
   margin-bottom: 24px;

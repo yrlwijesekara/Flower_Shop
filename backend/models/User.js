@@ -163,8 +163,7 @@ userSchema.methods.getVerificationToken = function() {
 };
 
 // Create indexes for better performance
-userSchema.index({ email: 1 });
-userSchema.index({ sessionId: 1 });
+// Note: email and sessionId already have unique indexes from schema definition
 userSchema.index({ resetPasswordToken: 1 });
 userSchema.index({ verificationToken: 1 });
 

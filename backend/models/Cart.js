@@ -40,8 +40,8 @@ const cartSchema = new mongoose.Schema({
   sessionId: {
     type: String,
     required: [true, 'Session ID is required'],
-    unique: true,
-    index: true
+    unique: true
+    // Note: unique: true automatically creates an index, no need for index: true
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -172,10 +172,10 @@ cartSchema.statics.cleanupExpiredCarts = async function() {
 };
 
 // Create indexes for better performance
-cartSchema.index({ sessionId: 1 });
+// Note: sessionId already has unique index from schema definition
+// Note: expiresAt already has TTL index from schema definition
 cartSchema.index({ userId: 1 });
 cartSchema.index({ status: 1 });
-cartSchema.index({ expiresAt: 1 });
 cartSchema.index({ updatedAt: 1 });
 
 const Cart = mongoose.model('Cart', cartSchema);
