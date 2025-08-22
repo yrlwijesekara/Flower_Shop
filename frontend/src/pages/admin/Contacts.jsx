@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FiTrash2, FiEye, FiMail, FiPhone, FiCalendar, FiUser } from 'react-icons/fi';
 import './Adminpage.css';
 
 const Contacts = () => {
@@ -117,6 +118,39 @@ const Contacts = () => {
       }
     } catch (error) {
       console.error('Error updating contact:', error);
+      setError('Network error. Please try again.');
+    }
+  };
+
+  // Delete contact
+  const deleteContact = async (contactId, contactName) => {
+    if (!window.confirm(`Are you sure you want to delete the contact from "${contactName}"? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      const adminToken = localStorage.getItem('authToken');
+      const response = await fetch(`http://localhost:8000/api/contact/admin/${contactId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${adminToken}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        fetchContacts(currentPage, searchTerm, statusFilter, priorityFilter);
+        // If we're on a page with no contacts after deletion, go to previous page
+        if (contacts.length === 1 && currentPage > 1) {
+          setCurrentPage(currentPage - 1);
+          fetchContacts(currentPage - 1, searchTerm, statusFilter, priorityFilter);
+        }
+      } else {
+        setError(data.message || 'Failed to delete contact');
+      }
+    } catch (error) {
+      console.error('Error deleting contact:', error);
       setError('Network error. Please try again.');
     }
   };
@@ -267,12 +301,23 @@ const Contacts = () => {
                         </span>
                       </td>
                       <td>
-                        <button 
-                          className="admin-btn-view"
-                          onClick={() => handleViewContact(contact)}
-                        >
-                          View
-                        </button>
+                        <div className="admin-contact-actions-buttons">
+                          <button 
+                            className="admin-btn-view"
+                            onClick={() => handleViewContact(contact)}
+                            title="View contact details"
+                          >
+                            <FiEye size={14} />
+                            View
+                          </button>
+                          <button 
+                            className="admin-btn-delete"
+                            onClick={() => deleteContact(contact._id, contact.name)}
+                            title="Delete contact"
+                          >
+                            <FiTrash2 size={14} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -325,18 +370,23 @@ const Contacts = () => {
             <div className="admin-modal-body">
               <div className="admin-contact-details">
                 <div className="admin-detail-row">
+                  <FiUser size={16} />
                   <strong>Name:</strong> {selectedContact.name}
                 </div>
                 <div className="admin-detail-row">
+                  <FiMail size={16} />
                   <strong>Email:</strong> {selectedContact.email}
                 </div>
                 <div className="admin-detail-row">
+                  <FiPhone size={16} />
                   <strong>Phone:</strong> {selectedContact.phone || 'N/A'}
                 </div>
                 <div className="admin-detail-row">
+                  <FiMail size={16} />
                   <strong>Subject:</strong> {selectedContact.subject}
                 </div>
                 <div className="admin-detail-row">
+                  <FiCalendar size={16} />
                   <strong>Date:</strong> {formatDate(selectedContact.createdAt)}
                 </div>
                 <div className="admin-detail-row">
@@ -376,6 +426,15 @@ const Contacts = () => {
                     onClick={() => updateContactStatus(selectedContact._id, 'resolved')}
                   >
                     Mark as Resolved
+                  </button>
+                  <button 
+                    className="admin-btn-status admin-btn-delete-modal"
+                    onClick={() => {
+                      deleteContact(selectedContact._id, selectedContact.name);
+                    }}
+                  >
+                    <FiTrash2 size={16} />
+                    Delete Contact
                   </button>
                 </div>
                 

@@ -139,19 +139,53 @@
 }
 
 /* Action Buttons */
+.admin-contact-actions-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .admin-btn-view {
   padding: 6px 12px;
-  background: #2196f3;
+  background: #6c757d;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 12px;
   transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .admin-btn-view:hover {
-  background: #1976d2;
+  background: #5a6268;
+}
+
+.admin-btn-delete {
+  padding: 6px 8px;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+}
+
+.admin-btn-delete:hover {
+  background: #f44336;
+  transform: scale(1.1);
+}
+
+.admin-btn-delete:active {
+  transform: scale(0.95);
 }
 
 /* Modal Styles */
@@ -217,6 +251,12 @@
   margin-bottom: 12px;
   display: flex;
   gap: 8px;
+  align-items: center;
+}
+
+.admin-detail-row svg {
+  color: #333;
+  flex-shrink: 0;
 }
 
 .admin-detail-row strong {
@@ -271,6 +311,18 @@
 
 .admin-btn-resolved:hover {
   background: #7b1fa2;
+}
+
+.admin-btn-delete-modal {
+  background: #6c757d;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-btn-delete-modal:hover {
+  background: #f44336;
 }
 
 .admin-priority-actions {
