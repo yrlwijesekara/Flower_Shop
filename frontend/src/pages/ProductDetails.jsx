@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FiShoppingCart, FiChevronLeft, FiChevronRight, FiHome } from 'react-icons/fi';
+import { productAPI, reviewAPI } from '../services/api';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
 import Footer from '../components/Footer';
 import TopSellingFlowers from '../components/TopSelling';
+import ReviewForm from '../components/ReviewForm';
 import './ProductDetails.css';
 
 const ProductDetails = () => {
@@ -14,6 +16,14 @@ const ProductDetails = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [product, setProduct] = useState(null);
   const [activeTab, setActiveTab] = useState('description');
+  const [notification, setNotification] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [reviews, setReviews] = useState([]);
+  const [reviewStats, setReviewStats] = useState(null);
+  const [reviewsLoading, setReviewsLoading] = useState(false);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Generate shop URL with preserved state
   const getShopUrl = () => {
@@ -37,7 +47,7 @@ const ProductDetails = () => {
     return '/shop';
   };
 
-  // Sample product data - in a real app, this would come from an API
+  // Enhanced fallback product data with full database schema structure
   const productData = {
     1: {
       id: 1,
@@ -51,12 +61,40 @@ const ProductDetails = () => {
         "14 days easy refund & returns",
         "Product taxes and customs duties included"
       ],
+      image: "/images/snake-plant.jpg",
+      gallery: [
+        "/images/product-1.png",
+        "/images/product-2.png",
+        "/images/product-3.png"
+      ],
       images: [
         "/images/snake-plant.jpg",
         "/images/product-1.png",
         "/images/product-2.png",
         "/images/product-3.png"
       ],
+      specifications: {
+        size: "Medium (12-16 inches tall)",
+        height: "12-16 inches",
+        potSize: "6 inch decorative pot",
+        origin: "West Africa"
+      },
+      plantDetails: {
+        sunlight: "Low Light",
+        water: "Every 2 weeks",
+        soil: "Well-draining potting mix",
+        temperature: "65-75°F (18-24°C)",
+        humidity: "Low (30-40%)",
+        toxicity: "Toxic to cats and dogs"
+      },
+      careInstructions: {
+        difficulty: "Easy",
+        placement: "Perfect for bedrooms, offices, or any low-light area",
+        watering: "Water when soil is completely dry, typically every 2-3 weeks. Overwatering is the most common cause of problems.",
+        feeding: "Feed monthly during spring and summer with diluted liquid fertilizer",
+        pruning: "Remove dead or damaged leaves at the base. Wipe leaves with damp cloth monthly.",
+        repotting: "Repot every 2-3 years or when rootbound"
+      },
       reviews: [
         {
           id: 1,
@@ -105,12 +143,39 @@ const ProductDetails = () => {
         "14 days easy refund & returns",
         "Product taxes and customs duties included"
       ],
+      image: "/images/candelabra-aloe.jpg",
+      gallery: [
+        "/images/product-1.png",
+        "/images/product-2.png",
+        "/images/product-3.png"
+      ],
       images: [
         "/images/candelabra-aloe.jpg",
         "/images/product-1.png",
         "/images/product-2.png",
         "/images/product-3.png"
       ],
+      specifications: {
+        size: "Large (2-4 feet tall)",
+        height: "2-4 feet",
+        potSize: "10 inch pot",
+        origin: "South Africa"
+      },
+      plantDetails: {
+        sunlight: "Bright Indirect Light",
+        water: "Every 2-3 weeks",
+        soil: "Cactus/Succulent mix",
+        temperature: "70-80°F (21-27°C)",
+        humidity: "Low (30-40%)",
+        toxicity: "Pet Safe"
+      },
+      careInstructions: {
+        difficulty: "Easy",
+        placement: "Bright window with indirect sunlight, can handle some direct morning sun",
+        watering: "Water deeply but infrequently. Allow soil to dry completely between waterings.",
+        feeding: "Feed once in spring and once in summer with cactus fertilizer",
+        pruning: "Remove dead or damaged branches. Use gloves as sap can be irritating."
+      },
       reviews: [
         {
           id: 1,
@@ -151,12 +216,39 @@ const ProductDetails = () => {
         "14 days easy refund & returns",
         "Product taxes and customs duties included"
       ],
+      image: "/images/golden-pothos.jpg",
+      gallery: [
+        "/images/product-1.png",
+        "/images/product-2.png",
+        "/images/product-3.png"
+      ],
       images: [
         "/images/golden-pothos.jpg",
         "/images/product-1.png",
         "/images/product-2.png",
         "/images/product-3.png"
       ],
+      specifications: {
+        size: "Trailing (6-10 feet when mature)",
+        height: "Trails up to 10 feet",
+        potSize: "6-8 inch hanging basket",
+        origin: "Solomon Islands"
+      },
+      plantDetails: {
+        sunlight: "Medium Light",
+        water: "Weekly",
+        soil: "Regular potting soil",
+        temperature: "65-75°F (18-24°C)",
+        humidity: "Medium (40-60%)",
+        toxicity: "Toxic to cats and dogs"
+      },
+      careInstructions: {
+        difficulty: "Easy",
+        placement: "Bright, indirect light. Can tolerate lower light conditions",
+        watering: "Water when top inch of soil is dry, typically weekly",
+        feeding: "Feed monthly during growing season with balanced liquid fertilizer",
+        pruning: "Pinch back to encourage bushier growth. Propagate cuttings in water."
+      },
       reviews: [
         {
           id: 1,
@@ -435,15 +527,145 @@ const ProductDetails = () => {
     }
   };
 
+  // Check if user is logged in and listen for auth changes
   useEffect(() => {
-    const foundProduct = productData[id];
-    if (foundProduct) {
-      setProduct(foundProduct);
-    } else {
-      // If product not found, redirect to shop page
-      navigate('/shop');
+    const checkAuthStatus = () => {
+      const token = localStorage.getItem('authToken');
+      const userLoggedIn = localStorage.getItem('userLoggedIn');
+      console.log('Auth check - Token:', token, 'UserLoggedIn:', userLoggedIn);
+      setIsLoggedIn(!!token);
+    };
+
+    // Initial check
+    checkAuthStatus();
+
+    // Listen for storage changes (when user logs in/out in another tab)
+    window.addEventListener('storage', checkAuthStatus);
+
+    // Listen for custom auth events (when user logs in/out in same tab)
+    window.addEventListener('authChange', checkAuthStatus);
+
+    return () => {
+      window.removeEventListener('storage', checkAuthStatus);
+      window.removeEventListener('authChange', checkAuthStatus);
+    };
+  }, []);
+
+  // Fetch reviews from database
+  const fetchReviews = async (productId) => {
+    if (!productId) return;
+    
+    setReviewsLoading(true);
+    try {
+      const response = await reviewAPI.getProductReviews(productId, {
+        limit: 10,
+        page: 1
+      });
+      
+      if (response.success && response.data) {
+        setReviews(response.data.reviews || []);
+        setReviewStats(response.data.stats || null);
+        console.log('Reviews fetched successfully:', response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+      // Keep fallback reviews if API fails
+    } finally {
+      setReviewsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      setLoading(true);
+      setError('');
+      
+      try {
+        console.log('Fetching product with ID:', id);
+        const response = await productAPI.getProduct(id);
+        
+        if (response.success && response.data) {
+          console.log('Product fetched successfully:', response.data);
+          // Ensure images array is properly formatted
+          const productWithImages = {
+            ...response.data,
+            images: response.data.images || (response.data.image ? 
+              [response.data.image, ...(response.data.gallery || [])] : 
+              ['/images/placeholder.jpg'])
+          };
+          setProduct(productWithImages);
+          setSelectedImage(0);
+          
+          // Fetch reviews for this product
+          await fetchReviews(response.data._id || id);
+        } else {
+          throw new Error(response.message || 'Product not found');
+        }
+        
+      } catch (error) {
+        console.error('Error fetching product:', error);
+        setError(error.message || 'Failed to load product');
+        
+        // Try to find product in fallback data
+        const fallbackProduct = productData[id];
+        if (fallbackProduct) {
+          console.log('Using fallback product data');
+          setProduct(fallbackProduct);
+          setError('');
+          // Initialize wishlist for fallback data
+          await initializeWishlist(fallbackProduct.id);
+          // Try to fetch reviews with fallback ID
+          await fetchReviews(id);
+        } else {
+          setTimeout(() => {
+            navigate('/shop');
+          }, 3000);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchProduct();
     }
   }, [id, navigate]);
+
+  // Initialize wishlist status
+  const initializeWishlist = async (productId) => {
+    try {
+      if (!wishlistService.isInitialized) {
+        await wishlistService.init();
+      }
+      setIsInWishlist(wishlistService.isInWishlist(productId));
+    } catch (error) {
+      console.error('Failed to initialize wishlist status:', error);
+    }
+  };
+
+  // Handle wishlist toggle
+  const handleToggleWishlist = async () => {
+    if (!product) return;
+    
+    try {
+      const productId = product._id || product.id;
+      const newStatus = await wishlistService.toggleWishlist(productId);
+      setIsInWishlist(newStatus);
+      
+      // Show notification
+      setNotification(`${newStatus ? 'Added to' : 'Removed from'} wishlist!`);
+      
+      // Clear notification after 3 seconds
+      setTimeout(() => {
+        setNotification('');
+      }, 3000);
+      
+    } catch (error) {
+      console.error('Failed to toggle wishlist:', error);
+      setNotification('Failed to update wishlist');
+      setTimeout(() => setNotification(''), 3000);
+    }
+  };
 
   const handleQuantityChange = (change) => {
     setQuantity(prev => Math.max(1, prev + change));
@@ -474,8 +696,16 @@ const ProductDetails = () => {
       
       localStorage.setItem('flowerShopCart', JSON.stringify(existingCart));
       
-      // Show success message or redirect
-      alert(`Added ${quantity} ${product.name}(s) to cart!`);
+      // Trigger cart update event for navbar
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+      
+      // Show notification banner
+      setNotification(`Added ${quantity} ${product.name}(s) to cart!`);
+      
+      // Clear notification after 3 seconds
+      setTimeout(() => {
+        setNotification('');
+      }, 3000);
     }
   };
 
@@ -497,6 +727,34 @@ const ProductDetails = () => {
         ★
       </span>
     ));
+  };
+
+  // Handle review form submission
+  const handleReviewSubmitted = async () => {
+    // Refresh reviews after successful submission
+    const productId = product?._id || product?.id || id;
+    await fetchReviews(productId);
+    
+    // Show success notification
+    setNotification('Review submitted successfully!');
+    setTimeout(() => {
+      setNotification('');
+    }, 3000);
+  };
+
+  // Handle write review button click
+  const handleWriteReviewClick = () => {
+    const token = localStorage.getItem('authToken');
+    console.log('Write review clicked. Token:', token, 'IsLoggedIn:', isLoggedIn);
+    
+    if (!isLoggedIn || !token) {
+      setNotification('Please log in to write a review');
+      setTimeout(() => {
+        setNotification('');
+      }, 3000);
+      return;
+    }
+    setShowReviewForm(true);
   };
 
   const calculateReviewStats = (reviews) => {
@@ -537,7 +795,48 @@ const ProductDetails = () => {
         showFilters={false}
       />
       
-      <div className="product-details-container">
+      {/* Notification */}
+      {notification && (
+        <div className="product-details-notification">
+          {notification}
+        </div>
+      )}
+      
+      {/* Loading State */}
+      {loading && (
+        <div className="product-details-loading" style={{
+          textAlign: 'center',
+          padding: '3rem',
+          fontSize: '1.2rem',
+          color: '#666'
+        }}>
+          Loading product details...
+        </div>
+      )}
+      
+      {/* Error State */}
+      {error && (
+        <div className="product-details-error" style={{
+          backgroundColor: '#fee',
+          color: 'red',
+          padding: '1rem',
+          margin: '1rem 2rem',
+          borderRadius: '8px',
+          border: '1px solid red',
+          textAlign: 'center'
+        }}>
+          {error}
+          {error.includes('Failed to load') && (
+            <p style={{ marginTop: '0.5rem', fontSize: '0.9rem' }}>
+              Redirecting to shop page in 3 seconds...
+            </p>
+          )}
+        </div>
+      )}
+      
+      {/* Product Content - Only show if product is loaded and no error */}
+      {!loading && product && !error && (
+        <div className="product-details-container">
         <div className="product-content">
           {/* Photo Frame */}
           <div className="photo-frame">
@@ -548,7 +847,7 @@ const ProductDetails = () => {
               
               <div className="main-image">
                 <img 
-                  src={product.images[selectedImage]} 
+                  src={product.images && product.images.length > 0 ? product.images[selectedImage] : (product.image || '/images/placeholder.jpg')} 
                   alt={product.name}
                   onError={(e) => {
                     e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDc1IiBoZWlnaHQ9IjUzNCIgdmlld0JveD0iMCAwIDQ3NSA1MzQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0NzUiIGhlaWdodD0iNTM0IiBmaWxsPSIjRjBGMEYwIiByeD0iNSIvPgo8cGF0aCBkPSJNMjAwIDIwMEwyNzUgMjc1TDIwMCAzNTBMMTI1IDI3NUwyMDAgMjAwWiIgZmlsbD0iIzVCQzU1OSIvPgo8cGF0aCBkPSJNMjUwIDMwMEwzMjUgMzc1TDI1MCA0NTBMMTU1IDM3NUwyNTAgMzAwWiIgZmlsbD0iIzVCQzU1OSIvPgo8L3N2Zz4K';
@@ -562,7 +861,7 @@ const ProductDetails = () => {
             </div>
             
             <div className="thumbnail-container">
-              {product.images.map((image, index) => (
+              {product.images && product.images.length > 1 && product.images.map((image, index) => (
                 <div 
                   key={index}
                   className={`thumbnail ${index === selectedImage ? 'active' : ''}`}
@@ -614,11 +913,13 @@ const ProductDetails = () => {
               </button>
             </div>
             
-            {/* Add to Cart Button */}
-            <button className="add-to-cart-main" onClick={handleAddToCart}>
-              <span className="cart-text">ADD TO CART</span>
-              <FiShoppingCart className="cart-icon" size={20} />
-            </button>
+            {/* Action Buttons */}
+            <div className="action-buttons">
+              <button className="add-to-cart-main" onClick={handleAddToCart}>
+                <span className="cart-text">ADD TO CART</span>
+                <FiShoppingCart className="cart-icon" size={20} />
+              </button>
+            </div>
             
             {/* Product Features */}
             <div className="features-container">
@@ -653,7 +954,19 @@ const ProductDetails = () => {
               className={`tab-btn ${activeTab === 'reviews' ? 'active' : ''}`}
               onClick={() => setActiveTab('reviews')}
             >
-              Reviews ({product.reviews ? product.reviews.length : 0})
+              Reviews ({reviewStats ? reviewStats.totalReviews : (reviews.length || (product.reviews ? product.reviews.length : 0))})
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'care' ? 'active' : ''}`}
+              onClick={() => setActiveTab('care')}
+            >
+              Care Guide
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'specifications' ? 'active' : ''}`}
+              onClick={() => setActiveTab('specifications')}
+            >
+              Specifications
             </button>
             <button 
               className={`tab-btn ${activeTab === 'shipping' ? 'active' : ''}`}
@@ -667,117 +980,352 @@ const ProductDetails = () => {
             {activeTab === 'description' && (
               <>
                 <div className="tab-section">
-                  <h3 className="section-title">Plant Care Guide</h3>
+                  <h3 className="section-title">📝 Product Description</h3>
                   <p className="section-description">
                     {product.description}
                   </p>
+                  {product.shortDescription && (
+                    <p className="section-description short-desc">
+                      {product.shortDescription}
+                    </p>
+                  )}
                 </div>
                 
-                <div className="tab-section">
-                  <h3 className="section-title">What's Included</h3>
-                  <ul className="features-list">
-                    {product.features.map((feature, index) => (
-                      <li key={index}>{feature}</li>
-                    ))}
-                  </ul>
-                </div>
+                {product.plantDetails && (
+                  <div className="tab-section">
+                    <h3 className="section-title">🌱 Quick Care Overview</h3>
+                    <div className="care-overview-grid">
+                      {product.plantDetails.sunlight && (
+                        <div className="care-item">
+                          <strong>☀️ Light:</strong> {product.plantDetails.sunlight}
+                        </div>
+                      )}
+                      {product.plantDetails.water && (
+                        <div className="care-item">
+                          <strong>💧 Water:</strong> {product.plantDetails.water}
+                        </div>
+                      )}
+                      {product.plantDetails.difficulty && (
+                        <div className="care-item">
+                          <strong>🎯 Difficulty:</strong> {product.careInstructions?.difficulty || 'Easy'}
+                        </div>
+                      )}
+                      {product.plantDetails.toxicity && (
+                        <div className="care-item">
+                          <strong>🐕 Pet Safety:</strong> {product.plantDetails.toxicity}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+                
+                {product.features && product.features.length > 0 && (
+                  <div className="tab-section">
+                    <h3 className="section-title">📦 What's Included</h3>
+                    <ul className="features-list">
+                      {product.features.map((feature, index) => (
+                        <li key={index}>{feature}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </>
             )}
 
             {activeTab === 'reviews' && (
               <div className="reviews-section">
-                {product.reviews && product.reviews.length > 0 ? (
+                {reviewsLoading ? (
+                  <div className="reviews-loading">
+                    <p>Loading reviews...</p>
+                  </div>
+                ) : (
                   <>
-                    <div className="reviews-summary">
-                      <div className="rating-overview">
-                        <div className="average-rating">
-                          <span className="rating-number">{calculateReviewStats(product.reviews)?.averageRating || 0}</span>
-                          <div className="rating-stars">
-                            {renderStars(Math.round(calculateReviewStats(product.reviews)?.averageRating || 0))}
-                          </div>
-                          <span className="review-count">
-                            {calculateReviewStats(product.reviews)?.totalReviews || 0} reviews
-                          </span>
-                        </div>
-                        
-                        <div className="rating-breakdown">
-                          {[5, 4, 3, 2, 1].map(rating => {
-                            const stats = calculateReviewStats(product.reviews);
-                            const count = stats?.ratingCounts[rating] || 0;
-                            const percentage = stats ? (count / stats.totalReviews) * 100 : 0;
-                            
-                            return (
-                              <div key={rating} className="rating-bar">
-                                <span className="rating-label">{rating} ★</span>
-                                <div className="bar-container">
-                                  <div 
-                                    className="bar-fill" 
-                                    style={{ width: `${percentage}%` }}
-                                  ></div>
-                                </div>
-                                <span className="rating-count">({count})</span>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
+                    {/* Write Review Button */}
+                    <div className="write-review-section">
+                      <button 
+                        className="write-review-button"
+                        onClick={handleWriteReviewClick}
+                      >
+                        ✍️ Write a Review
+                      </button>
                     </div>
 
-                    <div className="reviews-list">
-                      <h3 className="section-title">Customer Reviews</h3>
-                      {product.reviews.map((review, index) => (
-                        <div key={review.id} className="review-item">
-                          <div className="review-header">
-                            <div className="reviewer-info">
-                              <span className="reviewer-name">{review.name}</span>
-                              {review.verified && (
-                                <span className="verified-badge">✓ Verified Purchase</span>
-                              )}
-                            </div>
-                            <div className="review-meta">
-                              <div className="review-rating">
-                                {renderStars(review.rating)}
+                    {/* Check if we have database reviews or fallback reviews */}
+                    {(reviews.length > 0 || (product.reviews && product.reviews.length > 0)) ? (
+                      <>
+                        <div className="reviews-summary">
+                          <div className="rating-overview">
+                            <div className="average-rating">
+                              <span className="rating-number">
+                                {reviewStats ? reviewStats.averageRating : (calculateReviewStats(product.reviews)?.averageRating || 0)}
+                              </span>
+                              <div className="rating-stars">
+                                {renderStars(Math.round(reviewStats ? reviewStats.averageRating : (calculateReviewStats(product.reviews)?.averageRating || 0)))}
                               </div>
-                              <span className="review-date">
-                                {new Date(review.date).toLocaleDateString('en-US', { 
-                                  year: 'numeric', 
-                                  month: 'long', 
-                                  day: 'numeric' 
-                                })}
+                              <span className="review-count">
+                                {reviewStats ? reviewStats.totalReviews : (calculateReviewStats(product.reviews)?.totalReviews || 0)} reviews
                               </span>
                             </div>
+                            
+                            <div className="rating-breakdown">
+                              {[5, 4, 3, 2, 1].map(rating => {
+                                const stats = reviewStats || calculateReviewStats(product.reviews);
+                                const count = stats?.ratingCounts[rating] || 0;
+                                const percentage = stats ? (count / stats.totalReviews) * 100 : 0;
+                                
+                                return (
+                                  <div key={rating} className="rating-bar">
+                                    <span className="rating-label">{rating} ★</span>
+                                    <div className="bar-container">
+                                      <div 
+                                        className="bar-fill" 
+                                        style={{ width: `${percentage}%` }}
+                                      ></div>
+                                    </div>
+                                    <span className="rating-count">({count})</span>
+                                  </div>
+                                );
+                              })}
+                            </div>
                           </div>
-                          <p className="review-comment">{review.comment}</p>
                         </div>
-                      ))}
-                    </div>
+
+                        <div className="reviews-list">
+                          <h3 className="section-title">⭐ Customer Reviews</h3>
+                          {/* Display database reviews if available, otherwise fallback reviews */}
+                          {(reviews.length > 0 ? reviews : product.reviews).map((review, index) => (
+                            <div key={review.id || index} className="review-item">
+                              <div className="review-header">
+                                <div className="reviewer-info">
+                                  <span className="reviewer-name">{review.userName || review.name}</span>
+                                  {review.verified && (
+                                    <span className="verified-badge">✓ Verified Purchase</span>
+                                  )}
+                                </div>
+                                <div className="review-meta">
+                                  <div className="review-rating">
+                                    {renderStars(review.rating)}
+                                  </div>
+                                  <span className="review-date">
+                                    {review.formattedDate || new Date(review.date).toLocaleDateString('en-US', { 
+                                      year: 'numeric', 
+                                      month: 'long', 
+                                      day: 'numeric' 
+                                    })}
+                                  </span>
+                                </div>
+                              </div>
+                              {review.title && (
+                                <h4 className="review-title">{review.title}</h4>
+                              )}
+                              <p className="review-comment">{review.comment}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    ) : (
+                      <div className="no-reviews">
+                        <h3>No reviews yet</h3>
+                        <p>Be the first to review this product!</p>
+                        <button 
+                          className="write-first-review-button"
+                          onClick={handleWriteReviewClick}
+                        >
+                          Write the First Review
+                        </button>
+                      </div>
+                    )}
                   </>
-                ) : (
-                  <div className="no-reviews">
-                    <h3>No reviews yet</h3>
-                    <p>Be the first to review this product!</p>
-                  </div>
                 )}
               </div>
+            )}
+
+            {activeTab === 'care' && (
+              <>
+                {product.careInstructions && (
+                  <>
+                    {product.careInstructions.placement && (
+                      <div className="tab-section">
+                        <h3 className="section-title">🏠 Placement</h3>
+                        <p className="section-description">{product.careInstructions.placement}</p>
+                      </div>
+                    )}
+                    
+                    {product.careInstructions.watering && (
+                      <div className="tab-section">
+                        <h3 className="section-title">💧 Watering</h3>
+                        <p className="section-description">{product.careInstructions.watering}</p>
+                      </div>
+                    )}
+                    
+                    {product.careInstructions.feeding && (
+                      <div className="tab-section">
+                        <h3 className="section-title">🌱 Feeding</h3>
+                        <p className="section-description">{product.careInstructions.feeding}</p>
+                      </div>
+                    )}
+                    
+                    {product.careInstructions.pruning && (
+                      <div className="tab-section">
+                        <h3 className="section-title">✂️ Pruning & Maintenance</h3>
+                        <p className="section-description">{product.careInstructions.pruning}</p>
+                      </div>
+                    )}
+                    
+                    {product.careInstructions.repotting && (
+                      <div className="tab-section">
+                        <h3 className="section-title">🏺 Repotting</h3>
+                        <p className="section-description">{product.careInstructions.repotting}</p>
+                      </div>
+                    )}
+                    
+                    {product.careInstructions.commonIssues && (
+                      <div className="tab-section">
+                        <h3 className="section-title">⚠️ Common Issues</h3>
+                        <p className="section-description">{product.careInstructions.commonIssues}</p>
+                      </div>
+                    )}
+                  </>
+                )}
+                
+                {product.plantDetails && (
+                  <div className="tab-section">
+                    <h3 className="section-title">📊 Plant Requirements</h3>
+                    <div className="plant-details-grid">
+                      {product.plantDetails.sunlight && (
+                        <div className="detail-item">
+                          <span className="detail-label">☀️ Sunlight:</span>
+                          <span className="detail-value">{product.plantDetails.sunlight}</span>
+                        </div>
+                      )}
+                      {product.plantDetails.water && (
+                        <div className="detail-item">
+                          <span className="detail-label">💧 Watering:</span>
+                          <span className="detail-value">{product.plantDetails.water}</span>
+                        </div>
+                      )}
+                      {product.plantDetails.soil && (
+                        <div className="detail-item">
+                          <span className="detail-label">🌱 Soil:</span>
+                          <span className="detail-value">{product.plantDetails.soil}</span>
+                        </div>
+                      )}
+                      {product.plantDetails.temperature && (
+                        <div className="detail-item">
+                          <span className="detail-label">🌡️ Temperature:</span>
+                          <span className="detail-value">{product.plantDetails.temperature}</span>
+                        </div>
+                      )}
+                      {product.plantDetails.humidity && (
+                        <div className="detail-item">
+                          <span className="detail-label">💨 Humidity:</span>
+                          <span className="detail-value">{product.plantDetails.humidity}</span>
+                        </div>
+                      )}
+                      {product.plantDetails.toxicity && (
+                        <div className="detail-item">
+                          <span className="detail-label">🐕 Pet Safety:</span>
+                          <span className="detail-value">{product.plantDetails.toxicity}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+            
+            {activeTab === 'specifications' && (
+              <>
+                {product.specifications && (
+                  <div className="tab-section">
+                    <h3 className="section-title">📏 Plant Specifications</h3>
+                    <div className="specifications-grid">
+                      {product.specifications.size && (
+                        <div className="spec-item">
+                          <span className="spec-label">Size:</span>
+                          <span className="spec-value">{product.specifications.size}</span>
+                        </div>
+                      )}
+                      {product.specifications.height && (
+                        <div className="spec-item">
+                          <span className="spec-label">Height:</span>
+                          <span className="spec-value">{product.specifications.height}</span>
+                        </div>
+                      )}
+                      {product.specifications.spread && (
+                        <div className="spec-item">
+                          <span className="spec-label">Spread:</span>
+                          <span className="spec-value">{product.specifications.spread}</span>
+                        </div>
+                      )}
+                      {product.specifications.potSize && (
+                        <div className="spec-item">
+                          <span className="spec-label">Pot Size:</span>
+                          <span className="spec-value">{product.specifications.potSize}</span>
+                        </div>
+                      )}
+                      {product.specifications.weight && (
+                        <div className="spec-item">
+                          <span className="spec-label">Weight:</span>
+                          <span className="spec-value">{product.specifications.weight}</span>
+                        </div>
+                      )}
+                      {product.specifications.origin && (
+                        <div className="spec-item">
+                          <span className="spec-label">Origin:</span>
+                          <span className="spec-value">{product.specifications.origin}</span>
+                        </div>
+                      )}
+                      {product.specifications.bloomTime && (
+                        <div className="spec-item">
+                          <span className="spec-label">Bloom Time:</span>
+                          <span className="spec-value">{product.specifications.bloomTime}</span>
+                        </div>
+                      )}
+                      {product.specifications.hardiness && (
+                        <div className="spec-item">
+                          <span className="spec-label">Hardiness:</span>
+                          <span className="spec-value">{product.specifications.hardiness}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+                
+                {product.tags && product.tags.length > 0 && (
+                  <div className="tab-section">
+                    <h3 className="section-title">🏷️ Tags</h3>
+                    <div className="tags-container">
+                      {product.tags.map((tag, index) => (
+                        <span key={index} className="tag">{tag}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
             )}
 
             {activeTab === 'shipping' && (
               <>
                 <div className="tab-section">
-                  <h3 className="section-title">Shipping Information</h3>
+                  <h3 className="section-title">🚚 Shipping Information</h3>
                   <ul className="shipping-list">
-                    <li>Free shipping on orders over $100</li>
-                    <li>Standard delivery: 3-5 business days</li>
+                    {product.shipping?.freeShipping ? (
+                      <li>✓ Free shipping included</li>
+                    ) : (
+                      <li>Free shipping on orders over $100</li>
+                    )}
+                    <li>{product.shipping?.shippingTime || 'Standard delivery: 3-5 business days'}</li>
                     <li>Express delivery: 1-2 business days (additional charges apply)</li>
-                    <li>Carefully packaged to ensure plant safety</li>
+                    <li>{product.shipping?.packaging || 'Carefully packaged to ensure plant safety'}</li>
                     <li>Tracking information provided via email</li>
                   </ul>
                 </div>
                 
                 <div className="tab-section">
-                  <h3 className="section-title">Returns & Refunds</h3>
+                  <h3 className="section-title">↩️ Returns & Refunds</h3>
                   <ul className="shipping-list">
-                    <li>14-day return policy for live plants</li>
+                    <li>{product.shipping?.returnPolicy || '14-day return policy for live plants'}</li>
                     <li>Plants must be in original condition</li>
                     <li>Photo documentation required for damaged plants</li>
                     <li>Refunds processed within 5-7 business days</li>
@@ -789,6 +1337,7 @@ const ProductDetails = () => {
           </div>
         </div>
       </div>
+      )}
       
       <TopSellingFlowers
         titleFirst='YOU MAY'
@@ -796,6 +1345,15 @@ const ProductDetails = () => {
       />
       
       <Footer />
+      
+      {/* Review Form Modal */}
+      {showReviewForm && (
+        <ReviewForm
+          productId={product?._id || product?.id || id}
+          onReviewSubmitted={handleReviewSubmitted}
+          onCancel={() => setShowReviewForm(false)}
+        />
+      )}
     </div>
   );
 };

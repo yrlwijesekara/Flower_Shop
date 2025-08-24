@@ -41,59 +41,104 @@
 
 /* Favorite Heart Button */
 .favorite-btn {
-  position: absolute;
+  position: absolute !important;
   top: 12px;
   right: 12px;
   width: 40px;
   height: 40px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.9) !important;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
   border-radius: 50%;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 10;
+  z-index: 10 !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 0 !important;
+  outline: none;
 }
 
 .favorite-btn:hover {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.95) !important;
   transform: scale(1.1);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 .favorite-btn.favorite {
-  background: rgba(239, 68, 68, 0.9);
-  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.9) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
   animation: favoriteAdded 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .favorite-btn.favorite:hover {
-  background: rgba(239, 68, 68, 0.95);
+  background: rgba(239, 68, 68, 0.95) !important;
   transform: scale(1.1);
 }
 
 /* Heart Icon Styles */
 .heart-icon {
   transition: all 0.3s ease;
+  display: block !important;
+  width: 20px !important;
+  height: 20px !important;
+  stroke-width: 2 !important;
+  fill: none !important;
 }
 
 .heart-icon.outline {
-  color: #666;
+  color: #666 !important;
+  stroke: #666 !important;
+  fill: none !important;
 }
 
 .heart-icon.filled {
-  color: #ffffff;
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  fill: #ffffff !important;
   animation: heartBeat 0.6s ease-in-out;
 }
 
 .favorite-btn:hover .heart-icon.outline {
-  color: #ef4444;
+  color: #ef4444 !important;
+  stroke: #ef4444 !important;
   transform: scale(1.1);
+}
+
+.favorite-btn .heart-icon {
+  pointer-events: none;
+  position: relative;
+  z-index: 1;
+}
+
+/* SVG Heart Icon Styles */
+.favorite-btn svg {
+  transition: all 0.3s ease;
+  display: block;
+  pointer-events: none;
+}
+
+.favorite-btn:hover:not(.favorite) svg {
+  stroke: #ef4444;
+  transform: scale(1.1);
+}
+
+.favorite-btn.favorite svg {
+  fill: #ffffff;
+  stroke: #ffffff;
+}
+
+/* Fallback for when react-icons don't load */
+.favorite-btn:not(:has(.heart-icon)) svg {
+  opacity: 1 !important;
+}
+
+/* Ensure SVG fallbacks work */
+.favorite-btn svg {
+  transition: all 0.3s ease;
 }
 
 /* Heart Animation Keyframes */

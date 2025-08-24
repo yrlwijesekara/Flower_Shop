@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FiHome } from 'react-icons/fi';
 import Navbar from '../components/Navbar';
 import MiniNavbar from '../components/MiniNavbar';
 import Footer from '../components/Footer';
 import './WishList.css';
 import TopSellingFlowers from '../components/TopSelling';
+import wishlistService from '../services/wishlistService';
+import { productAPI } from '../services/api';
 
 const WishList = () => {
+  const navigate = useNavigate();
   const [wishlistItems, setWishlistItems] = useState([]);
+  const [cart, setCart] = useState([]);
+  const [isCartLoaded, setIsCartLoaded] = useState(false);
+  const [notification, setNotification] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Product data - ideally this would come from an API or context
   const productData = {
@@ -118,83 +127,155 @@ const WishList = () => {
     }
   };
 
-  // Load favorites from localStorage on component mount
+  // Check authentication before loading data
   useEffect(() => {
-    const loadWishlistItems = () => {
-      const savedFavorites = localStorage.getItem('flowerShopFavorites');
-      if (savedFavorites) {
-        try {
-          const favoriteIds = JSON.parse(savedFavorites);
-          const wishlistProducts = favoriteIds
-            .map(id => {
-              const product = productData[id];
-              return product ? {
-                ...product,
+    const isLoggedIn = localStorage.getItem('userLoggedIn');
+    const authToken = localStorage.getItem('authToken');
+    
+    if (isLoggedIn !== 'true' || !authToken) {
+      console.log('User not logged in, redirecting to login page');
+      navigate('/login');
+      return;
+    }
+  }, [navigate]);
+
+  // Load cart from localStorage on component mount
+  useEffect(() => {
+    const savedCart = localStorage.getItem('flowerShopCart');
+    if (savedCart && savedCart !== '[]') {
+      try {
+        const parsedCart = JSON.parse(savedCart);
+        if (parsedCart && parsedCart.length > 0) {
+          setCart(parsedCart);
+        }
+      } catch (error) {
+        console.error('Error parsing cart from localStorage:', error);
+      }
+    }
+    setIsCartLoaded(true);
+  }, []);
+
+  // Save cart to localStorage whenever cart changes
+  useEffect(() => {
+    if (isCartLoaded) {
+      localStorage.setItem('flowerShopCart', JSON.stringify(cart));
+      // Trigger cart update event for navbar after localStorage is updated
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+    }
+  }, [cart, isCartLoaded]);
+
+  // Load wishlist items from database
+  useEffect(() => {
+    const loadWishlistItems = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        // Initialize wishlist service
+        await wishlistService.init();
+        
+        // Wait a moment for the service to fully load
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        // Get wishlist product IDs
+        const wishlistIds = wishlistService.getWishlistIds();
+        console.log('WishList component - loaded IDs:', wishlistIds);
+        
+        if (wishlistIds.length === 0) {
+          setWishlistItems([]);
+          setIsLoading(false);
+          return;
+        }
+        
+        // Fetch product details from database
+        const productPromises = wishlistIds.map(async (productId) => {
+          try {
+            // Validate product ID
+            if (!productId || typeof productId !== 'string' || productId === '[object Object]') {
+              console.error('Invalid product ID:', productId);
+              return null;
+            }
+            
+            const response = await productAPI.getProduct(productId);
+            if (response.success) {
+              return {
+                ...response.data,
                 quantity: 1,
                 selected: false
-              } : null;
-            })
-            .filter(item => item !== null);
-          
-          setWishlistItems(wishlistProducts);
-        } catch (error) {
-          console.error('Error parsing favorites from localStorage:', error);
-          setWishlistItems([]);
-        }
+              };
+            }
+            return null;
+          } catch (error) {
+            console.error(`Failed to fetch product ${productId}:`, error);
+            return null;
+          }
+        });
+        
+        const products = await Promise.all(productPromises);
+        const validProducts = products.filter(product => product !== null);
+        
+        setWishlistItems(validProducts);
+        
+      } catch (error) {
+        console.error('Error loading wishlist:', error);
+        setError('Failed to load wishlist items');
+        setWishlistItems([]);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     loadWishlistItems();
 
-    // Listen for storage changes to update wishlist in real-time
-    const handleStorageChange = (e) => {
-      if (e.key === 'flowerShopFavorites') {
-        loadWishlistItems();
+    // Listen for wishlist changes
+    const handleWishlistChange = (wishlistIds) => {
+      // Only update if we're not already loading
+      if (!isLoading) {
+        // Update wishlist IDs without re-fetching everything
+        console.log('Wishlist changed, new IDs:', wishlistIds);
+        // For now, just reload - can optimize later
+        if (wishlistIds.length !== wishlistItems.length) {
+          loadWishlistItems();
+        }
       }
     };
 
-    window.addEventListener('storage', handleStorageChange);
-    
-    // Also listen for custom events when favorites change in the same tab
-    const handleFavoritesChange = () => {
-      loadWishlistItems();
-    };
+    // Add listener for wishlist changes
+    const removeListener = wishlistService.addListener(handleWishlistChange);
 
-    window.addEventListener('favoritesChanged', handleFavoritesChange);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('favoritesChanged', handleFavoritesChange);
-    };
+    return removeListener;
   }, []);
 
   const updateQuantity = (id, change) => {
     setWishlistItems(items =>
       items.map(item =>
-        item.id === id
+        item._id === id
           ? { ...item, quantity: Math.max(1, item.quantity + change) }
           : item
       )
     );
   };
 
-  const removeItem = (id) => {
-    // Remove from wishlist state
-    setWishlistItems(items => items.filter(item => item.id !== id));
-    
-    // Remove from localStorage favorites
-    const savedFavorites = localStorage.getItem('flowerShopFavorites');
-    if (savedFavorites) {
-      try {
-        let favorites = JSON.parse(savedFavorites);
-        favorites = favorites.filter(fav => fav !== id);
-        localStorage.setItem('flowerShopFavorites', JSON.stringify(favorites));
+  const removeItem = async (id) => {
+    try {
+      // Remove from wishlist service (database)
+      const success = await wishlistService.removeFromWishlist(id);
+      
+      if (success) {
+        // Remove from local state
+        setWishlistItems(items => items.filter(item => item._id !== id));
         
-        // Dispatch custom event to notify other components
-        window.dispatchEvent(new CustomEvent('favoritesChanged'));
-      } catch (error) {
-        console.error('Error updating favorites in localStorage:', error);
+        // Show notification
+        setNotification('Item removed from wishlist');
+        setTimeout(() => setNotification(''), 3000);
+      } else {
+        setError('Failed to remove item from wishlist');
+        setTimeout(() => setError(null), 3000);
       }
+    } catch (error) {
+      console.error('Error removing item from wishlist:', error);
+      setError('Failed to remove item from wishlist');
+      setTimeout(() => setError(null), 3000);
     }
   };
 
@@ -202,9 +283,42 @@ const WishList = () => {
     setWishlistItems(items =>
       items.map(item => ({
         ...item,
-        selected: item.id === id
+        selected: item._id === id
       }))
     );
+  };
+
+  const handleAddToCart = (item) => {
+    console.log('Adding to cart:', item);
+    
+    setCart(prevCart => {
+      const existingItem = prevCart.find(cartItem => cartItem._id === item._id);
+      if (existingItem) {
+        // If item already exists, increase quantity by the wishlist item's quantity
+        return prevCart.map(cartItem =>
+          cartItem._id === item._id
+            ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
+            : cartItem
+        );
+      } else {
+        // Add new item to cart
+        return [...prevCart, { 
+          ...item,
+          id: item._id, // Ensure cart item has both _id and id for compatibility
+          image: item.image || '/images/placeholder.jpg' 
+        }];
+      }
+    });
+    
+    // Show success feedback
+    setNotification(`${item.name} added to cart! Quantity: ${item.quantity}`);
+    
+    // Clear notification after 3 seconds
+    setTimeout(() => {
+      setNotification('');
+    }, 3000);
+    
+    console.log('Item added to cart successfully');
   };
 
   // const calculateTotals = () => {
@@ -234,15 +348,35 @@ const WishList = () => {
       <div className="wishlist-main">
         <h1 className="wishlist-title">WISH LIST</h1>
         
-        <div className="wishlist-items">
-          {wishlistItems.length > 0 ? (
-            wishlistItems.map(item => (
-            <div key={item.id} className="wishlist-item">
+        {/* Notification */}
+        {notification && (
+          <div className="wishlist-notification">
+            {notification}
+          </div>
+        )}
+        
+        {/* Error Message */}
+        {error && (
+          <div className="wishlist-error">
+            {error}
+          </div>
+        )}
+        
+        {/* Loading State */}
+        {isLoading ? (
+          <div className="wishlist-loading">
+            <p>Loading your wishlist...</p>
+          </div>
+        ) : (
+          <div className="wishlist-items">
+            {wishlistItems.length > 0 ? (
+              wishlistItems.map(item => (
+              <div key={item._id} className="wishlist-item">
               <div className="wishlist-item-checkbox">
                 <input
                   type="radio"
                   checked={item.selected}
-                  onChange={() => toggleSelection(item.id)}
+                  onChange={() => toggleSelection(item._id)}
                   className="wishlist-checkbox"
                 />
               </div>
@@ -260,7 +394,7 @@ const WishList = () => {
               <div className="wishlist-item-actions">
                 <button
                   className="wishlist-remove-btn"
-                  onClick={() => removeItem(item.id)}
+                  onClick={() => removeItem(item._id)}
                 >
                   REMOVE
                 </button>
@@ -268,40 +402,44 @@ const WishList = () => {
                 <div className="wishlist-quantity-controls">
                   <button
                     className="wishlist-qty-btn"
-                    onClick={() => updateQuantity(item.id, -1)}
+                    onClick={() => updateQuantity(item._id, -1)}
                   >
                     -
                   </button>
                   <span className="wishlist-quantity">{item.quantity}</span>
                   <button
                     className="wishlist-qty-btn"
-                    onClick={() => updateQuantity(item.id, 1)}
+                    onClick={() => updateQuantity(item._id, 1)}
                   >
                     +
                   </button>
                 </div>
                 
-                <button className="wishlist-add-to-cart-btn">
+                <button 
+                  className="wishlist-add-to-cart-btn"
+                  onClick={() => handleAddToCart(item)}
+                >
                   ADD TO CART ↗
                 </button>
               </div>
             </div>
-            ))
-          ) : (
-            <div className="empty-wishlist">
-              <div className="empty-wishlist-content">
-                <div className="empty-wishlist-icon">💝</div>
-                <h2 className="empty-wishlist-title">Your Wishlist is Empty</h2>
-                <p className="empty-wishlist-text">
-                  Start adding your favorite plants by clicking the heart icon on product cards!
-                </p>
-                <a href="/shop" className="browse-products-btn">
-                  Browse Products
-                </a>
+              ))
+            ) : (
+              <div className="empty-wishlist">
+                <div className="empty-wishlist-content">
+                  <div className="empty-wishlist-icon">💝</div>
+                  <h2 className="empty-wishlist-title">Your Wishlist is Empty</h2>
+                  <p className="empty-wishlist-text">
+                    Start adding your favorite plants by clicking the heart icon on product cards!
+                  </p>
+                  <a href="/shop" className="browse-products-btn">
+                    Browse Products
+                  </a>
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
       
       {/* <div className="cart-sidebar">

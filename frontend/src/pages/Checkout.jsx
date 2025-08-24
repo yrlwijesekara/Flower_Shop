@@ -17,19 +17,78 @@ const Checkout = () => {
     streetAddress: '',
     apartment: '',
     townCity: '',
+    state: '',
     postcode: '',
+    country: 'Sri Lanka',
     phoneNumber: '',
     emailAddress: ''
   });
 
 
-  // Load cart from localStorage on component mount
+  // Load cart and user data on component mount
   useEffect(() => {
+    // Check if user is logged in first
+    const isLoggedIn = localStorage.getItem('userLoggedIn');
+    const authToken = localStorage.getItem('authToken');
+    
+    if (isLoggedIn !== 'true' || !authToken) {
+      console.log('User not logged in, redirecting to login page');
+      navigate('/login');
+      return;
+    }
+    
+    // Fetch user data to auto-fill form
+    const fetchUserData = async () => {
+      try {
+        console.log('Fetching user data for checkout auto-fill...');
+        
+        const response = await fetch('http://localhost:8000/api/auth/me', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          
+          if (data.success) {
+            const user = data.data.user;
+            console.log('User data fetched:', user);
+            
+            // Split name into firstName and lastName
+            const nameParts = user.name.split(' ');
+            const firstName = nameParts[0] || '';
+            const lastName = nameParts.slice(1).join(' ') || '';
+            
+            // Auto-fill form data with user information
+            setFormData(prev => ({
+              ...prev,
+              firstName,
+              lastName,
+              emailAddress: user.email || '',
+              phoneNumber: user.phone || '',
+              townCity: user.address?.city || '',
+              state: user.address?.state || '',
+              country: user.address?.country || 'Sri Lanka'
+            }));
+          }
+        } else {
+          console.warn('Failed to fetch user data for auto-fill');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    
+    // Then check cart
     const savedCart = localStorage.getItem('flowerShopCart');
     if (savedCart) {
       const parsedCart = JSON.parse(savedCart);
       if (parsedCart && parsedCart.length > 0) {
         setCart(parsedCart);
+        fetchUserData(); // Only fetch user data if cart has items
       } else {
         // Redirect to cart if empty
         navigate('/cart');
@@ -72,101 +131,139 @@ const Checkout = () => {
     return calculateSubtotal() + calculateShipping();
   };
 
-  const handleOrderSubmit = () => {
+  const handleOrderSubmit = async () => {
     setIsLoading(true);
     
-    // Save checkout form data 
-    localStorage.setItem('checkoutFormData', JSON.stringify(formData));
-    
-    // Get selected payment method from localStorage (set by cart page)
-    const selectedPayment = localStorage.getItem('selectedPaymentMethod') || 'cod';
-    
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      // Validate required fields on frontend
+      if (!formData.firstName.trim() || !formData.lastName.trim() || !formData.streetAddress.trim() || 
+          !formData.townCity.trim() || !formData.state.trim() || !formData.postcode.trim() || 
+          !formData.country.trim() || !formData.phoneNumber.trim() || !formData.emailAddress.trim()) {
+        alert('Please fill in all required fields');
+        setIsLoading(false);
+        return;
+      }
       
-      if (selectedPayment === 'online') {
-        // Redirect to payment page for online payment
-        navigate('/payment');
-      } else {
-        // Process COD order directly and go to success page
-        processOrder('cod');
+      // Get auth token
+      const authToken = localStorage.getItem('authToken');
+      
+      if (!authToken) {
+        alert('Authentication required. Please login again.');
+        navigate('/login');
+        return;
       }
-    }, 1000);
-  };
-
-  const processOrder = (paymentMethod) => {
-    // Generate and save order data with current cart items
-    const generateOrderNumber = () => {
-      return Math.floor(Math.random() * 90000) + 10000;
-    };
-
-    const getCurrentDate = () => {
-      const now = new Date();
-      return now.toLocaleDateString('en-GB', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
+      
+      // Get selected payment method from localStorage (set by cart page)
+      const selectedPayment = localStorage.getItem('selectedPaymentMethod') || 'cod';
+      
+      // Prepare checkout data for API
+      const checkoutData = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        streetAddress: formData.streetAddress,
+        apartment: formData.apartment,
+        townCity: formData.townCity,
+        state: formData.state,
+        postcode: formData.postcode,
+        country: formData.country,
+        phoneNumber: formData.phoneNumber,
+        emailAddress: formData.emailAddress,
+        cartItems: cart,
+        paymentMethod: selectedPayment
+      };
+      
+      console.log('Submitting checkout data:', checkoutData);
+      
+      // Submit order to database
+      const response = await fetch('http://localhost:8000/api/checkout/simple', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify(checkoutData)
       });
-    };
-
-    const subtotal = calculateSubtotal();
-    const shipping = calculateShipping();
-    const tax = Math.round(subtotal * 0.1);
-    const total = subtotal + shipping + tax;
-
-    const orderData = {
-      orderNumber: generateOrderNumber().toString(),
-      orderDate: getCurrentDate(),
-      shippingAddress: {
-        line1: formData.streetAddress ? `${formData.streetAddress},` : "Address not provided,",
-        line2: formData.apartment ? `${formData.apartment},` : "",
-        line3: formData.townCity ? `${formData.townCity}.` : "City not provided."
-      },
-      items: cart.map(item => ({
-        id: item.id,
-        name: item.name,
-        category: item.category || "Plant",
-        price: item.price,
-        quantity: item.quantity,
-        total: item.price * item.quantity,
-        image: item.image
-      })),
-      pricing: {
-        itemsTotal: subtotal,
-        discount: 0,
-        shipping: shipping,
-        tax: tax,
-        total: total
-      },
-      paymentMethod: paymentMethod
-    };
-
-    // Save order data before clearing cart
-    localStorage.setItem('orderData', JSON.stringify(orderData));
-    
-    // Remove purchased items from full cart if it exists
-    const savedFullCart = localStorage.getItem('flowerShopFullCart');
-    if (savedFullCart) {
-      try {
-        const fullCart = JSON.parse(savedFullCart);
-        const purchasedItemIds = cart.map(item => item.id);
-        const remainingItems = fullCart.filter(item => !purchasedItemIds.includes(item.id));
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        console.log('Order created successfully:', data);
         
-        if (remainingItems.length > 0) {
-          localStorage.setItem('flowerShopCart', JSON.stringify(remainingItems));
-        } 
-        // Always clear the full cart after successful purchase
-        localStorage.removeItem('flowerShopFullCart');
+        // Save order data for success page
+        const orderData = {
+          orderNumber: data.data.order.orderNumber,
+          orderDate: new Date().toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+          }),
+          shippingAddress: {
+            line1: `${formData.streetAddress}${formData.apartment ? ', ' + formData.apartment : ''},`,
+            line2: `${formData.townCity},`,
+            line3: `${formData.postcode}.`
+          },
+          items: cart.map(item => ({
+            id: item.id,
+            name: item.name,
+            category: item.category || "Product",
+            price: item.price,
+            quantity: item.quantity,
+            total: item.price * item.quantity,
+            image: item.image
+          })),
+          pricing: {
+            itemsTotal: calculateSubtotal(),
+            discount: 0,
+            shipping: calculateShipping(),
+            tax: Math.round(calculateSubtotal() * 0.1),
+            total: calculateTotal()
+          },
+          paymentMethod: selectedPayment
+        };
         
-        // Trigger cart update event for navbar
-        window.dispatchEvent(new CustomEvent('cartUpdated'));
-      } catch (error) {
-        console.error('Error updating full cart:', error);
+        localStorage.setItem('orderData', JSON.stringify(orderData));
+        
+        setIsLoading(false);
+        
+        if (selectedPayment === 'online') {
+          // Save checkout form data for payment page
+          localStorage.setItem('checkoutFormData', JSON.stringify(formData));
+          // Don't clear cart yet - payment page needs it
+          // Redirect to payment page for online payment
+          navigate('/payment');
+        } else {
+          // Clear cart after successful COD order
+          localStorage.removeItem('flowerShopCart');
+          localStorage.removeItem('flowerShopFullCart');
+          
+          // Trigger cart update event for navbar
+          window.dispatchEvent(new CustomEvent('cartUpdated'));
+          
+          // Go directly to success page for COD
+          navigate('/order-success');
+        }
+        
+      } else {
+        console.error('Order creation failed:', data.message);
+        console.error('Full error response:', data);
+        
+        // Show more specific error message
+        let errorMessage = data.message;
+        if (data.errors && Array.isArray(data.errors)) {
+          errorMessage = data.errors.join(', ');
+        }
+        
+        alert(`Order failed: ${errorMessage}`);
+        setIsLoading(false);
       }
+      
+    } catch (error) {
+      console.error('Error submitting order:', error);
+      alert(`Order failed: ${error.message}`);
+      setIsLoading(false);
     }
-    
-    navigate('/order-success');
   };
+
 
   // Show loading or empty state while cart is being loaded
   if (cart.length === 0) {
@@ -205,8 +302,8 @@ const Checkout = () => {
           {/* Checkout Form */}
           <div className="checkout-form">
             <form onSubmit={(e) => { e.preventDefault(); handleOrderSubmit(); }}>
-              <div className="form-row">
-                <div className="form-group half-width">
+              <div className="checkout-form-row">
+                <div className="checkout-form-group half-width">
                   <label htmlFor="firstName">First Name</label>
                   <input
                     type="text"
@@ -218,7 +315,7 @@ const Checkout = () => {
                     required
                   />
                 </div>
-                <div className="form-group half-width">
+                <div className="checkout-form-group half-width">
                   <label htmlFor="lastName">Last Name</label>
                   <input
                     type="text"
@@ -232,7 +329,7 @@ const Checkout = () => {
                 </div>
               </div>
 
-              <div className="form-group">
+              <div className="checkout-form-group">
                 <label htmlFor="streetAddress">Street address</label>
                 <input
                   type="text"
@@ -245,7 +342,7 @@ const Checkout = () => {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="checkout-form-group">
                 <input
                   type="text"
                   id="apartment"
@@ -256,33 +353,65 @@ const Checkout = () => {
                 />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="townCity">Town / City</label>
-                <input
-                  type="text"
-                  id="townCity"
-                  name="townCity"
-                  value={formData.townCity}
-                  onChange={handleInputChange}
-                  placeholder="Brooklyn"
-                  required
-                />
+              <div className="checkout-form-row">
+                <div className="checkout-form-group half-width">
+                  <label htmlFor="townCity">Town / City</label>
+                  <input
+                    type="text"
+                    id="townCity"
+                    name="townCity"
+                    value={formData.townCity}
+                    onChange={handleInputChange}
+                    placeholder="Colombo"
+                    required
+                  />
+                </div>
+                <div className="checkout-form-group half-width">
+                  <label htmlFor="state">State / Province</label>
+                  <input
+                    type="text"
+                    id="state"
+                    name="state"
+                    value={formData.state}
+                    onChange={handleInputChange}
+                    placeholder="Western Province"
+                    required
+                  />
+                </div>
               </div>
 
-              <div className="form-group">
-                <label htmlFor="postcode">Postcode / Zip</label>
-                <input
-                  type="text"
-                  id="postcode"
-                  name="postcode"
-                  value={formData.postcode}
-                  onChange={handleInputChange}
-                  placeholder="236748"
-                  required
-                />
+              <div className="checkout-form-row">
+                <div className="checkout-form-group half-width">
+                  <label htmlFor="postcode">Postcode / Zip</label>
+                  <input
+                    type="text"
+                    id="postcode"
+                    name="postcode"
+                    value={formData.postcode}
+                    onChange={handleInputChange}
+                    placeholder="10100"
+                    required
+                  />
+                </div>
+                <div className="checkout-form-group half-width">
+                  <label htmlFor="country">Country</label>
+                  <select
+                    id="country"
+                    name="country"
+                    value={formData.country}
+                    onChange={handleInputChange}
+                    required
+                  >
+                    <option value="Sri Lanka">Sri Lanka</option>
+                    <option value="India">India</option>
+                    <option value="United States">United States</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="Australia">Australia</option>
+                  </select>
+                </div>
               </div>
 
-              <div className="form-group">
+              <div className="checkout-form-group">
                 <label htmlFor="phoneNumber">Phone Number</label>
                 <input
                   type="tel"
@@ -295,7 +424,7 @@ const Checkout = () => {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="checkout-form-group">
                 <label htmlFor="emailAddress">Email Address</label>
                 <input
                   type="email"
@@ -311,7 +440,7 @@ const Checkout = () => {
 
               <button 
                 type="submit" 
-                className="order-button"
+                className="checkout-order-button"
                 disabled={isLoading}
               >
                 {isLoading ? 'Processing...' : ' ORDER'}
@@ -320,14 +449,14 @@ const Checkout = () => {
           </div>
 
           {/* Order Summary */}
-          <div className="order-summary">
+          <div className="checkout-order-summary">
             <h3>Order Summary</h3>
             
-            <div className="cart-items">
+            <div className="checkout-cart-items">
               {cart.map((item) => (
-                <div key={item.id} className="cart-item">
+                <div key={item.id} className="checkout-cart-item">
                   <img src={item.image} alt={item.name} />
-                  <div className="item-details">
+                  <div className="checkout-item-details">
                     <h4>{item.name}</h4>
                     <p>Quantity: {item.quantity}</p>
                     <p className="price">$ {item.price}</p>
@@ -336,16 +465,16 @@ const Checkout = () => {
               ))}
             </div>
             
-            <div className="order-totals">
-              <div className="total-row">
+            <div className="checkout-order-totals">
+              <div className="checkout-total-row">
                 <span>Subtotal:</span>
                 <span>$ {calculateSubtotal()}</span>
               </div>
-              <div className="total-row">
+              <div className="checkout-total-row">
                 <span>Shipping:</span>
                 <span>$ {calculateShipping()}</span>
               </div>
-              <div className="total-row final-total">
+              <div className="checkout-total-row checkout-final-total">
                 <span>Total:</span>
                 <span>$ {calculateTotal()}</span>
               </div>
