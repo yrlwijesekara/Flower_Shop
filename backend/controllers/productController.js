@@ -128,22 +128,42 @@ const getProducts = async (req, res) => {
     
     // Search functionality
     let products;
+    let countQuery = query;
+    
     if (req.query.search) {
-      products = await Product.searchProducts(req.query.search)
-        .find(query);
+      // Combine search query with filters
+      const searchQuery = {
+        $text: { $search: req.query.search },
+        inStock: true,
+        ...query
+      };
+      countQuery = searchQuery;
+      products = Product.find(searchQuery, {
+        score: { $meta: 'textScore' }
+      });
+      
+      // For search, sort by text score first, then by other criteria if specified
+      if (req.query.sortBy && req.query.sortBy !== 'relevance') {
+        const sortField = req.query.sortBy;
+        const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1;
+        products = products.sort({ score: { $meta: 'textScore' }, [sortField]: sortOrder });
+      } else {
+        products = products.sort({ score: { $meta: 'textScore' } });
+      }
     } else {
       products = Product.find(query);
-    }
-    
-    // Sorting
-    let sortBy = {};
-    if (req.query.sortBy) {
-      const sortField = req.query.sortBy;
-      const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1;
-      sortBy[sortField] = sortOrder;
-    } else {
-      // Default sort by creation date (newest first)
-      sortBy.createdAt = -1;
+      
+      // Sorting for non-search queries
+      let sortBy = {};
+      if (req.query.sortBy) {
+        const sortField = req.query.sortBy;
+        const sortOrder = req.query.sortOrder === 'desc' ? -1 : 1;
+        sortBy[sortField] = sortOrder;
+      } else {
+        // Default sort by creation date (newest first)
+        sortBy.createdAt = -1;
+      }
+      products = products.sort(sortBy);
     }
     
     // Pagination
@@ -153,12 +173,11 @@ const getProducts = async (req, res) => {
     
     // Execute query
     const result = await products
-      .sort(sortBy)
       .skip(skip)
       .limit(limit);
     
     // Get total count for pagination
-    const total = await Product.countDocuments(query);
+    const total = await Product.countDocuments(countQuery);
     
     res.status(200).json({
       success: true,

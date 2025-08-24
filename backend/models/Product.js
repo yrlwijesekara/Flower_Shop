@@ -284,7 +284,9 @@ productSchema.statics.searchProducts = function(query) {
   return this.find({
     $text: { $search: query },
     inStock: true
-  }).score({ score: { $meta: 'textScore' } }).sort({ score: { $meta: 'textScore' } });
+  }, {
+    score: { $meta: 'textScore' }
+  }).sort({ score: { $meta: 'textScore' } });
 };
 
 module.exports = mongoose.model('Product', productSchema);
