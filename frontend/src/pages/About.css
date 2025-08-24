@@ -1,0 +1,925 @@
+.img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.img img {
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+}
+
+.aboutContainter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color:#A6A3A3;
+  padding: 20px;
+
+  
+}
+
+.aboutContainter h1{
+  color:green;
+font-size: 4rem;
+}
+.aboutContainter h3{
+  margin-top: 10px;
+}
+
+
+.aboutContainter p {
+  font-size: 2rem;
+  text-align: center;
+  margin-top: 40px;
+  
+}
+
+.yearsofexperience {
+display: flex;
+flex-direction: column;
+color: green;
+width: 40%;
+margin:20px;
+align-items: center;
+
+
+}
+.yearsofexperience h1 {
+    margin-left: 60px;
+  font-size: 6rem;
+  margin-bottom: 20px;
+}
+
+.yearsofexperience h4{
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color:black;
+  display: flex;
+  align-items: center;
+  margin-right: 70px;
+  position: relative;
+}
+
+.yearsofexperience h4::before {
+  content: "✓";
+  color: #23B540;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-right: 8px;
+}
+.yearsofexperience h5 {
+  font-size: 1rem;
+  margin-bottom: 20px;
+  text-align: end;
+  margin-left:120px;
+  color:black;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.yearsofexperience h5::before {
+  content: "✓";
+  color: #23B540;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.experiencecontainer{
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}  
+
+.experienceimg {
+  width: 50%;
+  display: flex;
+  margin-left: 30px;
+
+}
+
+.imgone img{
+    border: 30px solid #ffffff; 
+    width: 273px;
+    height: 244px;
+    margin-top: 50px;
+    margin-left:20px ;
+}
+
+.imgtwo img{
+  width: 326px;
+  height: 326px;
+}
+  
+
+.imgthree img{
+    
+margin-right: 30px;
+  width: 326px;
+  height: 326px;
+}
+
+.imgfour img{
+ border: 30px solid #ffffff;    
+ margin-left: -30px;
+ width: 273px;
+  height: 226px;
+
+}
+
+.Historycontainer{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 100px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+}
+
+.HistoryText{
+    text-align: center;
+}
+.HistoryText h1{
+    font-size: 4rem;
+    color: green;
+}
+
+.HistoryText p{
+    font-size: 2rem;
+    color: #A6A3A3;
+    max-width: 1000px;
+    margin-left: 20px;
+}
+
+
+.Result {
+width: 90%;
+max-width: 1200px;
+height: 568px;
+display: flex;
+flex-direction: column;
+margin: 110px auto 0 auto;
+background-color: rgb(4, 36, 0);
+position: relative;
+}
+
+.bg-overlay img {
+    width: 100%;
+    height: 568px;
+    object-fit: cover;
+    opacity: 0.2;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+
+
+
+
+.resultbox{
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 70px;
+    margin-top: 120px;
+}
+
+.onebox{
+    border: #ffffff solid 4px;
+    width: 110px;
+    height: 130px;
+    display: flex;
+    justify-content: center;
+    margin-left: 70px;
+    align-items: center;
+    font-size: 3rem;
+    font-weight: bold;
+    
+    
+}
+
+.twobox{
+    border: #ffffff solid 4px;
+    width: 110px;
+    height: 130px;
+    display: flex;
+    justify-content: center;
+    margin-left: 50px;  
+    align-items: center;
+    font-size: 3rem;
+    font-weight: bold;
+    
+}
+
+
+
+.threebox{
+    border: #ffffff solid 4px;
+    width: 110px;
+    height: 130px;
+    display: flex;
+    justify-content: center;
+    margin-left: 30px;
+    align-items: center;
+    font-size: 3rem;
+    font-weight: bold;
+    
+}
+
+.fourbox{
+    border: #ffffff solid 4px;
+    width: 110px;
+    height: 130px;
+    display: flex;
+    justify-content: center;
+    margin-left: 30px;
+    align-items: center;
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.Result h1{
+    color: rgb(110, 227, 110);
+    align-items: center;
+    text-align: center; 
+    margin-top: 5%;
+}
+
+.Clientbox{
+    width: 90%;
+    max-width: 1200px;
+    height: 422px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 100px auto 0 auto;
+    border: solid 2px #000000;
+}
+
+.Clientbox h1{
+    font-size: 2.5rem;
+    color: green;
+    
+}
+.Clientbox img{
+    width: 119px;
+    height: 112px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.Clientbox p{
+    font-size: 1.5rem;
+    color: #A6A3A3;
+    text-align: center;
+    margin-left: 40px;
+    margin-right: 40px;
+    margin-top: 20px;
+}
+
+/* Responsive Design */
+
+/* 1400px breakpoint */
+@media (max-width: 1400px) {
+  .aboutContainter h1 {
+    font-size: 3.5rem;
+  }
+  
+  .aboutContainter p {
+    font-size: 1.8rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 30px;
+  }
+  
+  .yearsofexperience h1 {
+    font-size: 5rem;
+    margin-left: 40px;
+  }
+  
+  .experienceimg {
+    width: 55%;
+    margin-left: 20px;
+  }
+  
+  .imgone img {
+    width: 250px;
+    height: 220px;
+    border: 25px solid #ffffff;
+  }
+  
+  .imgtwo img, .imgthree img {
+    width: 280px;
+    height: 280px;
+  }
+  
+  .imgfour img {
+    width: 250px;
+    height: 200px;
+    border: 25px solid #ffffff;
+  }
+  
+  .HistoryText h1 {
+    font-size: 3.5rem;
+  }
+  
+  .HistoryText p {
+    font-size: 1.8rem;
+    max-width: 800px;
+  }
+  
+  .Result {
+    width: 95%;
+    height: 500px;
+    margin: 110px auto 0 auto;
+  }
+  
+  .bg-overlay img {
+    width: 100%;
+    height: 500px;
+  }
+  
+  .resultbox {
+    gap: 50px;
+    margin-top: 100px;
+  }
+  
+  .Clientbox {
+    width: 95%;
+    margin: 100px auto 0 auto;
+  }
+  
+  .Clientbox h1 {
+    font-size: 2.2rem;
+  }
+}
+
+/* 1200px breakpoint */
+@media (max-width: 1200px) {
+  .img img {
+    height: 500px;
+  }
+  
+  .aboutContainter {
+    padding: 30px 20px;
+  }
+  
+  .aboutContainter h1 {
+    font-size: 3rem;
+  }
+  
+  .aboutContainter p {
+    font-size: 1.6rem;
+    max-width: 1000px;
+  }
+  
+  .experiencecontainer {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .yearsofexperience {
+    width: 80%;
+    margin-bottom: 30px;
+  }
+  
+  .yearsofexperience h1 {
+    font-size: 4rem;
+    margin-left: 0;
+    text-align: center;
+  }
+  
+  .yearsofexperience h4, .yearsofexperience h5 {
+    margin-left: 0;
+    margin-right: 0;
+    text-align: center;
+  }
+  
+  .experienceimg {
+    width: 80%;
+    margin-left: 0;
+    justify-content: center;
+  }
+  
+  .imgone img {
+    width: 200px;
+    height: 180px;
+    border: 20px solid #ffffff;
+  }
+  
+  .imgtwo img, .imgthree img {
+    width: 240px;
+    height: 240px;
+  }
+  
+  .imgfour img {
+    width: 200px;
+    height: 160px;
+    border: 20px solid #ffffff;
+  }
+  
+  .Historycontainer {
+    flex-direction: column-reverse;
+    align-items: center;
+    margin-top: 50px;
+  }
+  
+  .HistoryImg {
+    width: 80%;
+    margin-top: 30px;
+  }
+  
+  .HistoryText {
+    width: 80%;
+    margin-bottom: 20px;
+  }
+  
+  .HistoryText h1 {
+    font-size: 3rem;
+  }
+  
+  .HistoryText p {
+    font-size: 1.6rem;
+    max-width: 100%;
+    margin-left: 0;
+  }
+  
+  .Result {
+    width: 90%;
+    height: 450px;
+    margin: 110px auto 0 auto;
+  }
+  
+  .bg-overlay img {
+    width: 100%;
+    height: 450px;
+  }
+  
+  .resultbox {
+    gap: 40px;
+    margin-top: 80px;
+    font-size: 1.8rem;
+  }
+  
+  .onebox, .twobox, .threebox, .fourbox {
+    width: 100px;
+    height: 110px;
+    font-size: 2.5rem;
+    margin-left: 20px;
+  }
+  
+  .Clientbox {
+    width: 90%;
+    height: 380px;
+    margin: 100px auto 0 auto;
+  }
+  
+  .Clientbox h1 {
+    font-size: 2rem;
+  }
+  
+  .Clientbox p {
+    font-size: 1.3rem;
+  }
+}
+
+/* 992px breakpoint */
+@media (max-width: 992px) {
+  .img img {
+    height: 400px;
+  }
+  
+  .aboutContainter {
+    padding: 25px 15px;
+  }
+  
+  .aboutContainter h1 {
+    font-size: 2.5rem;
+  }
+  
+  .aboutContainter p {
+    font-size: 1.4rem;
+    max-width: 800px;
+  }
+  
+  .yearsofexperience {
+    width: 90%;
+  }
+  
+  .yearsofexperience h1 {
+    font-size: 3rem;
+  }
+  
+  .yearsofexperience h4, .yearsofexperience h5 {
+    font-size: 0.9rem;
+  }
+  
+  .experienceimg {
+    width: 90%;
+  }
+  
+  .imgdev, .imgdevtwo {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .imgone img {
+    width: 180px;
+    height: 160px;
+    border: 15px solid #ffffff;
+    margin-top: 0;
+    margin-left: 0;
+  }
+  
+  .imgtwo img, .imgthree img {
+    width: 200px;
+    height: 200px;
+    margin-right: 0;
+  }
+  
+  .imgfour img {
+    width: 180px;
+    height: 140px;
+    border: 15px solid #ffffff;
+    margin-left: 0;
+  }
+  
+  .HistoryImg {
+    width: 90%;
+  }
+  
+  .HistoryText {
+    width: 90%;
+  }
+  
+  .HistoryText h1 {
+    font-size: 2.5rem;
+  }
+  
+  .HistoryText p {
+    font-size: 1.4rem;
+  }
+  
+  .Result {
+    width: 95%;
+    height: 400px;
+    margin: 110px auto 0 auto;
+  }
+  
+  .bg-overlay img {
+    width: 100%;
+    height: 400px;
+  }
+  
+  .Result h1 {
+    font-size: 2rem;
+  }
+  
+  .resultbox {
+    gap: 30px;
+    margin-top: 60px;
+    font-size: 1.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .onebox, .twobox, .threebox, .fourbox {
+    width: 90px;
+    height: 100px;
+    font-size: 2rem;
+    margin-left: 10px;
+  }
+  
+  .tbox, .ttbox, .tttbox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .Clientbox {
+    width: 95%;
+    height: 350px;
+    margin: 100px auto 0 auto;
+  }
+  
+  .Clientbox h1 {
+    font-size: 1.8rem;
+  }
+  
+  .Clientbox img {
+    width: 100px;
+    height: 95px;
+  }
+  
+  .Clientbox p {
+    font-size: 1.2rem;
+    margin-left: 30px;
+    margin-right: 30px;
+  }
+}
+
+/* 768px breakpoint */
+@media (max-width: 768px) {
+  .img img {
+    height: 300px;
+  }
+  
+  .aboutContainter {
+    padding: 20px 10px;
+  }
+  
+  .aboutContainter h1 {
+    font-size: 2rem;
+  }
+  
+  .aboutContainter h3 {
+    font-size: 1.2rem;
+  }
+  
+  .aboutContainter p {
+    font-size: 1.2rem;
+    max-width: 100%;
+    padding: 0 10px;
+  }
+  
+  .yearsofexperience {
+    width: 95%;
+  }
+  
+  .yearsofexperience h1 {
+    font-size: 2.5rem;
+  }
+  
+  .yearsofexperience h4, .yearsofexperience h5 {
+    font-size: 0.8rem;
+  }
+  
+  .experienceimg {
+    width: 95%;
+  }
+  
+  .imgone img {
+    width: 150px;
+    height: 130px;
+    border: 10px solid #ffffff;
+  }
+  
+  .imgtwo img, .imgthree img {
+    width: 170px;
+    height: 170px;
+  }
+  
+  .imgfour img {
+    width: 150px;
+    height: 120px;
+    border: 10px solid #ffffff;
+  }
+  
+  .HistoryText h1 {
+    font-size: 2rem;
+  }
+  
+  .HistoryText p {
+    font-size: 1.2rem;
+    padding: 0 10px;
+  }
+  
+  .Result {
+    width: 98%;
+    height: 350px;
+    margin: 50px auto 0 auto;
+  }
+  
+  .bg-overlay img {
+    width: 100%;
+    height: 350px;
+  }
+  
+  .Result h1 {
+    font-size: 1.8rem;
+    padding: 0 10px;
+  }
+  
+  .resultbox {
+    gap: 20px;
+    margin-top: 40px;
+    font-size: 1.2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .onebox, .twobox, .threebox, .fourbox {
+    width: 80px;
+    height: 90px;
+    font-size: 1.8rem;
+    margin-left: 5px;
+  }
+  
+  .tbox, .ttbox, .tttbox {
+    margin-bottom: 15px;
+  }
+  
+  .Clientbox {
+    width: 98%;
+    height: 320px;
+    margin: 50px auto 0 auto;
+  }
+  
+  .Clientbox h1 {
+    font-size: 1.6rem;
+    padding: 0 10px;
+  }
+  
+  .Clientbox h2 {
+    font-size: 1.2rem;
+  }
+  
+  .Clientbox img {
+    width: 80px;
+    height: 75px;
+  }
+  
+  .Clientbox p {
+    font-size: 1rem;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+}
+
+/* 480px breakpoint - Mobile */
+@media (max-width: 480px) {
+  .img img {
+    height: 250px;
+  }
+  
+  .aboutContainter {
+    padding: 15px 8px;
+  }
+  
+  .aboutContainter h1 {
+    font-size: 1.8rem;
+  }
+  
+  .aboutContainter h3 {
+    font-size: 1rem;
+    margin-top: 5px;
+  }
+  
+  .aboutContainter p {
+    font-size: 1rem;
+    line-height: 1.5;
+    padding: 0 5px;
+    margin-top: 20px;
+  }
+  
+  .experiencecontainer {
+    margin: 20px 0;
+  }
+  
+  .yearsofexperience {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .yearsofexperience h1 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+  }
+  
+  .yearsofexperience h4, .yearsofexperience h5 {
+    font-size: 0.7rem;
+    margin-bottom: 8px;
+  }
+  
+  .experienceimg {
+    width: 100%;
+  }
+  
+  .imgdev, .imgdevtwo {
+    gap: 10px;
+  }
+  
+  .imgone img {
+    width: 120px;
+    height: 100px;
+    border: 8px solid #ffffff;
+  }
+  
+  .imgtwo img, .imgthree img {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .imgfour img {
+    width: 120px;
+    height: 90px;
+    border: 8px solid #ffffff;
+  }
+  
+  .Historycontainer {
+    margin-top: 30px;
+  }
+  
+  .HistoryImg, .HistoryText {
+    width: 100%;
+  }
+  
+  .HistoryText h1 {
+    font-size: 1.8rem;
+  }
+  
+  .HistoryText p {
+    font-size: 1rem;
+    line-height: 1.5;
+    padding: 0 8px;
+  }
+  
+  .Result {
+    width: 100%;
+    height: 300px;
+    margin: 30px auto 0 auto;
+  }
+  
+  .bg-overlay img {
+    width: 100%;
+    height: 300px;
+  }
+  
+  .Result h1 {
+    font-size: 1.5rem;
+    padding: 0 8px;
+    margin-top: 3%;
+  }
+  
+  .resultbox {
+    gap: 15px;
+    margin-top: 30px;
+    font-size: 1rem;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .onebox, .twobox, .threebox, .fourbox {
+    width: 70px;
+    height: 80px;
+    font-size: 1.5rem;
+    margin-left: 0;
+  }
+  
+  .tbox, .ttbox, .tttbox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .Clientbox {
+    width: 100%;
+    height: auto;
+    min-height: 280px;
+    margin: 30px auto 0 auto;
+    padding: 20px 0;
+  }
+  
+  .Clientbox h1 {
+    font-size: 1.4rem;
+    padding: 0 8px;
+  }
+  
+  .Clientbox h2 {
+    font-size: 1rem;
+  }
+  
+  .Clientbox img {
+    width: 70px;
+    height: 65px;
+  }
+  
+  .Clientbox p {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+}
+

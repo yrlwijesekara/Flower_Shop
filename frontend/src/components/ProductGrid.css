@@ -1,0 +1,128 @@
+/* Product Grid Component Styles */
+
+.product-grid {
+  width: 100%;
+  max-width: 100vw;
+  padding: 40px 20px;
+  background: #FFFFFF;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.grid-container {
+  display: grid;
+  justify-content: center;
+  gap: 30px 20px;
+  max-width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Responsive Grid Layout */
+
+/* 1400px and above - Desktop Large */
+@media (min-width: 1400px) {
+  .grid-container {
+    grid-template-columns: repeat(4, minmax(300px, 325px));
+    gap: 30px 25px;
+    padding: 0 20px;
+    max-width: 1400px;
+  }
+}
+
+/* 1200px - Desktop */
+@media (max-width: 1399px) and (min-width: 1200px) {
+  .grid-container {
+    grid-template-columns: repeat(4, minmax(280px, 300px));
+    gap: 25px 20px;
+    padding: 0 15px;
+    max-width: calc(100vw - 30px);
+  }
+}
+
+/* 992px - Tablet Large */
+@media (max-width: 1199px) and (min-width: 992px) {
+  .grid-container {
+    grid-template-columns: repeat(3, minmax(260px, 280px));
+    gap: 25px 20px;
+    padding: 0 15px;
+    max-width: calc(100vw - 30px);
+  }
+}
+
+/* 768px - Tablet */
+@media (max-width: 991px) and (min-width: 768px) {
+  .product-grid {
+    padding: 30px 15px;
+    overflow-x: hidden;
+  }
+  
+  .grid-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 0 10px;
+    max-width: calc(100vw - 30px);
+  }
+  
+  .grid-container > * {
+    flex: 0 0 calc(50% - 10px);
+    max-width: 300px;
+    min-width: 260px;
+  }
+}
+
+/* 480px - Mobile */
+@media (max-width: 767px) and (min-width: 480px) {
+  .product-grid {
+    padding: 25px 10px;
+    overflow-x: hidden;
+  }
+  
+  .grid-container {
+    grid-template-columns: repeat(2, minmax(200px, 1fr));
+    gap: 15px 10px;
+    padding: 0 5px;
+    max-width: calc(100vw - 20px);
+  }
+}
+
+/* Below 480px - Mobile Small */
+@media (max-width: 479px) {
+  .product-grid {
+    padding: 20px 5px;
+    overflow-x: hidden;
+  }
+  
+  .grid-container {
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+    gap: 12px 8px;
+    padding: 0;
+    max-width: calc(100vw - 10px);
+  }
+}
+
+/* Very small screens - Single column */
+@media (max-width: 380px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 15px;
+    max-width: calc(100vw - 10px);
+  }
+}
+
+/* Override default grid settings for custom layout classes */
+.product-grid.row-products-only {
+  padding: 0;
+  background: transparent;
+  width: 100%;
+  max-width: none;
+}
+
+.product-grid.row-products-only .grid-container {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
